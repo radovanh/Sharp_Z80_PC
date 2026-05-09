@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sharp PC-G Series · LCD Graphics Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green:      #39ff14;
+    --green-dim:  #1a7a09;
+    --green-glow: #39ff1480;
+    --amber:      #ffb300;
+    --bg:         #050a04;
+    --bg2:        #0a100a;
+    --scanline:   rgba(0,0,0,0.18);
+    --grid:       rgba(57,255,20,0.04);
+    --font-mono:  'Share Tech Mono', monospace;
+    --font-display: 'VT323', monospace;
+    --font-title: 'Orbitron', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--green);
+    font-family: var(--font-mono);
+    min-height: 100vh;
+    overflow-x: hidden;
+    cursor: crosshair;
+  }
+
+  /* ── CRT overlay ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      var(--scanline) 0px,
+      var(--scanline) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  /* ── dot-grid background ── */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(circle, rgba(57,255,20,0.07) 1px, transparent 1px);
+    background-size: 28px 28px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    height: 52px;
+    border-bottom: 1px solid var(--green-dim);
+    background: rgba(5,10,4,0.92);
+    backdrop-filter: blur(4px);
+  }
+
+  .nav-logo {
+    font-family: var(--font-title);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    color: var(--green);
+    text-shadow: 0 0 8px var(--green-glow);
+  }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+  }
+
+  nav a {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--green-dim);
+    text-decoration: none;
+    letter-spacing: .08em;
+    transition: color .2s, text-shadow .2s;
+  }
+
+  nav a:hover {
+    color: var(--green);
+    text-shadow: 0 0 8px var(--green-glow);
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 6rem 2rem 4rem;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  /* animated corner brackets */
+  .hero::before, .hero::after {
+    content: '';
+    position: absolute;
+    width: 120px; height: 120px;
+    border-color: var(--green-dim);
+    border-style: solid;
+    opacity: .4;
+  }
+  .hero::before {
+    top: 80px; left: 40px;
+    border-width: 2px 0 0 2px;
+    animation: bracket-pulse 3s ease-in-out infinite alternate;
+  }
+  .hero::after {
+    bottom: 40px; right: 40px;
+    border-width: 0 2px 2px 0;
+    animation: bracket-pulse 3s ease-in-out infinite alternate-reverse;
+  }
+
+  @keyframes bracket-pulse {
+    from { opacity: .2; }
+    to   { opacity: .7; }
+  }
+
+  /* ── SVG PC-G815 illustration ── */
+  .device-art {
+    position: relative;
+    margin-bottom: 3rem;
+    filter: drop-shadow(0 0 30px rgba(57,255,20,0.25));
+    animation: float 5s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%,100% { transform: translateY(0); }
+    50%      { transform: translateY(-12px); }
+  }
+
+  .hero-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: .25em;
+    color: var(--green-dim);
+    margin-bottom: 1rem;
+    animation: fadein .8s ease both;
+  }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 8vw, 6.5rem);
+    line-height: 1;
+    letter-spacing: .04em;
+    text-align: center;
+    color: var(--green);
+    text-shadow:
+      0 0 20px var(--green-glow),
+      0 0 60px rgba(57,255,20,0.2);
+    animation: fadein .8s .15s ease both;
+  }
+
+  .hero-subtitle {
+    font-family: var(--font-mono);
+    font-size: 15px;
+    color: var(--green-dim);
+    letter-spacing: .08em;
+    text-align: center;
+    margin-top: 1.25rem;
+    max-width: 600px;
+    line-height: 1.7;
+    animation: fadein .8s .3s ease both;
+  }
+
+  .hero-subtitle em {
+    color: var(--green);
+    font-style: normal;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    animation: fadein .8s .45s ease both;
+  }
+
+  .btn {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: .1em;
+    padding: .75rem 2rem;
+    border: 1px solid currentColor;
+    text-decoration: none;
+    transition: all .2s;
+    position: relative;
+    overflow: hidden;
+    cursor: crosshair;
+  }
+
+  .btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: currentColor;
+    opacity: 0;
+    transition: opacity .2s;
+  }
+
+  .btn:hover::before { opacity: .08; }
+
+  .btn-primary {
+    color: var(--bg);
+    background: var(--green);
+    border-color: var(--green);
+    text-shadow: none;
+    box-shadow: 0 0 20px var(--green-glow);
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 0 35px var(--green-glow), 0 0 60px rgba(57,255,20,0.2);
+  }
+
+  .btn-secondary {
+    color: var(--green);
+    background: transparent;
+  }
+
+  .btn-secondary:hover {
+    text-shadow: 0 0 8px var(--green-glow);
+    border-color: var(--green);
+    box-shadow: 0 0 12px rgba(57,255,20,0.15);
+  }
+
+  @keyframes fadein {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── blinking cursor ── */
+  .cursor {
+    display: inline-block;
+    width: 10px; height: 1.1em;
+    background: var(--green);
+    vertical-align: text-bottom;
+    animation: blink 1s step-end infinite;
+    margin-left: 4px;
+  }
+
+  @keyframes blink {
+    0%,100% { opacity: 1; }
+    50%      { opacity: 0; }
+  }
+
+  /* ── ticker ── */
+  .ticker-wrap {
+    width: 100%;
+    overflow: hidden;
+    border-top: 1px solid var(--green-dim);
+    border-bottom: 1px solid var(--green-dim);
+    padding: 10px 0;
+    margin: 3rem 0;
+    background: rgba(57,255,20,0.02);
+    position: relative;
+    z-index: 1;
+  }
+
+  .ticker-inner {
+    display: flex;
+    white-space: nowrap;
+    animation: ticker 28s linear infinite;
+  }
+
+  .ticker-inner span {
+    font-size: 12px;
+    letter-spacing: .15em;
+    color: var(--green-dim);
+    padding-right: 4rem;
+  }
+
+  .ticker-inner span strong {
+    color: var(--green);
+    font-weight: normal;
+  }
+
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* ── FEATURE CARDS ── */
+  .cards-section {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem 6rem;
+  }
+
+  .section-label {
+    font-size: 11px;
+    letter-spacing: .25em;
+    color: var(--green-dim);
+    margin-bottom: 2.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--green-dim);
+    opacity: .4;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5px;
+    border: 1.5px solid var(--green-dim);
+  }
+
+  .card {
+    padding: 2rem;
+    background: var(--bg2);
+    border: 1.5px solid transparent;
+    transition: border-color .25s, background .25s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: var(--green);
+    opacity: 0;
+    transition: opacity .25s;
+    box-shadow: 0 0 8px var(--green-glow);
+  }
+
+  .card:hover { background: #0d150c; border-color: var(--green-dim); }
+  .card:hover::before { opacity: .7; }
+
+  .card-number {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    color: var(--green-dim);
+    opacity: .3;
+    line-height: 1;
+    margin-bottom: .5rem;
+  }
+
+  .card-title {
+    font-family: var(--font-title);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    color: var(--green);
+    margin-bottom: .75rem;
+  }
+
+  .card-body {
+    font-size: 13px;
+    color: var(--green-dim);
+    line-height: 1.7;
+  }
+
+  .card-body code {
+    color: var(--amber);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    background: rgba(255,179,0,.08);
+    padding: 1px 5px;
+    border-radius: 2px;
+  }
+
+  /* ── SPEC TABLE ── */
+  .spec-section {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem 6rem;
+  }
+
+  .spec-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1.5px solid var(--green-dim);
+  }
+
+  @media (max-width: 640px) {
+    .spec-grid { grid-template-columns: 1fr; }
+  }
+
+  .spec-item {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid rgba(57,255,20,0.12);
+    border-right: 1px solid rgba(57,255,20,0.12);
+    display: flex;
+    gap: 1rem;
+    align-items: baseline;
+  }
+
+  .spec-item:nth-child(2n) { border-right: none; }
+
+  .spec-key {
+    font-size: 11px;
+    letter-spacing: .1em;
+    color: var(--green-dim);
+    min-width: 110px;
+    flex-shrink: 0;
+  }
+
+  .spec-val {
+    font-size: 13px;
+    color: var(--green);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--green-dim);
+    padding: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    font-size: 12px;
+    color: var(--green-dim);
+    letter-spacing: .06em;
+  }
+
+  footer a { color: var(--green-dim); text-decoration: none; }
+  footer a:hover { color: var(--green); }
+
+  /* ── Z80 chip SVG art inline ── */
+  .chip-decoration {
+    position: absolute;
+    right: 6%;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: .06;
+    pointer-events: none;
+  }
+
+  @media (max-width: 900px) {
+    .chip-decoration { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">PC-G · LCD · REF</div>
+  <ul>
+    <li><a href="index.html">HOME</a></li>
+    <li><a href="ports.html">I/O PORTS</a></li>
+    <li><a href="https://github.com/z88dk/z88dk/issues/2664" target="_blank">Z88DK</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+
+  <!-- large background Z80 chip silhouette -->
+  <svg class="chip-decoration" width="520" height="520" viewBox="0 0 520 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="120" y="120" width="280" height="280" rx="8" fill="#39ff14"/>
+    <!-- left pins -->
+    <rect x="60"  y="155" width="56" height="12" fill="#39ff14"/>
+    <rect x="60"  y="185" width="56" height="12" fill="#39ff14"/>
+    <rect x="60"  y="215" width="56" height="12" fill="#39ff14"/>
+    <rect x="60"  y="245" width="56" height="12" fill="#39ff14"/>
+    <rect x="60"  y="275" width="56" height="12" fill="#39ff14"/>
+    <rect x="60"  y="305" width="56" height="12" fill="#39ff14"/>
+    <rect x="60"  y="335" width="56" height="12" fill="#39ff14"/>
+    <!-- right pins -->
+    <rect x="404" y="155" width="56" height="12" fill="#39ff14"/>
+    <rect x="404" y="185" width="56" height="12" fill="#39ff14"/>
+    <rect x="404" y="215" width="56" height="12" fill="#39ff14"/>
+    <rect x="404" y="245" width="56" height="12" fill="#39ff14"/>
+    <rect x="404" y="275" width="56" height="12" fill="#39ff14"/>
+    <rect x="404" y="305" width="56" height="12" fill="#39ff14"/>
+    <rect x="404" y="335" width="56" height="12" fill="#39ff14"/>
+    <!-- top pins -->
+    <rect x="155" y="60"  width="12" height="56" fill="#39ff14"/>
+    <rect x="185" y="60"  width="12" height="56" fill="#39ff14"/>
+    <rect x="215" y="60"  width="12" height="56" fill="#39ff14"/>
+    <rect x="245" y="60"  width="12" height="56" fill="#39ff14"/>
+    <rect x="275" y="60"  width="12" height="56" fill="#39ff14"/>
+    <rect x="305" y="60"  width="12" height="56" fill="#39ff14"/>
+    <rect x="335" y="60"  width="12" height="56" fill="#39ff14"/>
+    <!-- bottom pins -->
+    <rect x="155" y="404" width="12" height="56" fill="#39ff14"/>
+    <rect x="185" y="404" width="12" height="56" fill="#39ff14"/>
+    <rect x="215" y="404" width="12" height="56" fill="#39ff14"/>
+    <rect x="245" y="404" width="12" height="56" fill="#39ff14"/>
+    <rect x="275" y="404" width="12" height="56" fill="#39ff14"/>
+    <rect x="305" y="404" width="12" height="56" fill="#39ff14"/>
+    <rect x="335" y="404" width="12" height="56" fill="#39ff14"/>
+    <!-- inner die marks -->
+    <rect x="160" y="160" width="200" height="200" rx="4" fill="none" stroke="#39ff14" stroke-width="3"/>
+    <text x="260" y="268" text-anchor="middle" font-family="monospace" font-size="42" font-weight="bold" fill="#39ff14">Z80</text>
+    <text x="260" y="296" text-anchor="middle" font-family="monospace" font-size="14" fill="#39ff14">ZILOG</text>
+  </svg>
+
+  <!-- PC-G815 device illustration -->
+  <div class="device-art">
+    <svg width="520" height="200" viewBox="0 0 520 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- body -->
+      <rect x="10" y="20" width="500" height="165" rx="10" fill="#0a150a" stroke="#39ff14" stroke-width="1.5"/>
+      <!-- inner bezel -->
+      <rect x="24" y="32" width="472" height="141" rx="6" fill="#050a04" stroke="#1a7a09" stroke-width="1"/>
+      <!-- LCD screen area -->
+      <rect x="36" y="42" width="340" height="90" rx="3" fill="#020702" stroke="#39ff14" stroke-width="1"/>
+      <!-- LCD pixel grid simulation -->
+      <rect x="40"  y="46" width="332" height="82" rx="2" fill="#020a02"/>
+      <!-- simulated pixel content: diagonal lines + border -->
+      <line x1="40"  y1="46"  x2="372" y2="128" stroke="#39ff14" stroke-width="1" opacity=".4"/>
+      <line x1="372" y1="46"  x2="40"  y2="128" stroke="#39ff14" stroke-width="1" opacity=".4"/>
+      <rect x="40"  y="46"  width="332" height="1" fill="#39ff14" opacity=".5"/>
+      <rect x="40"  y="127" width="332" height="1" fill="#39ff14" opacity=".5"/>
+      <rect x="40"  y="46"  width="1" height="82" fill="#39ff14" opacity=".5"/>
+      <rect x="371" y="46"  width="1" height="82" fill="#39ff14" opacity=".5"/>
+      <!-- LCD label -->
+      <text x="206" y="88" text-anchor="middle" font-family="'VT323',monospace" font-size="22" fill="#39ff14" opacity=".9">144 × 32</text>
+      <text x="206" y="108" text-anchor="middle" font-family="'Share Tech Mono',monospace" font-size="10" fill="#1a7a09" letter-spacing="2">GRAPHIC LCD</text>
+      <!-- right side: keys block -->
+      <rect x="390" y="42" width="95" height="90" rx="3" fill="#050a04" stroke="#1a7a09" stroke-width=".5"/>
+      <!-- key grid 5x4 -->
+      <g fill="#0d150c" stroke="#39ff14" stroke-width=".5" opacity=".7">
+        <rect x="396" y="47" width="16" height="10" rx="1"/>
+        <rect x="416" y="47" width="16" height="10" rx="1"/>
+        <rect x="436" y="47" width="16" height="10" rx="1"/>
+        <rect x="456" y="47" width="16" height="10" rx="1"/>
+        <rect x="396" y="61" width="16" height="10" rx="1"/>
+        <rect x="416" y="61" width="16" height="10" rx="1"/>
+        <rect x="436" y="61" width="16" height="10" rx="1"/>
+        <rect x="456" y="61" width="16" height="10" rx="1"/>
+        <rect x="396" y="75" width="16" height="10" rx="1"/>
+        <rect x="416" y="75" width="16" height="10" rx="1"/>
+        <rect x="436" y="75" width="16" height="10" rx="1"/>
+        <rect x="456" y="75" width="16" height="10" rx="1"/>
+        <rect x="396" y="89" width="16" height="10" rx="1"/>
+        <rect x="416" y="89" width="16" height="10" rx="1"/>
+        <rect x="436" y="89" width="16" height="10" rx="1"/>
+        <rect x="456" y="89" width="33" height="10" rx="1"/>
+      </g>
+      <!-- label row under screen -->
+      <text x="36"  y="148" font-family="'Share Tech Mono',monospace" font-size="9" fill="#1a7a09" letter-spacing="1">SHARP</text>
+      <text x="82"  y="148" font-family="'Share Tech Mono',monospace" font-size="9" fill="#39ff14" letter-spacing="1">PC-G815</text>
+      <text x="390" y="148" font-family="'Share Tech Mono',monospace" font-size="9" fill="#1a7a09" letter-spacing="1">Z80 CMOS</text>
+      <!-- 11-pin interface mark -->
+      <g opacity=".5">
+        <rect x="36" y="155" width="6" height="16" rx="1" fill="#1a7a09"/>
+        <rect x="46" y="155" width="6" height="16" rx="1" fill="#1a7a09"/>
+        <rect x="56" y="155" width="6" height="16" rx="1" fill="#1a7a09"/>
+        <rect x="66" y="155" width="6" height="16" rx="1" fill="#1a7a09"/>
+        <rect x="76" y="155" width="6" height="16" rx="1" fill="#1a7a09"/>
+        <rect x="86" y="155" width="6" height="16" rx="1" fill="#1a7a09"/>
+        <rect x="96" y="155" width="6" height="16" rx="1" fill="#1a7a09"/>
+        <text x="66" y="185" text-anchor="middle" font-family="'Share Tech Mono',monospace" font-size="8" fill="#1a7a09" letter-spacing="1">11-PIN I/F</text>
+      </g>
+      <!-- expansion bus right -->
+      <g opacity=".4">
+        <rect x="450" y="155" width="5" height="16" rx="1" fill="#1a7a09"/>
+        <rect x="458" y="155" width="5" height="16" rx="1" fill="#1a7a09"/>
+        <rect x="466" y="155" width="5" height="16" rx="1" fill="#1a7a09"/>
+        <rect x="474" y="155" width="5" height="16" rx="1" fill="#1a7a09"/>
+        <rect x="482" y="155" width="5" height="16" rx="1" fill="#1a7a09"/>
+        <text x="466" y="185" text-anchor="middle" font-family="'Share Tech Mono',monospace" font-size="8" fill="#1a7a09" letter-spacing="1">40-PIN EXP</text>
+      </g>
+    </svg>
+  </div>
+
+  <p class="hero-eyebrow">// HARDWARE REFERENCE · REVERSE ENGINEERING NOTES</p>
+
+  <h1 class="hero-title">Sharp PC-G Series<br>LCD Graphics<span class="cursor"></span></h1>
+
+  <p class="hero-subtitle">
+    Complete <em>I/O port reference</em> for driving the LCD display
+    on <em>PC-E200</em>, <em>PC-E220</em>, <em>PC-G815</em> and <em>PC-G850</em>
+    pocket computers from Z80 assembly.
+  </p>
+
+  <div class="hero-actions">
+    <a href="ports.html" class="btn btn-primary">VIEW PORT TABLE →</a>
+    <a href="https://github.com/z88dk/z88dk/issues/2664" target="_blank" class="btn btn-secondary">Z88DK SOURCE ↗</a>
+  </div>
+
+</section>
+
+<!-- ticker -->
+<div class="ticker-wrap">
+  <div class="ticker-inner">
+    <span>PORT <strong>54h</strong> · CMD LEFT PANEL &nbsp;·&nbsp; </span>
+    <span>PORT <strong>55h</strong> · BUSY LEFT &nbsp;·&nbsp; </span>
+    <span>PORT <strong>56h</strong> · DATA WRITE LEFT &nbsp;·&nbsp; </span>
+    <span>PORT <strong>57h</strong> · DATA READ LEFT &nbsp;·&nbsp; </span>
+    <span>PORT <strong>58h</strong> · CMD RIGHT PANEL &nbsp;·&nbsp; </span>
+    <span>PORT <strong>59h</strong> · BUSY RIGHT &nbsp;·&nbsp; </span>
+    <span>PORT <strong>5Ah</strong> · DATA WRITE RIGHT &nbsp;·&nbsp; </span>
+    <span>PORT <strong>5Bh</strong> · DATA READ RIGHT &nbsp;·&nbsp; </span>
+    <span>PORT <strong>40h</strong> · G850 LCD CMD &nbsp;·&nbsp; </span>
+    <span>144×32 · PC-G815 &nbsp;·&nbsp; 144×48 · PC-G850 &nbsp;·&nbsp; 144×32 · PC-E220 &nbsp;·&nbsp; </span>
+    <!-- duplicate for seamless loop -->
+    <span>PORT <strong>54h</strong> · CMD LEFT PANEL &nbsp;·&nbsp; </span>
+    <span>PORT <strong>55h</strong> · BUSY LEFT &nbsp;·&nbsp; </span>
+    <span>PORT <strong>56h</strong> · DATA WRITE LEFT &nbsp;·&nbsp; </span>
+    <span>PORT <strong>57h</strong> · DATA READ LEFT &nbsp;·&nbsp; </span>
+    <span>PORT <strong>58h</strong> · CMD RIGHT PANEL &nbsp;·&nbsp; </span>
+    <span>PORT <strong>59h</strong> · BUSY RIGHT &nbsp;·&nbsp; </span>
+    <span>PORT <strong>5Ah</strong> · DATA WRITE RIGHT &nbsp;·&nbsp; </span>
+    <span>PORT <strong>5Bh</strong> · DATA READ RIGHT &nbsp;·&nbsp; </span>
+    <span>PORT <strong>40h</strong> · G850 LCD CMD &nbsp;·&nbsp; </span>
+    <span>144×32 · PC-G815 &nbsp;·&nbsp; 144×48 · PC-G850 &nbsp;·&nbsp; 144×32 · PC-E220 &nbsp;·&nbsp; </span>
+  </div>
+</div>
+
+<!-- feature cards -->
+<section class="cards-section">
+  <div class="section-label">// COVERAGE</div>
+  <div class="cards">
+
+    <div class="card">
+      <div class="card-number">01</div>
+      <div class="card-title">PC-G815</div>
+      <div class="card-body">
+        Two independent HD61203-compatible controllers.
+        Left panel ports <code>54h–57h</code>, right panel <code>58h–5Bh</code>.
+        144×32 pixel display, mirrored column geometry on each half.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-number">02</div>
+      <div class="card-title">PC-G850 Series</div>
+      <div class="card-body">
+        Single controller, 144×48 pixels.
+        All commands through port <code>40h</code>, status echo on <code>41h</code>.
+        No explicit busy polling — command echo used instead.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-number">03</div>
+      <div class="card-title">PC-E200 / E220</div>
+      <div class="card-body">
+        HD62202+HD61203 chip pair, 144×32 pixels.
+        Ports <code>58h</code> (cmd), <code>59h</code> (busy), <code>5Ah</code> (write),
+        <code>5Bh</code> (read). Dummy-read latch priming required.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-number">04</div>
+      <div class="card-title">Read-Modify-Write</div>
+      <div class="card-body">
+        All E-series and G815 controllers require a <em>dummy read</em>
+        before the real read to prime the internal latch.
+        Re-issue column address after read to prevent auto-increment corruption.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-number">05</div>
+      <div class="card-title">Column Mirror Geometry</div>
+      <div class="card-body">
+        Each controller panel drives two symmetric halves.
+        Right half columns are addressed in reverse.
+        G815 left ctrl: <code>col = 119-X</code> for X&nbsp;≥&nbsp;60.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-number">06</div>
+      <div class="card-title">Pixel Byte Format</div>
+      <div class="card-body">
+        8 vertical pixels per byte. Bit&nbsp;0 = topmost pixel in page.
+        Page addressing: <code>0xB8 + page</code> (page 0–3 for 32 rows,
+        0–5 for G850's 48 rows).
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- device spec comparison -->
+<section class="spec-section">
+  <div class="section-label">// DEVICE COMPARISON</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:0;border:1.5px solid var(--green-dim);">
+
+    <!-- headers -->
+    <div style="padding:.75rem 1rem;border-bottom:1px solid rgba(57,255,20,.2);border-right:1px solid rgba(57,255,20,.12);font-size:11px;letter-spacing:.12em;color:var(--green-dim);">MODEL</div>
+    <div style="padding:.75rem 1rem;border-bottom:1px solid rgba(57,255,20,.2);border-right:1px solid rgba(57,255,20,.12);font-size:11px;letter-spacing:.12em;color:var(--green-dim);">DISPLAY</div>
+    <div style="padding:.75rem 1rem;border-bottom:1px solid rgba(57,255,20,.2);border-right:1px solid rgba(57,255,20,.12);font-size:11px;letter-spacing:.12em;color:var(--green-dim);">CTRL PORTS</div>
+    <div style="padding:.75rem 1rem;border-bottom:1px solid rgba(57,255,20,.2);font-size:11px;letter-spacing:.12em;color:var(--green-dim);">CPU</div>
+
+    <!-- E200/E220 -->
+    <div style="padding:.75rem 1rem;border-bottom:1px solid rgba(57,255,20,.08);border-right:1px solid rgba(57,255,20,.12);font-size:13px;color:var(--amber);">PC-E200/E220</div>
+    <div style="padding:.75rem 1rem;border-bottom:1px solid rgba(57,255,20,.08);border-right:1px solid rgba(57,255,20,.12);font-size:13px;color:var(--green);">144×32</div>
+    <div style="padding:.75rem 1rem;border-bottom:1px solid rgba(57,255,20,.08);border-right:1px solid rgba(57,255,20,.12);font-size:12px;color:var(--green);font-family:'Share Tech Mono',monospace;">58h 59h 5Ah 5Bh</div>
+    <div style="padding:.75rem 1rem;border-bottom:1px solid rgba(57,255,20,.08);font-size:13px;color:var(--green);">SC7852 / 3.58MHz</div>
+
+    <!-- G815 -->
+    <div style="padding:.75rem 1rem;border-bottom:1px solid rgba(57,255,20,.08);border-right:1px solid rgba(57,255,20,.12);font-size:13px;color:var(--amber);">PC-G815</div>
+    <div style="padding:.75rem 1rem;border-bottom:1px solid rgba(57,255,20,.08);border-right:1px solid rgba(57,255,20,.12);font-size:13px;color:var(--green);">144×32</div>
+    <div style="padding:.75rem 1rem;border-bottom:1px solid rgba(57,255,20,.08);border-right:1px solid rgba(57,255,20,.12);font-size:12px;color:var(--green);font-family:'Share Tech Mono',monospace;">54–57h + 58–5Bh</div>
+    <div style="padding:.75rem 1rem;border-bottom:1px solid rgba(57,255,20,.08);font-size:13px;color:var(--green);">Z80 CMOS</div>
+
+    <!-- G850 -->
+    <div style="padding:.75rem 1rem;border-right:1px solid rgba(57,255,20,.12);font-size:13px;color:var(--amber);">PC-G850 series</div>
+    <div style="padding:.75rem 1rem;border-right:1px solid rgba(57,255,20,.12);font-size:13px;color:var(--green);">144×48</div>
+    <div style="padding:.75rem 1rem;border-right:1px solid rgba(57,255,20,.12);font-size:12px;color:var(--green);font-family:'Share Tech Mono',monospace;">40h (+ mirrors)</div>
+    <div style="padding:.75rem 1rem;font-size:13px;color:var(--green);">LZ8514 / 8MHz</div>
+
+  </div>
+</section>
+
+<footer>
+  <div>Sharp PC-G Series · LCD I/O Reference · compiled from z88dk, akiyan.com, fu-sen gist</div>
+  <div><a href="ports.html">ports.html →</a></div>
+</footer>
+
+<script>
+  // subtle phosphor flicker on load
+  document.body.style.opacity = '0';
+  document.body.style.transition = 'opacity .15s';
+  requestAnimationFrame(() => {
+    document.body.style.opacity = '1';
+    setTimeout(() => {
+      document.body.style.opacity = '.92';
+      setTimeout(() => { document.body.style.opacity = '1'; }, 80);
+    }, 120);
+  });
+</script>
+</body>
+</html>
