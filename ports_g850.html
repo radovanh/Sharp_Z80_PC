@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PC-G850 I/O Port Reference · LCD Graphics</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --green:#39ff14;--green-dim:#1a7a09;--green-glow:#39ff1480;
+    --amber:#ffb300;--cyan:#00e5ff;--red:#ff4455;
+    --bg:#050a04;--bg2:#0a100a;
+    --scanline:rgba(0,0,0,0.18);
+    --font-mono:'Share Tech Mono',monospace;
+    --font-vt:'VT323',monospace;
+    --font-title:'Orbitron',sans-serif;
+  }
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--green);font-family:var(--font-mono);min-height:100vh;overflow-x:hidden;cursor:crosshair}
+  body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,var(--scanline) 0px,var(--scanline) 1px,transparent 1px,transparent 3px);pointer-events:none;z-index:9999}
+  body::after{content:'';position:fixed;inset:0;background-image:radial-gradient(circle,rgba(57,255,20,.05) 1px,transparent 1px);background-size:28px 28px;pointer-events:none;z-index:0}
+
+  nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:52px;border-bottom:1px solid var(--green-dim);background:rgba(5,10,4,.96);backdrop-filter:blur(4px)}
+  .nav-logo{font-family:var(--font-title);font-size:13px;font-weight:700;letter-spacing:.12em;color:var(--green);text-shadow:0 0 8px var(--green-glow)}
+  nav ul{list-style:none;display:flex;gap:2rem}
+  nav a{font-family:var(--font-mono);font-size:13px;color:var(--green-dim);text-decoration:none;letter-spacing:.08em;transition:color .2s}
+  nav a:hover,nav a.active{color:var(--green);text-shadow:0 0 8px var(--green-glow)}
+
+  .page-hdr{position:relative;z-index:1;padding:3rem 2rem 2rem;border-bottom:1px solid var(--green-dim);max-width:1160px;margin:0 auto}
+  .breadcrumb{font-size:11px;letter-spacing:.18em;color:var(--green-dim);margin-bottom:.75rem}
+  .breadcrumb a{color:var(--green-dim);text-decoration:none}
+  .breadcrumb a:hover{color:var(--green)}
+  .page-title{font-family:var(--font-vt);font-size:clamp(2rem,5vw,3.5rem);color:var(--cyan);text-shadow:0 0 16px rgba(0,229,255,.4);margin-bottom:.5rem}
+  .page-desc{font-size:13px;color:var(--green-dim);line-height:1.7;max-width:740px}
+  .page-desc code{color:var(--amber);background:rgba(255,179,0,.08);padding:1px 4px;border-radius:2px;font-size:12px}
+
+  .layout{position:relative;z-index:1;display:grid;grid-template-columns:200px 1fr;max-width:1160px;margin:0 auto}
+  @media(max-width:780px){.layout{grid-template-columns:1fr}.sidebar{display:none}}
+
+  .sidebar{border-right:1px solid var(--green-dim);padding:1.5rem 1.25rem;position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--green-dim) transparent}
+  .sb-label{font-size:10px;letter-spacing:.2em;color:var(--green-dim);margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:1px solid rgba(57,255,20,.15)}
+  .sidebar ul{list-style:none}
+  .sidebar li{margin-bottom:.2rem}
+  .sidebar a{font-size:11px;color:var(--green-dim);text-decoration:none;display:block;padding:.25rem .4rem;border-left:2px solid transparent;transition:all .15s}
+  .sidebar a:hover,.sidebar a.active{color:var(--green);border-left-color:var(--green);background:rgba(57,255,20,.04)}
+  .sb-grp{font-size:10px;letter-spacing:.15em;color:var(--green-dim);opacity:.45;padding:.75rem .4rem .15rem}
+
+  .content{padding:2rem 2.5rem 5rem}
+  .ref-sec{margin-bottom:3rem;scroll-margin-top:64px}
+  .sec-title{font-family:var(--font-title);font-size:12px;font-weight:700;letter-spacing:.14em;color:var(--cyan);margin-bottom:1rem;padding-bottom:.4rem;border-bottom:1px solid rgba(0,229,255,.3);display:flex;align-items:center;gap:.6rem}
+  .sec-badge{font-family:var(--font-mono);font-size:9px;font-weight:400;letter-spacing:.08em;color:var(--bg);background:var(--green-dim);padding:1px 6px;border-radius:2px}
+
+  .tbl-wrap{overflow-x:auto;border:1px solid var(--green-dim);border-radius:2px;margin-bottom:1rem}
+  table{width:100%;border-collapse:collapse;font-size:12px;min-width:560px}
+  thead th{font-size:10px;letter-spacing:.15em;color:var(--green-dim);padding:7px 12px;text-align:left;background:var(--bg2);border-bottom:1px solid var(--green-dim);white-space:nowrap}
+  tbody tr{border-bottom:1px solid rgba(57,255,20,.07);transition:background .12s}
+  tbody tr:last-child{border-bottom:none}
+  tbody tr:hover{background:rgba(57,255,20,.03)}
+  td{padding:9px 12px;vertical-align:top;line-height:1.6}
+  .td-port{font-family:var(--font-mono);font-weight:700;font-size:14px;color:var(--amber);text-shadow:0 0 5px rgba(255,179,0,.3);white-space:nowrap}
+  .dir{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.06em;padding:2px 6px;border-radius:2px;white-space:nowrap}
+  .dir-out{color:var(--red);background:rgba(255,68,85,.12);border:1px solid rgba(255,68,85,.3)}
+  .dir-in{color:var(--cyan);background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.25)}
+  .td-fn{color:var(--green);font-size:12px}
+  .fn-note{display:block;font-size:11px;color:var(--green-dim);margin-top:4px;line-height:1.65}
+  .fn-note code{color:var(--amber);font-size:11px;background:rgba(255,179,0,.07);padding:1px 4px;border-radius:2px}
+  .sep td{background:var(--bg2);font-size:10px;letter-spacing:.18em;color:var(--green-dim);padding:5px 12px;border-top:1px solid var(--green-dim);border-bottom:1px solid rgba(57,255,20,.15)}
+
+  .callout{border-left:2px solid var(--amber);padding:.9rem 1.1rem;background:rgba(255,179,0,.05);margin:1rem 0;font-size:12px;color:var(--green);line-height:1.7}
+  .callout strong{color:var(--amber)}
+  .callout-info{border-left-color:var(--cyan);background:rgba(0,229,255,.04)}
+  .callout-info strong{color:var(--cyan)}
+
+  pre.code{font-family:var(--font-mono);font-size:11px;color:var(--green-dim);line-height:1.7;border:1px solid var(--green-dim);padding:1rem 1.25rem;background:var(--bg2);overflow-x:auto;white-space:pre;margin:1rem 0}
+  pre.code .kw{color:var(--green)}
+  pre.code .cm{color:#1a7a09;font-style:italic}
+  pre.code .am{color:var(--amber)}
+
+  .steps{list-style:none;margin:.75rem 0}
+  .steps li{display:flex;gap:.75rem;padding:.4rem 0;border-bottom:1px solid rgba(57,255,20,.06);font-size:12px;color:var(--green);line-height:1.6}
+  .steps li:last-child{border-bottom:none}
+  .step-n{font-family:var(--font-vt);font-size:1.3rem;color:var(--green-dim);min-width:24px;line-height:1}
+
+  .cmd-tbl td,.cmd-tbl th{font-size:11px;padding:6px 12px}
+  .cmd-range{color:var(--amber);font-family:var(--font-mono);white-space:nowrap}
+  .cmd-name{color:var(--green)}
+  .cmd-note{color:var(--green-dim);font-size:11px}
+
+  .sources{margin-top:2.5rem;padding:.9rem 1.25rem;border:1px solid rgba(57,255,20,.15);background:var(--bg2);font-size:11px;color:var(--green-dim);line-height:1.8}
+  .sources a{color:var(--green-dim);text-decoration:underline;text-underline-offset:3px}
+  .sources a:hover{color:var(--green)}
+
+  footer{position:relative;z-index:1;border-top:1px solid var(--green-dim);padding:1.25rem 2rem;font-size:12px;color:var(--green-dim);display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;letter-spacing:.06em}
+  footer a{color:var(--green-dim);text-decoration:none}
+  footer a:hover{color:var(--green)}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">SHARP POKECOM · GFX · REF</div>
+  <ul>
+    <li><a href="index.html">HOME</a></li>
+    <li><a href="ports_g815.html">G815</a></li>
+    <li><a href="ports_g815.html">G815 PORTS</a></li>
+    <li><a href="rom_g815.html">G815 ROM</a></li>
+    <li><a href="ports_g850.html" class="active">G850 PORTS</a></li>
+    <li><a href="rom_g850.html">G850 ROM</a></li>
+    <li><a href="https://github.com/z88dk/z88dk" target="_blank">Z88DK</a></li>
+  </ul>
+</nav>
+
+<div class="page-hdr">
+  <div class="breadcrumb"><a href="index.html">HOME</a> / PC-G850 I/O PORT REFERENCE</div>
+  <h1 class="page-title">PC-G850 I/O Port Reference</h1>
+  <p class="page-desc">
+    Z80 I/O port map for LCD graphics on the Sharp PC-G850, PC-G850S, PC-G850V, and PC-G850VS.
+    The G850 uses a single integrated LCD controller accessed entirely through port <code>40h</code>,
+    making it simpler than the G815's dual-controller scheme.
+    Data from z88dk <code>locate.asm</code>, akiyan.com technical data, and the poke-com GPRINT documentation.
+  </p>
+</div>
+
+<div class="layout">
+<nav class="sidebar">
+  <div class="sb-label">// ON THIS PAGE</div>
+  <ul>
+    <li><div class="sb-grp">HARDWARE</div></li>
+    <li><a href="#ports">Port Map</a></li>
+    <li><a href="#commands">Command Reference</a></li>
+    <li><div class="sb-grp">PROTOCOL</div></li>
+    <li><a href="#sequence">Command Sequence</a></li>
+    <li><a href="#x-addr">X Addressing</a></li>
+    <li><a href="#y-addr">Y Addressing</a></li>
+    <li><a href="#pixel-byte">Pixel Byte</a></li>
+    <li><div class="sb-grp">CODE</div></li>
+    <li><a href="#init">Startup</a></li>
+    <li><a href="#code">Sample Code</a></li>
+  </ul>
+</nav>
+
+<main class="content">
+
+<!-- ── PORT MAP ── -->
+<section class="ref-sec" id="ports">
+  <h2 class="sec-title">Port Map <span class="sec-badge">PC-G850 SERIES</span></h2>
+
+  <div class="callout callout-info">
+    <strong>ARCHITECTURE:</strong> The G850 uses a single controller. All commands — X address,
+    Y page, scroll, contrast, display on/off — go through port <code>40h</code>.
+    Data is written and read back through port <code>42h</code>/<code>41h</code>.
+    Even/odd address mirrors exist across the <code>40h–6Fh</code> range.
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>PORT</th><th>DIR</th><th>NAME</th><th>DESCRIPTION</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="td-port">40h</td>
+          <td><span class="dir dir-out">OUT</span></td>
+          <td class="td-fn">Command register</td>
+          <td class="td-fn">
+            All drawing commands: X address nibbles, Y page, scroll, contrast, display control.
+            <span class="fn-note">Also even-address mirrors: <code>42h, 44h … 6Eh</code> are identical.</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="td-port">40h</td>
+          <td><span class="dir dir-in">IN</span></td>
+          <td class="td-fn">Status / command echo</td>
+          <td class="td-fn">
+            Reads back the last value written to <code>40h</code>. Bit 7 = busy when set.
+            <span class="fn-note">Also odd-address mirrors: <code>41h, 43h … 6Fh</code>.</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="td-port">42h</td>
+          <td><span class="dir dir-out">OUT</span></td>
+          <td class="td-fn">Pixel data write</td>
+          <td class="td-fn">
+            Write one pixel byte (8 vertical pixels) at the current GCURSOR position.
+            <span class="fn-note">GCURSOR auto-increments after each write. Even-address mirrors apply here too.</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="td-port">41h</td>
+          <td><span class="dir dir-in">IN</span></td>
+          <td class="td-fn">Pixel data read</td>
+          <td class="td-fn">
+            Read pixel byte at current GCURSOR. First read is dummy (primes latch), second returns data.
+            <span class="fn-note">Odd-address mirrors apply.</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ── COMMAND REFERENCE ── -->
+<section class="ref-sec" id="commands">
+  <h2 class="sec-title">Command Reference <span class="sec-badge">PORT 40h</span></h2>
+  <p style="font-size:12px;color:var(--green-dim);margin-bottom:.9rem;line-height:1.7">
+    The upper nibble of the command byte selects the command class.
+    The lower nibble carries the parameter.
+  </p>
+  <div class="tbl-wrap">
+    <table class="cmd-tbl">
+      <thead><tr><th>VALUE RANGE</th><th>COMMAND</th><th>NOTES</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="cmd-range">00h – 0Fh</td>
+          <td class="cmd-name">GCURSOR X low nibble</td>
+          <td class="cmd-note">Lower 4 bits of X column address. Send this first.</td>
+        </tr>
+        <tr>
+          <td class="cmd-range">10h – 1Fh</td>
+          <td class="cmd-name">GCURSOR X high nibble</td>
+          <td class="cmd-note">Upper 4 bits of X column address, OR'd with 10h. Send after low nibble.</td>
+        </tr>
+        <tr>
+          <td class="cmd-range">24h</td>
+          <td class="cmd-name">LCD voltage OFF</td>
+          <td class="cmd-note">Turn display power off.</td>
+        </tr>
+        <tr>
+          <td class="cmd-range">25h</td>
+          <td class="cmd-name">LCD voltage ON</td>
+          <td class="cmd-note">Turn display power on.</td>
+        </tr>
+        <tr>
+          <td class="cmd-range">40h – 7Fh</td>
+          <td class="cmd-name">VRAM display start line</td>
+          <td class="cmd-note">Vertical scroll: 40h = line 0 (no scroll), 7Fh = line 63. 1-dot-per-step smooth scroll.</td>
+        </tr>
+        <tr>
+          <td class="cmd-range">80h – 9Fh</td>
+          <td class="cmd-name">Contrast</td>
+          <td class="cmd-note">80h = brightest, 9Fh = darkest.</td>
+        </tr>
+        <tr>
+          <td class="cmd-range">A0h / A1h</td>
+          <td class="cmd-name">Mirror off / on</td>
+          <td class="cmd-note">A1h flips display horizontally.</td>
+        </tr>
+        <tr>
+          <td class="cmd-range">A6h / A7h</td>
+          <td class="cmd-name">Invert off / on</td>
+          <td class="cmd-note">A7h inverts all pixels (black↔white).</td>
+        </tr>
+        <tr>
+          <td class="cmd-range">B0h – B7h</td>
+          <td class="cmd-name">GCURSOR Y page</td>
+          <td class="cmd-note">Select 8-pixel row band. B0h = rows 0–7, B5h = rows 40–47 (max for 48-row display).</td>
+        </tr>
+        <tr>
+          <td class="cmd-range">C0h – CFh</td>
+          <td class="cmd-name">Partial display modes</td>
+          <td class="cmd-note">Various partial-screen suppression modes. C0h = normal full display.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ── SEQUENCE ── -->
+<section class="ref-sec" id="sequence">
+  <h2 class="sec-title">Command Sequence</h2>
+  <ol class="steps">
+    <li><span class="step-n">1</span>Reset scroll: <code>OUT(40h, 40h)</code> — sets display start line to 0</li>
+    <li><span class="step-n">2</span>Set Y page: <code>OUT(40h, 0xB0 + (Y&gt;&gt;3))</code> — selects 8-pixel row band</li>
+    <li><span class="step-n">3</span>Set X low nibble: <code>OUT(40h, X &amp; 0x0F)</code></li>
+    <li><span class="step-n">4</span>Set X high nibble: <code>OUT(40h, (X &gt;&gt; 4) | 0x10)</code></li>
+    <li><span class="step-n">5</span>Write pixel byte: <code>OUT(42h, byte)</code></li>
+  </ol>
+  <div class="callout">
+    <strong>NOTE:</strong> On the G850, Y is set before X (opposite approach would also work since each command
+    is independent), but the z88dk library sets Y page in <code>sety()</code> then X nibbles in <code>setx()</code>,
+    and this order is confirmed to work correctly.
+  </div>
+</section>
+
+<!-- ── X ADDRESSING ── -->
+<section class="ref-sec" id="x-addr">
+  <h2 class="sec-title">X Addressing — Two Nibbles</h2>
+  <p style="font-size:12px;color:var(--green-dim);margin-bottom:.9rem;line-height:1.7">
+    The G850 column address is 8 bits wide (0–143), sent as two 4-bit nibbles.
+    Unlike the G815, there is no mirror — X=0 maps to the leftmost column,
+    X=143 to the rightmost, with a single controller covering the full width.
+  </p>
+  <pre class="code">
+  <span class="cm">; Set GCURSOR X to column X (0-143)</span>
+  <span class="cm">; Send low nibble first, then high nibble | 0x10</span>
+  <span class="kw">set_x:</span>
+      ld   a, h           <span class="cm">; H = X</span>
+      and  <span class="am">00Fh</span>           <span class="cm">; low nibble (bits 3-0)</span>
+      out  (<span class="am">040h</span>), a     <span class="cm">; OUT low nibble</span>
+
+      ld   a, h
+      rra  \ rra \ rra \ rra  <span class="cm">; shift high nibble down</span>
+      and  <span class="am">00Fh</span>
+      or   <span class="am">010h</span>           <span class="cm">; set class bit: 1x = high nibble command</span>
+      out  (<span class="am">040h</span>), a     <span class="cm">; OUT high nibble | 0x10</span>
+  </pre>
+  <div class="callout callout-info">
+    <strong>EXAMPLE:</strong> X=100 (0x64): low nibble = 0x04 → <code>OUT(40h, 04h)</code>.
+    High nibble = 0x06 → <code>OUT(40h, 16h)</code>.
+  </div>
+</section>
+
+<!-- ── Y ADDRESSING ── -->
+<section class="ref-sec" id="y-addr">
+  <h2 class="sec-title">Y Addressing — Page Command</h2>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>CMD VALUE</th><th>PAGE</th><th>PIXEL ROWS</th></tr></thead>
+      <tbody>
+        <tr><td class="td-port" style="font-size:12px">0xB0</td><td class="td-fn">0</td><td class="td-fn">0–7</td></tr>
+        <tr><td class="td-port" style="font-size:12px">0xB1</td><td class="td-fn">1</td><td class="td-fn">8–15</td></tr>
+        <tr><td class="td-port" style="font-size:12px">0xB2</td><td class="td-fn">2</td><td class="td-fn">16–23</td></tr>
+        <tr><td class="td-port" style="font-size:12px">0xB3</td><td class="td-fn">3</td><td class="td-fn">24–31</td></tr>
+        <tr><td class="td-port" style="font-size:12px">0xB4</td><td class="td-fn">4</td><td class="td-fn">32–39</td></tr>
+        <tr><td class="td-port" style="font-size:12px">0xB5</td><td class="td-fn">5</td><td class="td-fn">40–47</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:11px;color:var(--green-dim);margin-top:.5rem">
+    Formula: <code>page_cmd = 0xB0 | (Y &gt;&gt; 3)</code>
+    &nbsp;—&nbsp;
+    Note: the G850 uses <code>0xB0</code> base (not <code>0xB8</code> like the G815).
+  </p>
+</section>
+
+<!-- ── PIXEL BYTE ── -->
+<section class="ref-sec" id="pixel-byte">
+  <h2 class="sec-title">Pixel Byte Format</h2>
+  <pre class="code">
+  One byte = 8 vertical pixels at the current GCURSOR column:
+
+  Byte:  bit7  bit6  bit5  bit4  bit3  bit2  bit1  <span class="kw">bit0</span>
+  Row:   Y+7   Y+6   Y+5   Y+4   Y+3   Y+2   Y+1   <span class="kw">Y+0</span>  ← topmost (smallest Y)
+
+  To plot pixel at (X, Y):
+    page      = Y &gt;&gt; 3                <span class="cm">; 0–5  (G850 has 6 pages)</span>
+    bit_index = Y &amp; 7
+    bit_mask  = 1 &lt;&lt; bit_index
+    page_cmd  = 0xB0 | page
+
+  Read-modify-write sequence:
+    OUT(40h, page_cmd)
+    OUT(40h, X &amp; 0Fh)       <span class="cm">; X low nibble</span>
+    OUT(40h, (X&gt;&gt;4)|10h)   <span class="cm">; X high nibble</span>
+    IN  A, (41h)             <span class="cm">; dummy read  (primes latch)</span>
+    IN  A, (41h)             <span class="cm">; real read   → existing byte</span>
+    OUT(40h, X &amp; 0Fh)       <span class="cm">; re-issue X (prevents auto-increment corruption)</span>
+    OUT(40h, (X&gt;&gt;4)|10h)
+    OR  bit_mask             <span class="cm">; set pixel</span>
+    OUT(42h, A)              <span class="cm">; write back</span>
+  </pre>
+</section>
+
+<!-- ── STARTUP ── -->
+<section class="ref-sec" id="init">
+  <h2 class="sec-title">Startup Sequence</h2>
+  <ol class="steps">
+    <li><span class="step-n">1</span>Reset scroll: <code>OUT(40h, 40h)</code> — start line 0 (value 40h in range 40h–7Fh)</li>
+    <li><span class="step-n">2</span>Optionally set contrast: <code>OUT(40h, 8Ch)</code> — mid-range</li>
+    <li><span class="step-n">3</span>Clear screen via BIOS: <code>CALL 0BFEEh</code> with A=space, B=count, DE=0</li>
+    <li><span class="step-n">4</span>Begin drawing</li>
+  </ol>
+  <pre class="code">
+  <span class="kw">scroll_reset:</span>
+      ld   a, <span class="am">040h</span>         <span class="cm">; start line 0  (range 40h-7Fh, 40h = no scroll)</span>
+      out  (<span class="am">040h</span>), a
+      ret
+  </pre>
+</section>
+
+<!-- ── SAMPLE CODE ── -->
+<section class="ref-sec" id="code">
+  <h2 class="sec-title">Complete plot Routine</h2>
+  <pre class="code">
+  <span class="cm">; plot_g850 -- set pixel at H=X (0-143), L=Y (0-47)</span>
+  <span class="cm">; Destroys: A, B, C</span>
+  <span class="kw">plot_g850:</span>
+      ld   a, h \ cp <span class="am">144</span> \ ret nc   <span class="cm">; bounds check X</span>
+      ld   a, l \ cp  <span class="am">48</span> \ ret nc   <span class="cm">; bounds check Y</span>
+
+      <span class="cm">; bit mask = 1 << (Y & 7)</span>
+      ld   a, l \ and <span class="am">007h</span>
+      jr   z, pg_bit0
+      ld   b, a \ ld a, <span class="am">001h</span>
+  <span class="kw">pg_shft:</span> rlca \ djnz pg_shft \ jr pg_mask
+  <span class="kw">pg_bit0:</span> ld a, <span class="am">001h</span>
+  <span class="kw">pg_mask:</span> ld c, a                  <span class="cm">; C = bit mask</span>
+
+      <span class="cm">; Y page command</span>
+      ld   a, l \ srl a \ srl a \ srl a
+      or   <span class="am">0B0h</span>                     <span class="cm">; G850 page base = 0xB0</span>
+      out  (<span class="am">040h</span>), a               <span class="cm">; SET Y</span>
+
+      <span class="cm">; X low nibble</span>
+      ld   a, h \ and <span class="am">00Fh</span>
+      out  (<span class="am">040h</span>), a               <span class="cm">; X low</span>
+
+      <span class="cm">; X high nibble</span>
+      ld   a, h \ rra \ rra \ rra \ rra
+      and  <span class="am">00Fh</span> \ or <span class="am">010h</span>
+      out  (<span class="am">040h</span>), a               <span class="cm">; X high | 0x10</span>
+
+      <span class="cm">; read-modify-write</span>
+      in   a, (<span class="am">041h</span>)               <span class="cm">; dummy read</span>
+      in   a, (<span class="am">041h</span>)               <span class="cm">; real read</span>
+      or   c                        <span class="cm">; set pixel bit</span>
+      ld   b, a                     <span class="cm">; save result</span>
+
+      <span class="cm">; re-issue X (reset auto-increment pointer)</span>
+      ld   a, h \ and <span class="am">00Fh</span>
+      out  (<span class="am">040h</span>), a
+      ld   a, h \ rra \ rra \ rra \ rra
+      and  <span class="am">00Fh</span> \ or <span class="am">010h</span>
+      out  (<span class="am">040h</span>), a
+
+      ld   a, b
+      out  (<span class="am">042h</span>), a               <span class="cm">; write back</span>
+      ret
+
+  <span class="cm">; plot_clear_g850 -- clear pixel at H=X, L=Y</span>
+  <span class="kw">plot_clear_g850:</span>
+      <span class="cm">; ... same as plot_g850 but AND ~bit_mask instead of OR</span>
+      <span class="cm">; replace "or c" with "cpl / and c / ld b,a" where c=mask</span>
+  </pre>
+  <div class="callout">
+    <strong>NOTE:</strong> On real G850 hardware, the <code>IN A,(41h)</code> read-modify-write
+    works correctly. If porting from G815 code which uses a shadow buffer (because G815 readback
+    is unreliable in the emulator), the shadow buffer approach also works on G850 and avoids the
+    double-read requirement.
+  </div>
+
+  <div class="sources">
+    <strong style="color:var(--green-dim);letter-spacing:.1em">// SOURCES</strong><br>
+    z88dk — <a href="https://github.com/z88dk/z88dk/blob/master/libsrc/target/g800/graphics/locate.asm" target="_blank">libsrc/target/g800/graphics/locate.asm</a> (G850 setx/sety routines)<br>
+    akiyan.com — <a href="http://www.akiyan.com/pc-g850_technical_data" target="_blank">SHARP PC-G850 解析資料</a> (full port analysis)<br>
+    poke-com.jimdofree.com — <a href="https://poke-com.jimdofree.com/gprint-%E3%82%92%E4%BD%BF%E3%81%86/" target="_blank">GPRINT port documentation</a><br>
+    z88dk — <a href="https://github.com/z88dk/z88dk/issues/2664" target="_blank">issue #2664</a> (G815/G850 graphics discussion)
+  </div>
+</section>
+
+</main>
+</div>
+
+<footer>
+  <div>Sharp PC-G850 · I/O Port Reference</div>
+  <div>
+    <a href="ports_g815.html">← G815 Reference</a> &nbsp;
+    <a href="index.html">Home →</a>
+  </div>
+</footer>
+
+<script>
+  document.body.style.opacity='0';
+  document.body.style.transition='opacity .12s';
+  requestAnimationFrame(()=>{
+    document.body.style.opacity='1';
+    setTimeout(()=>{document.body.style.opacity='.9';setTimeout(()=>{document.body.style.opacity='1'},70)},110);
+  });
+  const secs=document.querySelectorAll('.ref-sec');
+  const lnks=document.querySelectorAll('.sidebar a');
+  const obs=new IntersectionObserver(e=>{
+    e.forEach(en=>{
+      if(en.isIntersecting){
+        lnks.forEach(l=>l.classList.remove('active'));
+        const a=document.querySelector(`.sidebar a[href="#${en.target.id}"]`);
+        if(a)a.classList.add('active');
+      }
+    });
+  },{rootMargin:'-25% 0px -65% 0px'});
+  secs.forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>

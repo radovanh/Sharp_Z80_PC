@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PC-G815 ROM / BIOS Reference · IOCS Calls</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --green:#39ff14;--green-dim:#1a7a09;--green-glow:#39ff1480;
+    --amber:#ffb300;--cyan:#00e5ff;--red:#ff4455;--purple:#c084fc;
+    --bg:#050a04;--bg2:#0a100a;--bg3:#0d150c;
+    --scanline:rgba(0,0,0,0.18);
+    --font-mono:'Share Tech Mono',monospace;
+    --font-vt:'VT323',monospace;
+    --font-title:'Orbitron',sans-serif;
+  }
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--green);font-family:var(--font-mono);min-height:100vh;overflow-x:hidden;cursor:crosshair}
+  body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,var(--scanline) 0px,var(--scanline) 1px,transparent 1px,transparent 3px);pointer-events:none;z-index:9999}
+  body::after{content:'';position:fixed;inset:0;background-image:radial-gradient(circle,rgba(57,255,20,.05) 1px,transparent 1px);background-size:28px 28px;pointer-events:none;z-index:0}
+
+  nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:52px;border-bottom:1px solid var(--green-dim);background:rgba(5,10,4,.96);backdrop-filter:blur(4px)}
+  .nav-logo{font-family:var(--font-title);font-size:13px;font-weight:700;letter-spacing:.12em;color:var(--green);text-shadow:0 0 8px var(--green-glow)}
+  nav ul{list-style:none;display:flex;gap:1.75rem}
+  nav a{font-family:var(--font-mono);font-size:13px;color:var(--green-dim);text-decoration:none;letter-spacing:.08em;transition:color .2s}
+  nav a:hover,nav a.active{color:var(--green);text-shadow:0 0 8px var(--green-glow)}
+
+  .page-hdr{position:relative;z-index:1;padding:3rem 2rem 2rem;border-bottom:1px solid var(--green-dim);max-width:1160px;margin:0 auto}
+  .breadcrumb{font-size:11px;letter-spacing:.18em;color:var(--green-dim);margin-bottom:.75rem}
+  .breadcrumb a{color:var(--green-dim);text-decoration:none}
+  .breadcrumb a:hover{color:var(--green)}
+  .page-title{font-family:var(--font-vt);font-size:clamp(2rem,5vw,3.5rem);color:var(--green);text-shadow:0 0 16px var(--green-glow);margin-bottom:.5rem}
+  .page-desc{font-size:13px;color:var(--green-dim);line-height:1.7;max-width:740px}
+  .page-desc code{color:var(--amber);background:rgba(255,179,0,.08);padding:1px 4px;border-radius:2px;font-size:12px}
+
+  .layout{position:relative;z-index:1;display:grid;grid-template-columns:210px 1fr;max-width:1160px;margin:0 auto}
+  @media(max-width:780px){.layout{grid-template-columns:1fr}.sidebar{display:none}}
+
+  .sidebar{border-right:1px solid var(--green-dim);padding:1.5rem 1.25rem;position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--green-dim) transparent}
+  .sb-label{font-size:10px;letter-spacing:.2em;color:var(--green-dim);margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:1px solid rgba(57,255,20,.15)}
+  .sidebar ul{list-style:none}
+  .sidebar li{margin-bottom:.15rem}
+  .sidebar a{font-size:11px;color:var(--green-dim);text-decoration:none;display:block;padding:.25rem .4rem;border-left:2px solid transparent;transition:all .15s}
+  .sidebar a:hover,.sidebar a.active{color:var(--green);border-left-color:var(--green);background:rgba(57,255,20,.04)}
+  .sb-grp{font-size:10px;letter-spacing:.15em;color:var(--green-dim);opacity:.45;padding:.7rem .4rem .12rem}
+
+  .content{padding:2rem 2.5rem 5rem}
+  .ref-sec{margin-bottom:3.5rem;scroll-margin-top:64px}
+  .sec-title{font-family:var(--font-title);font-size:12px;font-weight:700;letter-spacing:.14em;color:var(--green);margin-bottom:1rem;padding-bottom:.4rem;border-bottom:1px solid var(--green-dim);display:flex;align-items:center;gap:.6rem}
+  .sec-badge{font-family:var(--font-mono);font-size:9px;font-weight:400;letter-spacing:.08em;color:var(--bg);background:var(--green-dim);padding:1px 6px;border-radius:2px}
+
+  .routine{border:1px solid var(--green-dim);background:var(--bg2);margin-bottom:1.25rem;transition:border-color .2s}
+  .routine:hover{border-color:rgba(57,255,20,.4)}
+  .rout-hdr{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;padding:.75rem 1rem;border-bottom:1px solid rgba(57,255,20,.12);flex-wrap:wrap;gap:.5rem}
+  .rout-addr{font-family:var(--font-vt);font-size:2rem;color:var(--amber);text-shadow:0 0 8px rgba(255,179,0,.35);line-height:1}
+  .rout-name{font-family:var(--font-title);font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--green)}
+  .rout-tags{display:flex;gap:.4rem;flex-wrap:wrap}
+  .tag{font-size:9px;letter-spacing:.08em;padding:2px 7px;border-radius:2px;border:1px solid;white-space:nowrap}
+  .tag-display{color:var(--cyan);border-color:rgba(0,229,255,.3);background:rgba(0,229,255,.06)}
+  .tag-input{color:var(--purple);border-color:rgba(192,132,252,.3);background:rgba(192,132,252,.06)}
+  .tag-system{color:var(--amber);border-color:rgba(255,179,0,.3);background:rgba(255,179,0,.06)}
+  .tag-verified{color:var(--green);border-color:rgba(57,255,20,.3);background:rgba(57,255,20,.06)}
+  .rout-body{padding:.75rem 1rem;display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem}
+  @media(max-width:600px){.rout-body{grid-template-columns:1fr}}
+  .rout-col-title{font-size:10px;letter-spacing:.18em;color:var(--green-dim);margin-bottom:.35rem}
+  .rout-col-body{font-size:12px;color:var(--green);line-height:1.65}
+  .rout-col-body code{color:var(--amber);font-size:11px;background:rgba(255,179,0,.08);padding:1px 4px;border-radius:2px}
+  .rout-col-body .reg{color:var(--cyan);font-family:var(--font-mono)}
+  .rout-desc{padding:.5rem 1rem .75rem;font-size:12px;color:var(--green-dim);line-height:1.7;border-top:1px solid rgba(57,255,20,.07)}
+  .rout-desc code{color:var(--amber);font-size:11px;background:rgba(255,179,0,.08);padding:1px 4px;border-radius:2px}
+  .rout-note{padding:.5rem 1rem .75rem;font-size:11px;color:var(--green-dim);line-height:1.6;border-top:1px dashed rgba(57,255,20,.12);font-style:italic}
+
+  .callout{border-left:2px solid var(--amber);padding:.9rem 1.1rem;background:rgba(255,179,0,.05);margin:1rem 0;font-size:12px;color:var(--green);line-height:1.7}
+  .callout strong{color:var(--amber)}
+  .callout-info{border-left-color:var(--cyan);background:rgba(0,229,255,.04)}
+  .callout-info strong{color:var(--cyan)}
+
+  pre.code{font-family:var(--font-mono);font-size:11px;color:var(--green-dim);line-height:1.7;border:1px solid var(--green-dim);padding:1rem 1.25rem;background:var(--bg2);overflow-x:auto;white-space:pre;margin:1rem 0}
+  pre.code .kw{color:var(--green)}
+  pre.code .cm{color:#1a7a09;font-style:italic}
+  pre.code .am{color:var(--amber)}
+  pre.code .cy{color:var(--cyan)}
+
+  .key-tbl{font-size:11px}
+  .key-tbl td,.key-tbl th{padding:4px 8px;border:1px solid rgba(57,255,20,.12)}
+  .key-tbl thead th{background:var(--bg2);color:var(--green-dim);font-size:10px;letter-spacing:.1em}
+  .key-tbl td{color:var(--green-dim)}
+  .key-tbl td.key-val{color:var(--amber);font-family:var(--font-mono)}
+  .key-tbl td.key-name{color:var(--green)}
+  .tbl-wrap{overflow-x:auto;border:1px solid var(--green-dim);margin-bottom:1rem}
+  table.plain{width:100%;border-collapse:collapse;font-size:12px}
+  table.plain thead th{font-size:10px;letter-spacing:.12em;color:var(--green-dim);padding:7px 12px;text-align:left;background:var(--bg2);border-bottom:1px solid var(--green-dim)}
+  table.plain tbody tr{border-bottom:1px solid rgba(57,255,20,.07)}
+  table.plain tbody tr:hover{background:rgba(57,255,20,.03)}
+  table.plain td{padding:8px 12px;vertical-align:top;line-height:1.6;color:var(--green-dim)}
+  table.plain td:first-child{color:var(--amber);font-family:var(--font-mono);white-space:nowrap}
+  table.plain td strong{color:var(--green);font-weight:normal}
+
+  .sources{margin-top:2rem;padding:.9rem 1.25rem;border:1px solid rgba(57,255,20,.15);background:var(--bg2);font-size:11px;color:var(--green-dim);line-height:1.8}
+  .sources a{color:var(--green-dim);text-decoration:underline;text-underline-offset:3px}
+  .sources a:hover{color:var(--green)}
+
+  footer{position:relative;z-index:1;border-top:1px solid var(--green-dim);padding:1.25rem 2rem;font-size:12px;color:var(--green-dim);display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;letter-spacing:.06em}
+  footer a{color:var(--green-dim);text-decoration:none}
+  footer a:hover{color:var(--green)}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">SHARP POKECOM · GFX · REF</div>
+  <ul>
+    <li><a href="index.html">HOME</a></li>
+    <li><a href="ports_g815.html">G815 PORTS</a></li>
+    <li><a href="rom_g815.html" class="active">G815 ROM</a></li>
+    <li><a href="ports_g850.html">G850 PORTS</a></li>
+    <li><a href="rom_g850.html">G850 ROM</a></li>
+  </ul>
+</nav>
+
+<div class="page-hdr">
+  <div class="breadcrumb"><a href="index.html">HOME</a> / <a href="ports_g815.html">PC-G815</a> / ROM ROUTINES</div>
+  <h1 class="page-title">PC-G815 ROM / BIOS Reference</h1>
+  <p class="page-desc">
+    IOCS (BIOS) call table for the Sharp PC-G815 and compatible machines (PC-E200, PC-G8xx series).
+    All addresses are fixed ROM entry points callable from Z80 machine language.
+    Sources: ver0.sakura.ne.jp IOCS table, akiyan.com analysis, game binary reverse engineering, z88dk source.
+    Entries marked <span style="color:var(--green);font-size:11px;border:1px solid rgba(57,255,20,.4);padding:1px 5px;border-radius:2px">VERIFIED</span> were confirmed by direct use in working code.
+  </p>
+</div>
+
+<div class="layout">
+<nav class="sidebar">
+  <div class="sb-label">// ON THIS PAGE</div>
+  <ul>
+    <li><div class="sb-grp">DISPLAY</div></li>
+    <li><a href="#char-out">BE62 Char Output</a></li>
+    <li><a href="#char-ext">BE5F Char (Extended)</a></li>
+    <li><a href="#char-repeat">BFEE Char Repeat</a></li>
+    <li><a href="#str-out">BFF1 String Output</a></li>
+    <li><a href="#gfx-out">BFD0 Pattern Output</a></li>
+    <li><a href="#cls-gfx">BFEB Cls Graphics</a></li>
+    <li><a href="#cls-eol">BE65 Cls to EOL</a></li>
+    <li><div class="sb-grp">INPUT</div></li>
+    <li><a href="#inkey">BE53 Inkey (nowait)</a></li>
+    <li><a href="#waitkey">BCFD Waitkey</a></li>
+    <li><a href="#keyconv">BE56 Key→Char</a></li>
+    <li><a href="#hex2">BD09 Hex 2-digit</a></li>
+    <li><a href="#hex4">BD0F Hex 4-digit</a></li>
+    <li><div class="sb-grp">SYSTEM</div></li>
+    <li><a href="#regdump">0030 Register Dump</a></li>
+    <li><a href="#poweroff">C110 Power Off</a></li>
+    <li><div class="sb-grp">REFERENCE</div></li>
+    <li><a href="#keycodes">Key Code Table</a></li>
+    <li><a href="#workarea">Work Area</a></li>
+  </ul>
+</nav>
+
+<main class="content">
+
+<div class="callout callout-info">
+  <strong>REGISTER CONVENTIONS:</strong> Position parameter: <code>D</code> = row (0–3 for G815), <code>E</code> = column (0–23 character columns).
+  For graphics (<code>BFD0h</code>): <code>D</code> = pixel column (0–143), <code>E</code> = character row (0–3).
+  Registers listed as "destroyed" must be saved by the caller if needed.
+</div>
+
+<!-- ── DISPLAY ── -->
+<section class="ref-sec" id="char-out">
+  <h2 class="sec-title">Display Routines</h2>
+
+  <div class="routine">
+    <div class="rout-hdr">
+      <div>
+        <div class="rout-addr">BE62h</div>
+        <div class="rout-name">Single Character Output</div>
+      </div>
+      <div class="rout-tags">
+        <span class="tag tag-display">DISPLAY</span>
+        <span class="tag tag-verified">VERIFIED</span>
+      </div>
+    </div>
+    <div class="rout-body">
+      <div>
+        <div class="rout-col-title">// INPUT</div>
+        <div class="rout-col-body">
+          <span class="reg">A</span> = ASCII character code<br>
+          <span class="reg">D</span> = row (0–3)<br>
+          <span class="reg">E</span> = column (0–23)
+        </div>
+      </div>
+      <div>
+        <div class="rout-col-title">// OUTPUT</div>
+        <div class="rout-col-body">None</div>
+      </div>
+      <div>
+        <div class="rout-col-title">// DESTROYS</div>
+        <div class="rout-col-body"><span class="reg">AF BC HL</span><br>Preserves: <span class="reg">DE IX IY</span> and alternates</div>
+      </div>
+    </div>
+    <div class="rout-desc">Outputs one character to the screen at the specified row/column position. Used for single-character placement without scrolling.</div>
+    <div class="rout-note">Confirmed from game binary analysis — used before BFD0h calls to set up display context.</div>
+  </div>
+
+  <div class="routine" id="char-ext">
+    <div class="rout-hdr">
+      <div>
+        <div class="rout-addr">BE5Fh</div>
+        <div class="rout-name">Single Character Output (Extended)</div>
+      </div>
+      <div class="rout-tags">
+        <span class="tag tag-display">DISPLAY</span>
+      </div>
+    </div>
+    <div class="rout-body">
+      <div>
+        <div class="rout-col-title">// INPUT</div>
+        <div class="rout-col-body">
+          <span class="reg">A</span> = character code (see extended codes below)<br>
+          <span class="reg">D</span> = row (0–3)<br>
+          <span class="reg">E</span> = column (0–23)
+        </div>
+      </div>
+      <div>
+        <div class="rout-col-title">// OUTPUT</div>
+        <div class="rout-col-body">None</div>
+      </div>
+      <div>
+        <div class="rout-col-title">// DESTROYS</div>
+        <div class="rout-col-body"><span class="reg">AF BC HL</span></div>
+      </div>
+    </div>
+    <div class="rout-desc">
+      Extended character output supporting special symbols via codes <code>0x10</code>–<code>0x1F</code>:
+      <code>10h</code>=空(blank), <code>11h</code>=橋|1, <code>12h</code>=橋|2, <code>13h</code>=橋,
+      <code>14h</code>=&lt;橋, <code>15h</code>=^2, <code>16h</code>=^3, <code>17h</code>=~x,
+      <code>18h</code>=~y, and more. Also outputs standard ASCII when A ≥ 0x20.
+    </div>
+  </div>
+
+  <div class="routine" id="char-repeat">
+    <div class="rout-hdr">
+      <div>
+        <div class="rout-addr">BFEEh</div>
+        <div class="rout-name">Repeated Character Output</div>
+      </div>
+      <div class="rout-tags">
+        <span class="tag tag-display">DISPLAY</span>
+        <span class="tag tag-verified">VERIFIED</span>
+      </div>
+    </div>
+    <div class="rout-body">
+      <div>
+        <div class="rout-col-title">// INPUT</div>
+        <div class="rout-col-body">
+          <span class="reg">A</span> = ASCII character (e.g. <code>0x20</code> = space)<br>
+          <span class="reg">B</span> = repeat count<br>
+          <span class="reg">D</span> = row (0–3)<br>
+          <span class="reg">E</span> = column (0–23)
+        </div>
+      </div>
+      <div>
+        <div class="rout-col-title">// OUTPUT</div>
+        <div class="rout-col-body">
+          <span class="reg">C</span> = scroll-up count<br>
+          <span class="reg">DE</span> = position after last char
+        </div>
+      </div>
+      <div>
+        <div class="rout-col-title">// DESTROYS</div>
+        <div class="rout-col-body"><span class="reg">AF B HL</span></div>
+      </div>
+    </div>
+    <div class="rout-desc">
+      Outputs the same character <code>B</code> times starting at <code>(D,E)</code>.
+      To clear the entire screen: <code>LD A,0x20 / LD B,96 / LD DE,0x0000 / CALL BFEEh</code>
+      (96 = 4 rows × 24 columns).
+    </div>
+  </div>
+
+  <div class="routine" id="str-out">
+    <div class="rout-hdr">
+      <div>
+        <div class="rout-addr">BFF1h</div>
+        <div class="rout-name">String Output</div>
+      </div>
+      <div class="rout-tags">
+        <span class="tag tag-display">DISPLAY</span>
+        <span class="tag tag-verified">VERIFIED</span>
+      </div>
+    </div>
+    <div class="rout-body">
+      <div>
+        <div class="rout-col-title">// INPUT</div>
+        <div class="rout-col-body">
+          <span class="reg">B</span> = character count<br>
+          <span class="reg">D</span> = row (0–3)<br>
+          <span class="reg">E</span> = column (0–23)<br>
+          <span class="reg">HL</span> = address of string data
+        </div>
+      </div>
+      <div>
+        <div class="rout-col-title">// OUTPUT</div>
+        <div class="rout-col-body">
+          <span class="reg">C</span> = scroll-up count<br>
+          <span class="reg">DE</span> = position after last char<br>
+          <span class="reg">HL</span> = address after last byte read
+        </div>
+      </div>
+      <div>
+        <div class="rout-col-title">// DESTROYS</div>
+        <div class="rout-col-body"><span class="reg">AF B</span></div>
+      </div>
+    </div>
+    <div class="rout-desc">
+      Outputs <code>B</code> bytes from the address in <code>HL</code> starting at position <code>(D,E)</code>.
+      If the output wraps past column 23, the display scrolls up (BASIC PRINT behaviour).
+      Scroll count is returned in C.
+    </div>
+    <div class="rout-note">Used extensively in the game binary for score/title text. The string is raw ASCII bytes — not null-terminated. Byte count in B is mandatory.</div>
+  </div>
+
+  <div class="routine" id="gfx-out">
+    <div class="rout-hdr">
+      <div>
+        <div class="rout-addr">BFD0h</div>
+        <div class="rout-name">Graphics Pattern Output (GPRINT)</div>
+      </div>
+      <div class="rout-tags">
+        <span class="tag tag-display">DISPLAY</span>
+        <span class="tag tag-verified">VERIFIED</span>
+      </div>
+    </div>
+    <div class="rout-body">
+      <div>
+        <div class="rout-col-title">// INPUT</div>
+        <div class="rout-col-body">
+          <span class="reg">B</span> = byte count<br>
+          <span class="reg">D</span> = pixel column (0–143)<br>
+          <span class="reg">E</span> = character row (0–3)<br>
+          <span class="reg">HL</span> = address of pattern data
+        </div>
+      </div>
+      <div>
+        <div class="rout-col-title">// OUTPUT</div>
+        <div class="rout-col-body">
+          <span class="reg">HL</span> = address after last byte read
+        </div>
+      </div>
+      <div>
+        <div class="rout-col-title">// DESTROYS</div>
+        <div class="rout-col-body"><span class="reg">AF B E</span><br>Preserves: <span class="reg">C D</span></div>
+      </div>
+    </div>
+    <div class="rout-desc">
+      Outputs <code>B</code> bytes of pixel pattern data at position <code>(D, E)</code>.
+      Each byte = 8 vertical pixels (bit 0 = topmost). <code>D</code> is the pixel column (0–143),
+      <code>E</code> is the character row (0–3). The BIOS handles all controller routing and page commands internally.
+    </div>
+    <div class="rout-note">
+      IMPORTANT: BFD0h destroys DE and HL. The game binary always does PUSH DE / PUSH HL before calling and POP HL / POP DE after.
+      Also destroys B (byte counter goes to 0). Called from BASIC via GPRINT command.
+    </div>
+  </div>
+
+  <div class="routine" id="cls-gfx">
+    <div class="rout-hdr">
+      <div>
+        <div class="rout-addr">BFEBh</div>
+        <div class="rout-name">Clear Graphics Screen</div>
+      </div>
+      <div class="rout-tags">
+        <span class="tag tag-display">DISPLAY</span>
+      </div>
+    </div>
+    <div class="rout-body">
+      <div>
+        <div class="rout-col-title">// INPUT</div>
+        <div class="rout-col-body">None</div>
+      </div>
+      <div>
+        <div class="rout-col-title">// OUTPUT</div>
+        <div class="rout-col-body">None</div>
+      </div>
+      <div>
+        <div class="rout-col-title">// DESTROYS</div>
+        <div class="rout-col-body"><span class="reg">AF B HL</span><br>Preserves: <span class="reg">C DE</span></div>
+      </div>
+    </div>
+    <div class="rout-desc">Clears the graphics display area (equivalent to BASIC's CLG command). Zeros all pixel data on screen.</div>
+    <div class="rout-note">Note: IX is listed as not preserved (不定). Do not rely on IX after this call.</div>
+  </div>
+
+  <div class="routine" id="cls-eol">
+    <div class="rout-hdr">
+      <div>
+        <div class="rout-addr">BE65h</div>
+        <div class="rout-name">Clear to End of Line / Right</div>
+      </div>
+      <div class="rout-tags">
+        <span class="tag tag-display">DISPLAY</span>
+      </div>
+    </div>
+    <div class="rout-body">
+      <div>
+        <div class="rout-col-title">// INPUT</div>
+        <div class="rout-col-body">
+          <span class="reg">D</span> = row (0–3)<br>
+          <span class="reg">E</span> = column (0–23)
+        </div>
+      </div>
+      <div>
+        <div class="rout-col-title">// OUTPUT</div>
+        <div class="rout-col-body">None</div>
+      </div>
+      <div>
+        <div class="rout-col-title">// DESTROYS</div>
+        <div class="rout-col-body"><span class="reg">AF BC DE HL</span></div>
+      </div>
+    </div>
+    <div class="rout-desc">Clears from position <code>(D,E)</code> to the end of that row (rightward).</div>
+  </div>
+</section>
+
+<!-- ── INPUT ── -->
+<section class="ref-sec" id="inkey">
+  <h2 class="sec-title">Input Routines</h2>
+
+  <div class="routine">
+    <div class="rout-hdr">
+      <div>
+        <div class="rout-addr">BE53h</div>
+        <div class="rout-name">Get Key Code (No Wait)</div>
+      </div>
+      <div class="rout-tags">
+        <span class="tag tag-input">INPUT</span>
+        <span class="tag tag-verified">VERIFIED</span>
+      </div>
+    </div>
+    <div class="rout-body">
+      <div>
+        <div class="rout-col-title">// INPUT</div>
+        <div class="rout-col-body">None</div>
+      </div>
+      <div>
+        <div class="rout-col-title">// OUTPUT</div>
+        <div class="rout-col-body">
+          <span class="reg">A</span> = key code (0 if no key)<br>
+          <span class="reg">Cy</span> = 1 if key is pressed
+        </div>
+      </div>
+      <div>
+        <div class="rout-col-title">// DESTROYS</div>
+        <div class="rout-col-body"><span class="reg">F</span> (Cy only in output)<br>Preserves: <span class="reg">B</span></div>
+      </div>
+    </div>
+    <div class="rout-desc">
+      Returns immediately with the current key state. If no key is pressed, A = 0 and carry is clear.
+      Returns key code from the IOCS key table (see below).
+    </div>
+    <div class="rout-note">
+      Requires interrupts to be enabled (EI) to function correctly from machine language monitor.
+      The BIOS key scan relies on the system timer interrupt to update the internal key buffer.
+      Polling loop: <code>CALL BE53h / OR A / JR Z, loop</code>
+    </div>
+  </div>
+
+  <div class="routine" id="waitkey">
+    <div class="rout-hdr">
+      <div>
+        <div class="rout-addr">BCFDh</div>
+        <div class="rout-name">Wait for Key Press</div>
+      </div>
+      <div class="rout-tags">
+        <span class="tag tag-input">INPUT</span>
+      </div>
+    </div>
+    <div class="rout-body">
+      <div>
+        <div class="rout-col-title">// INPUT</div>
+        <div class="rout-col-body">None</div>
+      </div>
+      <div>
+        <div class="rout-col-title">// OUTPUT</div>
+        <div class="rout-col-body">
+          <span class="reg">A</span> = key code of pressed key
+        </div>
+      </div>
+      <div>
+        <div class="rout-col-title">// DESTROYS</div>
+        <div class="rout-col-body"><span class="reg">F</span></div>
+      </div>
+    </div>
+    <div class="rout-desc">Blocks until a key is pressed, then returns the key code in A. Equivalent to BASIC's INKEY$ with a wait loop built in.</div>
+  </div>
+
+  <div class="routine" id="keyconv">
+    <div class="rout-hdr">
+      <div>
+        <div class="rout-addr">BE56h</div>
+        <div class="rout-name">Key Code to ASCII Character</div>
+      </div>
+      <div class="rout-tags">
+        <span class="tag tag-input">INPUT</span>
+      </div>
+    </div>
+    <div class="rout-body">
+      <div>
+        <div class="rout-col-title">// INPUT</div>
+        <div class="rout-col-body"><span class="reg">A</span> = key code (from BE53h)</div>
+      </div>
+      <div>
+        <div class="rout-col-title">// OUTPUT</div>
+        <div class="rout-col-body"><span class="reg">A</span> = ASCII character</div>
+      </div>
+      <div>
+        <div class="rout-col-title">// DESTROYS</div>
+        <div class="rout-col-body"><span class="reg">F B</span></div>
+      </div>
+    </div>
+    <div class="rout-desc">Converts a raw key code (as returned by BE53h) to the corresponding ASCII character. Respects CAPS lock state. Upper/lowercase depends on CAPS status.</div>
+  </div>
+
+  <div class="routine" id="hex2">
+    <div class="rout-hdr">
+      <div>
+        <div class="rout-addr">BD09h</div>
+        <div class="rout-name">Input 2-digit Hex Value</div>
+      </div>
+      <div class="rout-tags">
+        <span class="tag tag-input">INPUT</span>
+      </div>
+    </div>
+    <div class="rout-body">
+      <div>
+        <div class="rout-col-title">// INPUT</div>
+        <div class="rout-col-body">None</div>
+      </div>
+      <div>
+        <div class="rout-col-title">// OUTPUT</div>
+        <div class="rout-col-body"><span class="reg">A</span> = entered hex value (8-bit)</div>
+      </div>
+      <div>
+        <div class="rout-col-title">// DESTROYS</div>
+        <div class="rout-col-body"><span class="reg">F BC DE HL IX IY</span></div>
+      </div>
+    </div>
+    <div class="rout-desc">Waits for the user to type two hexadecimal digits and returns the resulting byte value in A.</div>
+  </div>
+
+  <div class="routine" id="hex4">
+    <div class="rout-hdr">
+      <div>
+        <div class="rout-addr">BD0Fh</div>
+        <div class="rout-name">Input 4-digit Hex Value</div>
+      </div>
+      <div class="rout-tags">
+        <span class="tag tag-input">INPUT</span>
+      </div>
+    </div>
+    <div class="rout-body">
+      <div>
+        <div class="rout-col-title">// INPUT</div>
+        <div class="rout-col-body">None</div>
+      </div>
+      <div>
+        <div class="rout-col-title">// OUTPUT</div>
+        <div class="rout-col-body"><span class="reg">HL</span> = entered hex value (16-bit)</div>
+      </div>
+      <div>
+        <div class="rout-col-title">// DESTROYS</div>
+        <div class="rout-col-body"><span class="reg">A BC DE IX IY</span></div>
+      </div>
+    </div>
+    <div class="rout-desc">Waits for the user to type four hexadecimal digits (e.g. for an address) and returns the 16-bit value in HL.</div>
+  </div>
+</section>
+
+<!-- ── SYSTEM ── -->
+<section class="ref-sec" id="regdump">
+  <h2 class="sec-title">System Routines</h2>
+
+  <div class="routine">
+    <div class="rout-hdr">
+      <div>
+        <div class="rout-addr">0030h</div>
+        <div class="rout-name">Register Dump (RST 30h)</div>
+      </div>
+      <div class="rout-tags">
+        <span class="tag tag-system">SYSTEM</span>
+      </div>
+    </div>
+    <div class="rout-body">
+      <div>
+        <div class="rout-col-title">// INPUT</div>
+        <div class="rout-col-body">None</div>
+      </div>
+      <div>
+        <div class="rout-col-title">// OUTPUT</div>
+        <div class="rout-col-body">None (displays on screen)</div>
+      </div>
+      <div>
+        <div class="rout-col-title">// DESTROYS</div>
+        <div class="rout-col-body">None</div>
+      </div>
+    </div>
+    <div class="rout-desc">Invoked via <code>RST 30h</code> (opcode <code>0xF7</code>). Displays all register values on screen — useful for debugging. Does not return to caller in the usual sense; returns to MON.</div>
+  </div>
+
+  <div class="routine" id="poweroff">
+    <div class="rout-hdr">
+      <div>
+        <div class="rout-addr">C110h</div>
+        <div class="rout-name">Power Off</div>
+      </div>
+      <div class="rout-tags">
+        <span class="tag tag-system">SYSTEM</span>
+      </div>
+    </div>
+    <div class="rout-body">
+      <div>
+        <div class="rout-col-title">// INPUT</div>
+        <div class="rout-col-body">None</div>
+      </div>
+      <div>
+        <div class="rout-col-title">// OUTPUT</div>
+        <div class="rout-col-body">Does not return</div>
+      </div>
+      <div>
+        <div class="rout-col-title">// DESTROYS</div>
+        <div class="rout-col-body">N/A</div>
+      </div>
+    </div>
+    <div class="rout-desc">Shuts the calculator off. The machine will restart from the BASIC prompt when the ON key is pressed.</div>
+  </div>
+</section>
+
+<!-- ── KEY CODES ── -->
+<section class="ref-sec" id="keycodes">
+  <h2 class="sec-title">Key Code Table <span class="sec-badge">BE53h RETURN VALUES</span></h2>
+  <p style="font-size:12px;color:var(--green-dim);margin-bottom:.9rem;line-height:1.7">
+    Values returned in A by <code>BE53h</code> and <code>BCFDh</code>.
+    Add <code>0x80</code> when SHIFT is held simultaneously. Two keys held = <code>0x52</code>.
+  </p>
+  <div class="tbl-wrap">
+    <table class="plain">
+      <thead><tr><th>CODE</th><th>KEY</th><th>CODE</th><th>KEY</th><th>CODE</th><th>KEY</th><th>CODE</th><th>KEY</th></tr></thead>
+      <tbody>
+        <tr><td>01h</td><td>OFF</td><td>02h</td><td>Q</td><td>03h</td><td>W</td><td>04h</td><td>E</td></tr>
+        <tr><td>05h</td><td>R</td><td>06h</td><td>T</td><td>07h</td><td>Y</td><td>08h</td><td>U</td></tr>
+        <tr><td>09h</td><td>A</td><td>0Ah</td><td>S</td><td>0Bh</td><td>D</td><td>0Ch</td><td>F</td></tr>
+        <tr><td>0Dh</td><td>G</td><td>0Eh</td><td>H</td><td>0Fh</td><td>J</td><td>10h</td><td>K</td></tr>
+        <tr><td>11h</td><td>Z</td><td>12h</td><td>X</td><td>13h</td><td>C</td><td>14h</td><td>V</td></tr>
+        <tr><td>15h</td><td>B</td><td>16h</td><td>N</td><td>17h</td><td>M</td><td>18h</td><td>,</td></tr>
+        <tr><td>19h</td><td>BASIC</td><td>1Ah</td><td>TEXT</td><td>1Bh</td><td>CAPS</td><td>1Ch</td><td>カナ</td></tr>
+        <tr><td>1Dh</td><td>TAB</td><td>1Eh</td><td>SPACE</td><td>1Fh</td><td>↓</td><td>20h</td><td>↑</td></tr>
+        <tr><td>21h</td><td>←</td><td>22h</td><td>→</td><td>23h</td><td>ANS</td><td>24h</td><td>0</td></tr>
+        <tr><td>25h</td><td>.</td><td>26h</td><td>=</td><td>27h</td><td>+</td><td>28h</td><td>RETURN</td></tr>
+        <tr><td>29h</td><td>L</td><td>2Ah</td><td>;</td><td>2Bh</td><td>CONST</td><td>2Ch</td><td>1</td></tr>
+        <tr><td>2Dh</td><td>2</td><td>2Eh</td><td>3</td><td>2Fh</td><td>-</td><td>30h</td><td>M+</td></tr>
+        <tr><td>31h</td><td>I</td><td>32h</td><td>O</td><td>33h</td><td>INS</td><td>34h</td><td>4</td></tr>
+        <tr><td>35h</td><td>5</td><td>36h</td><td>6</td><td>37h</td><td>*</td><td>38h</td><td>RCM</td></tr>
+        <tr><td>39h</td><td>P</td><td>3Ah</td><td>BS</td><td>3Bh</td><td>π</td><td>3Ch</td><td>7</td></tr>
+        <tr><td>3Dh</td><td>8</td><td>3Eh</td><td>9</td><td>3Fh</td><td>/</td><td>40h</td><td>)</td></tr>
+        <tr><td>41h</td><td>nPr</td><td>42h</td><td>→DEG</td><td>44h</td><td>x²</td><td>45h</td><td>yˣ</td></tr>
+        <tr><td>46h</td><td>(</td><td>47h</td><td>1/x</td><td>48h</td><td>MDF</td><td>49h</td><td>2ndF</td></tr>
+        <tr><td>4Ah</td><td>sin</td><td>4Bh</td><td>cos</td><td>4Ch</td><td>ln</td><td>4Dh</td><td>log</td></tr>
+        <tr><td>4Eh</td><td>tan</td><td>4Fh</td><td>F⇔E</td><td>50h</td><td>CLS</td><td>51h</td><td>ON</td></tr>
+        <tr><td>52h</td><td colspan="7">Two or more keys pressed simultaneously</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ── WORK AREA ── -->
+<section class="ref-sec" id="workarea">
+  <h2 class="sec-title">System Work Area <span class="sec-badge">RAM</span></h2>
+  <div class="tbl-wrap">
+    <table class="plain">
+      <thead><tr><th>ADDRESS</th><th>NAME</th><th>DESCRIPTION</th></tr></thead>
+      <tbody>
+        <tr><td>779Ch</td><td><strong>Contrast</strong></td><td>LCD contrast value. Write here then <code>OUT(40h, 0x80+val)</code> to apply.</td></tr>
+        <tr><td>7901h</td><td><strong>CAPS/Kana lock</strong></td><td>Bit 0 = always 1. Bit 1 = CAPS lock. Bit 2 = Kana lock. Writable.</td></tr>
+        <tr><td>790Dh</td><td><strong>VRAM scroll start</strong></td><td>Lower 4 bits × 8 = actual scroll pixel offset. Used by BIOS text scroll. Read to compensate graphics positioning.</td></tr>
+        <tr><td>7966h</td><td><strong>INKEY1</strong></td><td>Non-zero after INKEY$ if key pressed. Not ASCII — use INKEY2 for ASCII.</td></tr>
+        <tr><td>7E00h</td><td><strong>INKEY2</strong></td><td>ASCII value of last key pressed via INKEY$. Not reset on no-key — check INKEY1 first.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <pre class="code">
+  <span class="cm">; Read current scroll offset to compensate graphics Y position</span>
+  <span class="kw">get_scroll:</span>
+      ld   a, (<span class="am">790Dh</span>)
+      and  <span class="am">00Fh</span>         <span class="cm">; lower 4 bits</span>
+      ld   b, a
+      add  a, a
+      add  a, a
+      add  a, a         <span class="cm">; * 8 = pixel offset</span>
+      ret               <span class="cm">; A = actual display start line</span>
+
+  <span class="cm">; Reliable clear screen for ML programs:</span>
+  <span class="cm">; Scroll-reset both controllers first, then BIOS clear</span>
+  <span class="kw">cls_full:</span>
+      ld   a, <span class="am">0C0h</span>
+      out  (<span class="am">054h</span>), a    <span class="cm">; left controller scroll reset</span>
+      out  (<span class="am">058h</span>), a    <span class="cm">; right controller scroll reset</span>
+      ld   a, <span class="am">020h</span>      <span class="cm">; space</span>
+      ld   b, <span class="am">096h</span>      <span class="cm">; 4×24 = 96 chars</span>
+      ld   de, <span class="am">00000h</span>  <span class="cm">; row 0, col 0</span>
+      call <span class="am">0BFEEh</span>       <span class="cm">; fill with spaces</span>
+      ret
+  </pre>
+
+  <div class="sources">
+    <strong style="color:var(--green-dim);letter-spacing:.1em">// SOURCES</strong><br>
+    ver0.sakura.ne.jp — <a href="http://ver0.sakura.ne.jp/doc/pcg800iocs.html" target="_blank">PC-G800 IOCS call table</a> (primary reference)<br>
+    akiyan.com — <a href="http://www.akiyan.com/pc-g850_technical_data" target="_blank">SHARP PC-G850 解析資料</a> (work area, BIOS table)<br>
+    Game binary analysis — BIOS call addresses confirmed by tracing a working game (this project)<br>
+    z88dk — <a href="https://github.com/z88dk/z88dk" target="_blank">libsrc/target/g800</a> (key codes, BIOS usage)
+  </div>
+</section>
+
+</main>
+</div>
+
+<footer>
+  <div>Sharp PC-G815 · ROM / BIOS Reference · ver0.sakura.ne.jp · akiyan.com · hardware analysis</div>
+  <div>
+    <a href="ports_g815.html">← G815 Ports</a> &nbsp;
+    <a href="rom_g850.html">G850 ROM →</a>
+  </div>
+</footer>
+
+<script>
+  document.body.style.opacity='0';
+  document.body.style.transition='opacity .12s';
+  requestAnimationFrame(()=>{
+    document.body.style.opacity='1';
+    setTimeout(()=>{document.body.style.opacity='.9';setTimeout(()=>{document.body.style.opacity='1'},70)},110);
+  });
+  const secs=document.querySelectorAll('.ref-sec');
+  const lnks=document.querySelectorAll('.sidebar a');
+  const obs=new IntersectionObserver(e=>{
+    e.forEach(en=>{
+      if(en.isIntersecting){
+        lnks.forEach(l=>l.classList.remove('active'));
+        const a=document.querySelector(`.sidebar a[href="#${en.target.id}"]`);
+        if(a)a.classList.add('active');
+      }
+    });
+  },{rootMargin:'-20% 0px -60% 0px'});
+  secs.forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>

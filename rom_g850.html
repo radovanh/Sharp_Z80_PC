@@ -1,0 +1,211 @@
+      and transitions to that mode. Returns mode identifier in A.
+    </div>
+    <div class="rout-note">Not present on G815. Allows ML programs to hand control back to BASIC or TEXT mode cleanly.</div>
+  </div>
+</section>
+
+<!-- ── SYSTEM ── -->
+<section class="ref-sec" id="poweroff">
+  <h2 class="sec-title">System Routines</h2>
+
+  <div class="routine">
+    <div class="rout-hdr">
+      <div>
+        <div class="rout-addr">C110h</div>
+        <div class="rout-name">Power Off</div>
+      </div>
+      <div class="rout-tags">
+        <span class="tag tag-system">SYSTEM</span>
+      </div>
+    </div>
+    <div class="rout-body">
+      <div><div class="rout-col-title">// INPUT</div><div class="rout-col-body">None</div></div>
+      <div><div class="rout-col-title">// OUTPUT</div><div class="rout-col-body">Does not return</div></div>
+      <div><div class="rout-col-title">// DESTROYS</div><div class="rout-col-body">N/A</div></div>
+    </div>
+    <div class="rout-desc">Shuts the calculator off. Resumes from BASIC prompt on ON key press.</div>
+  </div>
+</section>
+
+<!-- ── KEY CODES ── -->
+<section class="ref-sec" id="keycodes">
+  <h2 class="sec-title">Key Code Table <span class="sec-badge">BE53h / BCFDh RETURN VALUES</span></h2>
+  <p style="font-size:12px;color:var(--green-dim);margin-bottom:.9rem;line-height:1.7">
+    SHIFT + key adds <code>0x80</code>. Two keys simultaneously = <code>0x52</code>.
+    Same codes as G815.
+  </p>
+  <div class="tbl-wrap">
+    <table class="plain">
+      <thead><tr><th>CODE</th><th>KEY</th><th>CODE</th><th>KEY</th><th>CODE</th><th>KEY</th><th>CODE</th><th>KEY</th></tr></thead>
+      <tbody>
+        <tr><td>01h</td><td>OFF</td><td>02h</td><td>Q</td><td>03h</td><td>W</td><td>04h</td><td>E</td></tr>
+        <tr><td>05h</td><td>R</td><td>06h</td><td>T</td><td>07h</td><td>Y</td><td>08h</td><td>U</td></tr>
+        <tr><td>09h</td><td>A</td><td>0Ah</td><td>S</td><td>0Bh</td><td>D</td><td>0Ch</td><td>F</td></tr>
+        <tr><td>0Dh</td><td>G</td><td>0Eh</td><td>H</td><td>0Fh</td><td>J</td><td>10h</td><td>K</td></tr>
+        <tr><td>11h</td><td>Z</td><td>12h</td><td>X</td><td>13h</td><td>C</td><td>14h</td><td>V</td></tr>
+        <tr><td>15h</td><td>B</td><td>16h</td><td>N</td><td>17h</td><td>M</td><td>18h</td><td>,</td></tr>
+        <tr><td>19h</td><td>BASIC</td><td>1Ah</td><td>TEXT</td><td>1Bh</td><td>CAPS</td><td>1Ch</td><td>カナ</td></tr>
+        <tr><td>1Dh</td><td>TAB</td><td>1Eh</td><td>SPACE</td><td>1Fh</td><td>↓</td><td>20h</td><td>↑</td></tr>
+        <tr><td>21h</td><td>←</td><td>22h</td><td>→</td><td>23h</td><td>ANS</td><td>24h</td><td>0</td></tr>
+        <tr><td>25h</td><td>.</td><td>26h</td><td>=</td><td>27h</td><td>+</td><td>28h</td><td>RETURN</td></tr>
+        <tr><td>29h</td><td>L</td><td>2Ah</td><td>;</td><td>2Bh</td><td>CONST</td><td>2Ch</td><td>1</td></tr>
+        <tr><td>2Dh</td><td>2</td><td>2Eh</td><td>3</td><td>2Fh</td><td>-</td><td>30h</td><td>M+</td></tr>
+        <tr><td>31h</td><td>I</td><td>32h</td><td>O</td><td>33h</td><td>INS</td><td>34h</td><td>4</td></tr>
+        <tr><td>35h</td><td>5</td><td>36h</td><td>6</td><td>37h</td><td>*</td><td>38h</td><td>RCM</td></tr>
+        <tr><td>39h</td><td>P</td><td>3Ah</td><td>BS</td><td>3Bh</td><td>π</td><td>3Ch</td><td>7</td></tr>
+        <tr><td>3Dh</td><td>8</td><td>3Eh</td><td>9</td><td>3Fh</td><td>/</td><td>40h</td><td>)</td></tr>
+        <tr><td>41h</td><td>nPr</td><td>42h</td><td>→DEG</td><td>44h</td><td>x²</td><td>45h</td><td>yˣ</td></tr>
+        <tr><td>46h</td><td>(</td><td>47h</td><td>1/x</td><td>48h</td><td>MDF</td><td>49h</td><td>2ndF</td></tr>
+        <tr><td>4Ah</td><td>sin</td><td>4Bh</td><td>cos</td><td>4Ch</td><td>ln</td><td>4Dh</td><td>log</td></tr>
+        <tr><td>4Eh</td><td>tan</td><td>4Fh</td><td>F⇔E</td><td>50h</td><td>CLS</td><td>51h</td><td>ON</td></tr>
+        <tr><td>52h</td><td colspan="7">Two or more keys pressed simultaneously</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ── KEY MATRIX ── -->
+<section class="ref-sec" id="keymatrix">
+  <h2 class="sec-title">Direct Key Matrix <span class="sec-badge">PORTS 11h/10h</span></h2>
+  <p style="font-size:12px;color:var(--green-dim);margin-bottom:.9rem;line-height:1.7">
+    For simultaneous key detection or when interrupts are disabled.
+    <code>OUT(11h, row_bit)</code> then <code>IN A,(10h)</code> — bit=1 means key pressed (active high).
+    Strobe one bit at a time (powers of 2: 01h, 02h, 04h…80h).
+  </p>
+  <div class="tbl-wrap" style="overflow-x:auto">
+    <table class="keymatrix">
+      <thead>
+        <tr><th>OUT 11h →<br>IN 10h bit ↓</th><th>bit7</th><th>bit6</th><th>bit5</th><th>bit4</th><th>bit3</th><th>bit2</th><th>bit1</th><th>bit0</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="header">bit 7</td><td>)</td><td>RCM</td><td>M+</td><td>RETURN</td><td>↑</td><td>,</td><td>K</td><td>U</td></tr>
+        <tr><td class="header">bit 6</td><td>/</td><td>*</td><td>-</td><td>+</td><td>↓</td><td>M</td><td>J</td><td>Y</td></tr>
+        <tr><td class="header">bit 5</td><td>9</td><td>6</td><td>3</td><td>=</td><td>SPACE</td><td>N</td><td>H</td><td>T</td></tr>
+        <tr><td class="header">bit 4</td><td>8</td><td>5</td><td>2</td><td>.</td><td>TAB</td><td>B</td><td>G</td><td>R</td></tr>
+        <tr><td class="header">bit 3</td><td>7</td><td>4</td><td>1</td><td>0</td><td>カナ</td><td>V</td><td>F</td><td>E</td></tr>
+        <tr><td class="header">bit 2</td><td>π</td><td>INS</td><td>CONST</td><td>ON</td><td>CAPS</td><td>C</td><td>D</td><td>W</td></tr>
+        <tr><td class="header">bit 1</td><td>BS</td><td>O</td><td>;</td><td>→</td><td>TEXT</td><td>X</td><td>S</td><td>Q</td></tr>
+        <tr><td class="header">bit 0</td><td>P</td><td>I</td><td>L</td><td>←</td><td>BASIC</td><td>Z</td><td>A</td><td>OFF</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p style="font-size:11px;color:var(--green-dim);margin-top:.5rem;line-height:1.6">
+    Function keys via <code>OUT(12h, bit)</code> + <code>IN A,(10h)</code>:
+    bit7=CLS, bit6=F⇔E, bit5=tan, bit4=log, bit3=ln, bit2=cos, bit1=sin, bit0=2ndF (OUT 12h, 01h).
+    bit7=MDF, bit6=1/x, bit5=(, bit4=yˣ, bit3=x², bit2=√, bit1=→DEG, bit0=nPr (OUT 12h, 02h).
+  </p>
+
+  <pre class="code">
+  <span class="cm">; Check if SPACE key is pressed (row bit=20h, col bit=5)</span>
+  <span class="kw">check_space:</span>
+      ld   a, <span class="am">020h</span>         <span class="cm">; strobe row containing SPACE (bit5)</span>
+      out  (<span class="am">011h</span>), a
+      in   a, (<span class="am">010h</span>)        <span class="cm">; read columns</span>
+      bit  5, a             <span class="cm">; test bit 5 (SPACE column)</span>
+      ret  z                <span class="cm">; Z set = not pressed</span>
+      <span class="cm">; NZ = SPACE is pressed</span>
+      ret
+
+  <span class="cm">; Scan all keys: returns bitmask of first pressed key</span>
+  <span class="kw">scan_all:</span>
+      ld   b, <span class="am">080h</span>         <span class="cm">; start with bit 7</span>
+  <span class="kw">scan_lp:</span>
+      ld   a, b
+      out  (<span class="am">011h</span>), a
+      in   a, (<span class="am">010h</span>)
+      or   a
+      ret  nz               <span class="cm">; found a key: A=col bits, B=row bit</span>
+      rrc  b
+      jr   nc, scan_lp      <span class="cm">; try next row</span>
+      xor  a
+      ret                   <span class="cm">; no key pressed</span>
+  </pre>
+</section>
+
+<!-- ── WORK AREA ── -->
+<section class="ref-sec" id="workarea">
+  <h2 class="sec-title">System Work Area <span class="sec-badge">G850 RAM</span></h2>
+  <div class="tbl-wrap">
+    <table class="plain">
+      <thead><tr><th>ADDRESS</th><th>NAME</th><th>DESCRIPTION</th></tr></thead>
+      <tbody>
+        <tr><td>779Ch</td><td><strong>Contrast</strong></td><td>LCD contrast (0x80=brightest, 0x9F=darkest). Write then <code>OUT(40h, val)</code> to apply.</td></tr>
+        <tr><td>7901h</td><td><strong>CAPS/Kana</strong></td><td>bit0=always 1, bit1=CAPS, bit2=Kana. Writable.</td></tr>
+        <tr><td>790Dh</td><td><strong>VRAM scroll start</strong></td><td>Lower 4 bits × 8 = pixel scroll offset. G850 VRAM is 144×64 internally; 16 rows are always hidden for smooth scroll use. Read this to compensate graphics Y.</td></tr>
+        <tr><td>7966h</td><td><strong>INKEY1</strong></td><td>Non-zero after INKEY$ if a key was pressed. Not ASCII.</td></tr>
+        <tr><td>7E00h</td><td><strong>INKEY2</strong></td><td>ASCII of last INKEY$ key. Not cleared on no-key — check INKEY1 first.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout">
+    <strong>SCROLL OFFSET:</strong> The G850 BASIC interpreter changes the VRAM scroll offset when scrolling text. If you mix BASIC text output with direct ML graphics, always read <code>790Dh</code> and compensate the Y coordinate, or reset the scroll offset with <code>OUT(40h, 40h)</code> at program start and avoid BASIC text scrolling.
+  </div>
+</section>
+
+<!-- ── BEEP ── -->
+<section class="ref-sec" id="beep">
+  <h2 class="sec-title">BEEP / Sound <span class="sec-badge">G850 ONLY</span></h2>
+  <div class="callout callout-info">
+    <strong>HARDWARE NOTE:</strong> The G850 has no internal speaker. Audio output requires a piezo buzzer wired to pins 2 and 7 of the 11-pin serial interface (TTL level, no level converter needed for piezo).
+  </div>
+  <p style="font-size:12px;color:var(--green-dim);margin-bottom:.9rem;line-height:1.7">
+    The BASIC <code>BEEP repeat[,level][,length]</code> command generates tones.
+    Frequency formula: <code>1300000 / (166 + 22 × level)</code> Hz.
+  </p>
+  <div class="tbl-wrap">
+    <table class="plain">
+      <thead><tr><th>NOTE</th><th>LEVEL VALUE</th><th>APPROX FREQ</th></tr></thead>
+      <tbody>
+        <tr><td>C4</td><td>105</td><td>~262 Hz</td></tr>
+        <tr><td>D4</td><td>93</td><td>~294 Hz</td></tr>
+        <tr><td>E4</td><td>82</td><td>~330 Hz</td></tr>
+        <tr><td>F4</td><td>77</td><td>~349 Hz</td></tr>
+        <tr><td>G4</td><td>68</td><td>~392 Hz</td></tr>
+        <tr><td>A4</td><td>60</td><td>~440 Hz</td></tr>
+        <tr><td>B4</td><td>52</td><td>~494 Hz</td></tr>
+        <tr><td>C5</td><td>49</td><td>~523 Hz</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="sources">
+    <strong style="color:var(--green-dim);letter-spacing:.1em">// SOURCES</strong><br>
+    akiyan.com — <a href="http://www.akiyan.com/pc-g850_technical_data" target="_blank">SHARP PC-G850 解析資料</a> (BIOS table, work area, key matrix, BEEP)<br>
+    ver0.sakura.ne.jp — <a href="http://ver0.sakura.ne.jp/doc/pcg800iocs.html" target="_blank">PC-G800 IOCS call table</a><br>
+    z88dk — <a href="https://github.com/z88dk/z88dk" target="_blank">libsrc/target/g800</a> (BIOS usage patterns)
+  </div>
+</section>
+
+</main>
+</div>
+
+<footer>
+  <div>Sharp PC-G850 · ROM / BIOS Reference · akiyan.com · ver0.sakura.ne.jp · z88dk</div>
+  <div>
+    <a href="rom_g815.html">← G815 ROM</a> &nbsp;
+    <a href="index.html">Home →</a>
+  </div>
+</footer>
+
+<script>
+  document.body.style.opacity='0';
+  document.body.style.transition='opacity .12s';
+  requestAnimationFrame(()=>{
+    document.body.style.opacity='1';
+    setTimeout(()=>{document.body.style.opacity='.9';setTimeout(()=>{document.body.style.opacity='1'},70)},110);
+  });
+  const secs=document.querySelectorAll('.ref-sec');
+  const lnks=document.querySelectorAll('.sidebar a');
+  const obs=new IntersectionObserver(e=>{
+    e.forEach(en=>{
+      if(en.isIntersecting){
+        lnks.forEach(l=>l.classList.remove('active'));
+        const a=document.querySelector(`.sidebar a[href="#${en.target.id}"]`);
+        if(a)a.classList.add('active');
+      }
+    });
+  },{rootMargin:'-20% 0px -60% 0px'});
+  secs.forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>
