@@ -406,7 +406,7 @@
   <ol class="steps">
     <li><span class="step-n">1</span>Clear the shadow buffer: zero all 576 bytes at <code>PP_VRAM</code></li>
     <li><span class="step-n">2</span>Reset scroll on both controllers: <code>OUT(54h, 0xC0)</code> then <code>OUT(58h, 0xC0)</code></li>
-    <li><span class="step-n">3</span>Optionally clear the screen via BIOS: <code>CALL 0xBE62h</code></li>
+    <li><span class="step-n">3</span>Optionally clear the screen via BIOS: <code>LD A,20h / LD B,96 / LD DE,0 / CALL BFEEh</code> — fills 4×24 chars with spaces (<code>BE62h</code> is single-char output, <em>not</em> a clear)</li>
     <li><span class="step-n">4</span>Begin drawing — no further initialisation required</li>
   </ol>
   <pre class="code">
@@ -475,6 +475,15 @@
       ld   a, e \ out (<span class="am">05Ah</span>), a
       ret
   </pre>
+
+  <div class="callout">
+    <strong>EMULATOR WARNING — BUSY POLLING:</strong> The <code>pp_send</code> snippet above omits busy-flag polls for clarity.
+    In production code that polls ports <code>55h</code> / <code>59h</code> before each OUT,
+    be aware that the g800 emulator returns <code>0x80</code> (busy) <em>permanently</em> on these ports —
+    any polling loop will hang indefinitely. Either strip the busy-poll loops when targeting the emulator,
+    or guard them with a compile-time flag (<code>NO_BUSY_POLL</code>).
+    On real G815 hardware the polls complete in a few cycles and are safe.
+  </div>
 
   <div class="sources">
     <strong style="color:var(--green-dim);letter-spacing:.1em">// SOURCES</strong><br>
