@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PC-E220 I/O Port Reference · LCD Graphics & System Ports</title>
+<title>PC-E220 I/O Port Reference</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
@@ -22,13 +22,11 @@
   body{background:var(--bg);color:var(--green);font-family:var(--font-mono);min-height:100vh;overflow-x:hidden;cursor:crosshair}
   body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,var(--scanline) 0px,var(--scanline) 1px,transparent 1px,transparent 3px);pointer-events:none;z-index:9999}
   body::after{content:'';position:fixed;inset:0;background-image:radial-gradient(circle,rgba(57,255,20,.05) 1px,transparent 1px);background-size:28px 28px;pointer-events:none;z-index:0}
-
   nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:52px;border-bottom:1px solid var(--green-dim);background:rgba(5,10,4,.96);backdrop-filter:blur(4px)}
-  .nav-logo{font-family:var(--font-title);font-size:13px;font-weight:700;letter-spacing:.12em;color:var(--green);text-shadow:0 0 8px var(--green-glow)}
+  .nav-logo{font-family:var(--font-title);font-size:12px;font-weight:700;letter-spacing:.12em;color:var(--green);text-shadow:0 0 8px var(--green-glow)}
   nav ul{list-style:none;display:flex;gap:1.5rem;flex-wrap:wrap}
   nav a{font-family:var(--font-mono);font-size:12px;color:var(--green-dim);text-decoration:none;letter-spacing:.08em;transition:color .2s}
   nav a:hover,nav a.active{color:var(--green);text-shadow:0 0 8px var(--green-glow)}
-
   .page-hdr{position:relative;z-index:1;padding:3rem 2rem 2rem;border-bottom:1px solid var(--green-dim);max-width:1160px;margin:0 auto}
   .breadcrumb{font-size:11px;letter-spacing:.18em;color:var(--green-dim);margin-bottom:.75rem}
   .breadcrumb a{color:var(--green-dim);text-decoration:none}
@@ -36,10 +34,8 @@
   .page-title{font-family:var(--font-vt);font-size:clamp(2rem,5vw,3.5rem);color:var(--purple);text-shadow:0 0 16px rgba(192,132,252,.4);margin-bottom:.5rem}
   .page-desc{font-size:13px;color:var(--green-dim);line-height:1.7;max-width:740px}
   .page-desc code{color:var(--amber);background:rgba(255,179,0,.08);padding:1px 4px;border-radius:2px;font-size:12px}
-
-  .layout{position:relative;z-index:1;display:grid;grid-template-columns:200px 1fr;max-width:1160px;margin:0 auto}
+  .layout{position:relative;z-index:1;display:grid;grid-template-columns:210px 1fr;max-width:1160px;margin:0 auto}
   @media(max-width:780px){.layout{grid-template-columns:1fr}.sidebar{display:none}}
-
   .sidebar{border-right:1px solid var(--green-dim);padding:1.5rem 1.25rem;position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--green-dim) transparent}
   .sb-label{font-size:10px;letter-spacing:.2em;color:var(--green-dim);margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:1px solid rgba(57,255,20,.15)}
   .sidebar ul{list-style:none}
@@ -47,12 +43,11 @@
   .sidebar a{font-size:11px;color:var(--green-dim);text-decoration:none;display:block;padding:.25rem .4rem;border-left:2px solid transparent;transition:all .15s}
   .sidebar a:hover,.sidebar a.active{color:var(--green);border-left-color:var(--green);background:rgba(57,255,20,.04)}
   .sb-grp{font-size:10px;letter-spacing:.15em;color:var(--green-dim);opacity:.45;padding:.75rem .4rem .15rem}
-
   .content{padding:2rem 2.5rem 5rem}
   .ref-sec{margin-bottom:3rem;scroll-margin-top:64px}
   .sec-title{font-family:var(--font-title);font-size:12px;font-weight:700;letter-spacing:.14em;color:var(--purple);margin-bottom:1rem;padding-bottom:.4rem;border-bottom:1px solid rgba(192,132,252,.3);display:flex;align-items:center;gap:.6rem}
   .sec-badge{font-family:var(--font-mono);font-size:9px;font-weight:400;letter-spacing:.08em;color:var(--bg);background:var(--green-dim);padding:1px 6px;border-radius:2px}
-
+  .sec-badge-warn{font-family:var(--font-mono);font-size:9px;font-weight:400;letter-spacing:.08em;color:var(--bg);background:var(--red);padding:1px 6px;border-radius:2px}
   .tbl-wrap{overflow-x:auto;border:1px solid var(--green-dim);border-radius:2px;margin-bottom:1rem}
   table{width:100%;border-collapse:collapse;font-size:12px;min-width:560px}
   thead th{font-size:10px;letter-spacing:.15em;color:var(--green-dim);padding:7px 12px;text-align:left;background:var(--bg2);border-bottom:1px solid var(--green-dim);white-space:nowrap}
@@ -68,42 +63,32 @@
   .td-fn{color:var(--green);font-size:12px}
   .fn-note{display:block;font-size:11px;color:var(--green-dim);margin-top:4px;line-height:1.65}
   .fn-note code{color:var(--amber);font-size:11px;background:rgba(255,179,0,.07);padding:1px 4px;border-radius:2px}
-  .sep td{background:var(--bg2);font-size:10px;letter-spacing:.18em;color:var(--green-dim);padding:5px 12px;border-top:1px solid var(--green-dim);border-bottom:1px solid rgba(57,255,20,.15)}
-
   .callout{border-left:2px solid var(--amber);padding:.9rem 1.1rem;background:rgba(255,179,0,.05);margin:1rem 0;font-size:12px;color:var(--green);line-height:1.7}
   .callout strong{color:var(--amber)}
   .callout-info{border-left-color:var(--cyan);background:rgba(0,229,255,.04)}
   .callout-info strong{color:var(--cyan)}
   .callout-purple{border-left-color:var(--purple);background:rgba(192,132,252,.04)}
   .callout-purple strong{color:var(--purple)}
-
+  .callout-red{border-left-color:var(--red);background:rgba(255,68,85,.04)}
+  .callout-red strong{color:var(--red)}
   pre.code{font-family:var(--font-mono);font-size:11px;color:var(--green-dim);line-height:1.7;border:1px solid var(--green-dim);padding:1rem 1.25rem;background:var(--bg2);overflow-x:auto;white-space:pre;margin:1rem 0}
   pre.code .kw{color:var(--green)}
   pre.code .cm{color:#1a7a09;font-style:italic}
   pre.code .am{color:var(--amber)}
   pre.code .cy{color:var(--cyan)}
-  pre.code .pu{color:var(--purple)}
-
+  pre.code .rd{color:var(--red)}
   .steps{list-style:none;margin:.75rem 0}
-  .steps li{display:flex;gap:.75rem;padding:.4rem 0;border-bottom:1px solid rgba(57,255,20,.06);font-size:12px;color:var(--green);line-height:1.6}
+  .steps li{display:flex;gap:.75rem;padding:.5rem 0;border-bottom:1px solid rgba(57,255,20,.06);font-size:12px;color:var(--green);line-height:1.65}
   .steps li:last-child{border-bottom:none}
   .step-n{font-family:var(--font-vt);font-size:1.3rem;color:var(--green-dim);min-width:24px;line-height:1}
-
-  .bits-tbl td,.bits-tbl th{font-size:11px;padding:5px 10px}
-  .bits-tbl .bit-n{color:var(--amber);font-family:var(--font-mono);white-space:nowrap}
-  .bits-tbl .bit-name{color:var(--green)}
-  .bits-tbl .bit-note{color:var(--green-dim)}
-
   .iface-tbl td,.iface-tbl th{font-size:11px;padding:6px 10px}
   .iface-tbl .pin-n{color:var(--amber);font-family:var(--font-mono)}
   .iface-tbl .pin-dir{color:var(--cyan)}
   .iface-tbl .pin-name{color:var(--green)}
   .iface-tbl .pin-note{color:var(--green-dim)}
-
   .sources{margin-top:2.5rem;padding:.9rem 1.25rem;border:1px solid rgba(57,255,20,.15);background:var(--bg2);font-size:11px;color:var(--green-dim);line-height:1.8}
   .sources a{color:var(--green-dim);text-decoration:underline;text-underline-offset:3px}
   .sources a:hover{color:var(--green)}
-
   footer{position:relative;z-index:1;border-top:1px solid var(--green-dim);padding:1.25rem 2rem;font-size:12px;color:var(--green-dim);display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;letter-spacing:.06em}
   footer a{color:var(--green-dim);text-decoration:none}
   footer a:hover{color:var(--green)}
@@ -128,12 +113,14 @@
   <div class="breadcrumb"><a href="index.html">HOME</a> / PC-E220 I/O PORT REFERENCE</div>
   <h1 class="page-title">PC-E220 I/O Port Reference</h1>
   <p class="page-desc">
-    Complete Z80 I/O port map for the Sharp PC-E220 pocket computer (build 1991).
-    The E220 uses a <strong style="color:var(--purple)">HD62202 + HD61203</strong> dual-controller LCD
-    scheme identical in spirit to the G815, but with a <strong style="color:var(--purple)">different
-    port assignment</strong> — LCD commands go to <code>58h</code>, not <code>54h</code>.
-    System ports cover keyboard, bank mapping, serial interface, timer, and interrupts.
-    Source: Achim Flammenkamp's PC-E220 technical analysis at uni-bielefeld.de.
+    Complete Z80 I/O port map for the Sharp PC-E220 (1991).
+    The LCD is <strong style="color:var(--purple)">120 &times; 32 pixels</strong> split into two
+    60-column halves (HD62202 left, HD61203 right). Pixel plotting uses HD61203-style
+    page-select commands (<code>$B8|N</code>) at port <code>$58</code>, requires a
+    ROM busy-wait call at <code>$8530</code> after every port access, and must compensate
+    for BIOS scroll drift using the live offset byte at RAM address <code>$790D</code>.
+    Data from Achim Flammenkamp (uni-bielefeld.de) and direct analysis of the
+    hardware-verified <code>plot_e220.asm</code> pixel library.
   </p>
 </div>
 
@@ -142,16 +129,24 @@
   <div class="sb-label">// ON THIS PAGE</div>
   <ul>
     <li><div class="sb-grp">LCD HARDWARE</div></li>
-    <li><a href="#lcd-ports">LCD Ports</a></li>
-    <li><a href="#lcd-cmd">LCD Command Encoding</a></li>
-    <li><a href="#pixel-byte">Pixel Byte</a></li>
-    <li><a href="#lcd-code">Sample Code</a></li>
+    <li><a href="#ports">Port Map</a></li>
+    <li><a href="#geometry">Display Geometry</a></li>
+    <li><a href="#page-cmd">Page Command ($B8|N)</a></li>
+    <li><a href="#n-table">N_TABLE</a></li>
+    <li><a href="#page-compens">PAGE_COMPENS ($790D)</a></li>
+    <li><a href="#pixel-byte">Pixel Byte / Bit 7</a></li>
+    <li><a href="#rmw">Read-Modify-Write</a></li>
+    <li><a href="#busy-wait">Busy-Wait ($8530)</a></li>
+    <li><div class="sb-grp">PROTOCOL</div></li>
+    <li><a href="#sequence">Full Command Sequence</a></li>
+    <li><a href="#code">plot_pixel Routines</a></li>
+    <li><a href="#primitives">Primitives</a></li>
     <li><div class="sb-grp">SYSTEM PORTS</div></li>
-    <li><a href="#keyboard">Keyboard (10h–13h)</a></li>
-    <li><a href="#interrupt">Interrupts (16h–17h)</a></li>
+    <li><a href="#keyboard">Keyboard (10h-13h)</a></li>
+    <li><a href="#interrupt">Interrupts (16h/17h)</a></li>
     <li><a href="#banking">ROM Banking (19h)</a></li>
-    <li><a href="#serial">Serial Interface (15h/18h/1Fh)</a></li>
-    <li><a href="#misc">Misc Ports</a></li>
+    <li><a href="#serial">Serial (15h/18h/1Fh)</a></li>
+    <li><a href="#misc">Misc</a></li>
     <li><div class="sb-grp">REFERENCE</div></li>
     <li><a href="#iface">11-Pin Interface</a></li>
     <li><a href="#specs">Hardware Specs</a></li>
@@ -160,16 +155,16 @@
 
 <main class="content">
 
-<!-- ── LCD PORTS ── -->
-<section class="ref-sec" id="lcd-ports">
+<!-- PORT MAP -->
+<section class="ref-sec" id="ports">
   <h2 class="sec-title">LCD Port Map <span class="sec-badge">PC-E220</span></h2>
 
   <div class="callout callout-purple">
-    <strong>ARCHITECTURE:</strong> The E220 display is 144×32 pixels, driven by a HD62202 (left panel)
-    and HD61203 (right panel), each covering 72 columns. This is similar to the G815's dual-HD61203
-    scheme but uses <strong style="color:var(--purple)">port 58h for commands</strong> and <strong style="color:var(--purple)">5Ah for data</strong>.
-    The command encoding also differs: column and row are packed into a single byte
-    as <code>(column × 4) + row | 0x40</code>.
+    <strong>ARCHITECTURE:</strong> The E220 LCD is <strong style="color:var(--purple)">120 x 32 pixels</strong>
+    split at X=60. Both halves share port <code>$58</code> (command) and
+    <code>$5A</code>/<code>$5B</code> (data). The active half is selected by the N value in the
+    page-select command. After <em>every</em> OUT or IN to an LCD port, call the ROM
+    busy-wait routine at <code>$8530</code>.
   </div>
 
   <div class="tbl-wrap">
@@ -177,40 +172,40 @@
       <thead><tr><th>PORT</th><th>DIR</th><th>NAME</th><th>DESCRIPTION</th></tr></thead>
       <tbody>
         <tr>
-          <td class="td-port">58h</td>
+          <td class="td-port">$58</td>
           <td><span class="dir dir-out">OUT</span></td>
           <td class="td-fn">LCD command</td>
           <td class="td-fn">
-            Combined column + row address command.
-            <span class="fn-note">Encoding: <code>(column × 4) + row | 0x40</code>, where
-            <code>0 ≤ column &lt; 24</code> and <code>0 ≤ row &lt; 4</code>.</span>
+            Page-select: <code>$B8 | ((N + PAGE_COMPENS) &amp; $07)</code><br>
+            Column-select: <code>$40 | colpos</code>
+            <span class="fn-note">Send page command first, then column command. Both via this port. Call <code>$8530</code> busy-wait after each.</span>
           </td>
         </tr>
         <tr>
-          <td class="td-port">59h</td>
+          <td class="td-port">$59</td>
           <td><span class="dir dir-in">IN</span></td>
           <td class="td-fn">LCD busy flag</td>
           <td class="td-fn">
-            Bit 7 = 1 → LCD controller is busy.
-            <span class="fn-note">Poll before sending commands if timing is critical. May return <code>0x80</code> permanently in emulators — do not poll during emulation.</span>
+            Bit 7 = 1 means LCD controller busy. Do not poll manually &mdash; call
+            <code>LCD_BUSY_WAIT</code> at <code>$8530</code> instead.
           </td>
         </tr>
         <tr>
-          <td class="td-port">5Ah</td>
+          <td class="td-port">$5A</td>
           <td><span class="dir dir-out">OUT</span></td>
           <td class="td-fn">LCD data write</td>
           <td class="td-fn">
-            Write one pixel byte (8 vertical pixels) at the current cursor position.
-            <span class="fn-note">Cursor auto-increments after each write. Bit 0 = topmost pixel.</span>
+            Write one pixel byte (8 vertical pixels) at current cursor. Column auto-increments after write.
+            <span class="fn-note">Bit 0 = topmost pixel. <strong>Bit 7 is non-visible</strong> on this display &mdash; writing it has no effect on screen.</span>
           </td>
         </tr>
         <tr>
-          <td class="td-port">5Bh</td>
+          <td class="td-port">$5B</td>
           <td><span class="dir dir-in">IN</span></td>
           <td class="td-fn">LCD data read</td>
           <td class="td-fn">
-            Read pixel byte at current cursor. Each byte = 8 vertical pixels.
-            <span class="fn-note">May be unreliable in emulators — use a shadow buffer for read-modify-write instead.</span>
+            Read pixel byte at current cursor. <strong>First read after a page/column seek is stale &mdash; always read twice (dummy + real).</strong>
+            <span class="fn-note">Read also auto-increments the column pointer. Must re-issue page+column commands before the subsequent write (see RMW section).</span>
           </td>
         </tr>
       </tbody>
@@ -218,535 +213,733 @@
   </div>
 
   <div class="callout">
-    <strong>G815 vs E220:</strong> The G815 uses ports <code>54h/56h</code> (left) and
-    <code>58h/5Ah</code> (right) as separate command/data pairs with a separate page command
-    (<code>0xB8+page</code>) and column address (<code>0x40+col</code>).
-    The E220 packs both into a single byte at port <code>58h</code>:
-    <code>(col × 4) + row | 0x40</code>. There is only one command port.
+    <strong>BUSY-WAIT REQUIRED AFTER EVERY ACCESS:</strong> Unlike the G850, the E220
+    LCD controllers require a busy-wait after every OUT $58, OUT $5A, and IN $5B.
+    Call the ROM routine <code>LCD_BUSY_WAIT EQU $8530</code> every time.
+    Skipping any call produces corrupt or missing pixels.
   </div>
 </section>
 
-<!-- ── LCD COMMAND ── -->
-<section class="ref-sec" id="lcd-cmd">
-  <h2 class="sec-title">LCD Command Encoding</h2>
+<!-- GEOMETRY -->
+<section class="ref-sec" id="geometry">
+  <h2 class="sec-title">Display Geometry <span class="sec-badge-warn">120 x 32 NOT 144</span></h2>
 
-  <p style="font-size:12px;color:var(--green-dim);margin-bottom:.9rem;line-height:1.7">
-    Unlike the G815/G850 which send page and column as separate commands, the E220
-    encodes both into a single byte. The column here is a <em>character column</em>
-    (0–23), not a pixel column, and the row is a <em>page</em> (0–3, each 8 pixels tall).
+  <div class="callout callout-red">
+    <strong>120 COLUMNS, NOT 144:</strong> The E220 display is 120 pixels wide (X = 0&ndash;119).
+    Code ported from the G815 or G850 must clip or rescale X coordinates.
+    The right half is addressed right-to-left: colpos = 119 &minus; X for X &ge; 60.
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>LOGICAL X</th><th>CONTROLLER</th><th>colpos FORMULA</th><th>side (for N_TABLE)</th></tr></thead>
+      <tbody>
+        <tr>
+          <td class="td-port" style="font-size:12px">0 &ndash; 59</td>
+          <td class="td-fn">Left &mdash; HD62202</td>
+          <td class="td-fn"><code>colpos = X</code></td>
+          <td class="td-fn">0 &rarr; side*4 = 0</td>
+        </tr>
+        <tr>
+          <td class="td-port" style="font-size:12px">60 &ndash; 119</td>
+          <td class="td-fn">Right &mdash; HD61203 (RTL)</td>
+          <td class="td-fn"><code>colpos = 119 &minus; X</code></td>
+          <td class="td-fn">1 &rarr; side*4 = 4</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p style="font-size:12px;color:var(--green-dim);margin-top:.5rem;line-height:1.7">
+    The column address command is always <code>OUT($58, $40 | colpos)</code> with colpos in range
+    0&ndash;59. Which physical controller responds is determined by the N value in the preceding
+    page-select command, not by the colpos value itself.
   </p>
 
   <pre class="code">
-  <span class="cm">; E220 LCD cursor positioning formula:</span>
-  <span class="cm">;   cmd = (char_col * 4) + row | 0x40</span>
-  <span class="cm">;   0 &lt;= char_col &lt; 24   (character columns, 6 pixels each)</span>
-  <span class="cm">;   0 &lt;= row &lt; 4         (page/row band, 8 pixels each)</span>
+  <span class="cm">; Compute side*4 and colpos from D=X (0-119)</span>
+  <span class="kw">get_side_col:</span>     <span class="cm">; returns B=side*4, C=colpos</span>
+      ld   a, d
+      cp   60
+      jr   c, <span class="kw">gsc_left</span>
+      <span class="cm">; right half: colpos = 119 - X, side*4 = 4</span>
+      ld   a, 119 \ sub d \ ld c, a
+      ld   b, 4
+      ret
+  <span class="kw">gsc_left:</span>
+      ld   c, d           <span class="cm">; colpos = X</span>
+      ld   b, 0           <span class="cm">; side*4 = 0</span>
+      ret
+  </pre>
+</section>
 
-  <span class="cm">; Example: position at char_col=3, row=1 (pixels 8–15, column 18–23)</span>
-  <span class="cm">;   cmd = (3 * 4) + 1 | 0x40 = 0x40 | 0x0D = 0x4D</span>
+<!-- PAGE COMMAND -->
+<section class="ref-sec" id="page-cmd">
+  <h2 class="sec-title">Page Command &mdash; $B8|N Encoding</h2>
 
-  <span class="kw">lcd_goto:</span>  <span class="cm">; B = char_col (0-23), C = row (0-3)</span>
-      ld   a, b
-      add  a, a    <span class="cm">; col * 2</span>
-      add  a, a    <span class="cm">; col * 4</span>
-      add  a, c    <span class="cm">; + row</span>
-      or   <span class="am">040h</span>    <span class="cm">; | 0x40</span>
-      out  (<span class="am">058h</span>), a
+  <div class="callout callout-purple">
+    <strong>TWO DIFFERENT ENCODINGS ON PORT $58:</strong> The BIOS text-output routines use
+    a packed <code>(col*4)+row|$40</code> byte for the text cursor. Direct pixel plotting uses
+    the HD61203 page-select format <code>$B8|N</code>. These are distinct encodings on the
+    same port, used in different contexts. The pixel library always uses <code>$B8|N</code>.
+  </div>
+
+  <p style="font-size:12px;color:var(--green-dim);margin-bottom:.9rem;line-height:1.7">
+    The page command selects both the 8-pixel row band and the active controller half.
+    N is not simply <code>Y &gt;&gt; 3</code> &mdash; it must be looked up from N_TABLE using
+    <code>side*4 + row</code>, then compensated with the PAGE_COMPENS byte before sending.
+  </p>
+</section>
+
+<!-- N_TABLE -->
+<section class="ref-sec" id="n-table">
+  <h2 class="sec-title">N_TABLE &mdash; Side and Row Lookup</h2>
+
+  <p style="font-size:12px;color:var(--green-dim);margin-bottom:.9rem;line-height:1.7">
+    An 8-byte table in program data. Index = <code>side*4 + row</code>, where
+    side = 0 (X&lt;60) or 1 (X&ge;60), and row = <code>Y &gt;&gt; 3</code> (0&ndash;3).
+  </p>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>INDEX<br><small>side*4+row</small></th>
+          <th>SIDE</th>
+          <th>ROW</th>
+          <th>N VALUE</th>
+          <th>PIXEL ROWS</th>
+          <th>PAGE CMD (before compensation)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="td-port" style="font-size:12px">0</td><td class="td-fn">Left (X 0&ndash;59)</td><td class="td-fn">0</td><td class="td-fn"><code>0</code></td><td class="td-fn">Y 0&ndash;7</td><td class="td-fn"><code>$B8</code></td></tr>
+        <tr><td class="td-port" style="font-size:12px">1</td><td class="td-fn">Left (X 0&ndash;59)</td><td class="td-fn">1</td><td class="td-fn"><code>1</code></td><td class="td-fn">Y 8&ndash;15</td><td class="td-fn"><code>$B9</code></td></tr>
+        <tr><td class="td-port" style="font-size:12px">2</td><td class="td-fn">Left (X 0&ndash;59)</td><td class="td-fn">2</td><td class="td-fn"><code>2</code></td><td class="td-fn">Y 16&ndash;23</td><td class="td-fn"><code>$BA</code></td></tr>
+        <tr><td class="td-port" style="font-size:12px">3</td><td class="td-fn">Left (X 0&ndash;59)</td><td class="td-fn">3</td><td class="td-fn"><code>3</code></td><td class="td-fn">Y 24&ndash;31</td><td class="td-fn"><code>$BB</code></td></tr>
+        <tr><td class="td-port" style="font-size:12px">4</td><td class="td-fn">Right (X 60&ndash;119)</td><td class="td-fn">0</td><td class="td-fn"><code>4</code></td><td class="td-fn">Y 0&ndash;7</td><td class="td-fn"><code>$BC</code></td></tr>
+        <tr><td class="td-port" style="font-size:12px">5</td><td class="td-fn">Right (X 60&ndash;119)</td><td class="td-fn">1</td><td class="td-fn"><code>5</code></td><td class="td-fn">Y 8&ndash;15</td><td class="td-fn"><code>$BD</code></td></tr>
+        <tr><td class="td-port" style="font-size:12px">6</td><td class="td-fn">Right (X 60&ndash;119)</td><td class="td-fn">2</td><td class="td-fn"><code>6</code></td><td class="td-fn">Y 16&ndash;23</td><td class="td-fn"><code>$BE</code></td></tr>
+        <tr><td class="td-port" style="font-size:12px">7</td><td class="td-fn">Right (X 60&ndash;119)</td><td class="td-fn">3</td><td class="td-fn"><code>7</code></td><td class="td-fn">Y 24&ndash;31</td><td class="td-fn"><code>$BF</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <pre class="code">
+  <span class="kw">N_TABLE:</span>
+      db 0,1,2,3    <span class="cm">; side=0 (left,  X 0-59),   rows 0-3</span>
+      db 4,5,6,7    <span class="cm">; side=1 (right, X 60-119), rows 0-3</span>
+
+  <span class="cm">; Look up N: B=side*4 (0 or 4), E=Y</span>
+  <span class="kw">lookup_N:</span>
+      ld   a, e
+      rrca \ rrca \ rrca  <span class="cm">; A = Y >> 3 = row (0-3)</span>
+      and  $07
+      add  a, b           <span class="cm">; index = side*4 + row</span>
+      ld   hl, <span class="am">N_TABLE</span>
+      add  a, l \ ld l, a
+      jr   nc, <span class="kw">ln_nc</span> \ inc h
+  <span class="kw">ln_nc:</span>
+      ld   a, (hl)        <span class="cm">; A = N (0-7)</span>
+      ret
+  </pre>
+</section>
+
+<!-- PAGE_COMPENS -->
+<section class="ref-sec" id="page-compens">
+  <h2 class="sec-title">PAGE_COMPENS &mdash; Drift Compensation <span class="sec-badge">RAM $790D</span></h2>
+
+  <div class="callout">
+    <strong>WHY THIS EXISTS:</strong> BIOS text-scroll routines advance an internal scroll
+    register in the LCD controllers as text rows scroll up. This shifts which physical
+    page the hardware considers "page 0", causing direct pixel writes to land on the
+    wrong rows after any scroll has occurred. The BIOS tracks this drift in a live byte
+    at RAM address <code>$790D</code>.
+  </div>
+
+  <p style="font-size:12px;color:var(--green-dim);margin-bottom:.9rem;line-height:1.7">
+    Before sending any page-select command, read the byte at <code>$790D</code>,
+    add it to the raw N value from N_TABLE, mask to 3 bits (wrapping within the
+    8-page ring), then OR with <code>$B8</code>.
+  </p>
+
+  <pre class="code">
+  <span class="am">PAGE_COMPENS</span>  <span class="am">EQU</span>  <span class="am">$790D</span>   <span class="cm">; BIOS work area: live scroll-drift offset</span>
+
+  <span class="cm">; Apply compensation and send page-select command</span>
+  <span class="cm">; Input: A = raw N from N_TABLE (0-7)</span>
+  <span class="kw">send_page_cmd:</span>
+      ld   hl, <span class="am">PAGE_COMPENS</span>
+      add  a, (hl)      <span class="cm">; N + live scroll offset</span>
+      and  $07          <span class="cm">; wrap to 3 bits (ring of 8 pages)</span>
+      or   $B8          <span class="cm">; HD61203 page-select command class</span>
+      out  ($58), a
+      call $8530        <span class="cm">; LCD_BUSY_WAIT</span>
+      ret
+
+  <span class="cm">; Send column-select command (always after page command)</span>
+  <span class="cm">; Input: C = colpos (0-59)</span>
+  <span class="kw">send_col_cmd:</span>
+      ld   a, $40 \ or c
+      out  ($58), a
+      call $8530
       ret
   </pre>
 
   <div class="callout callout-info">
-    <strong>CHARACTER vs PIXEL COLUMNS:</strong> The E220 LCD controller operates at
-    character-column granularity. Each character column is 6 pixels wide (the 5×7
-    font plus 1 pixel gap), giving 24 × 6 = 144 pixels across. To address a specific
-    pixel column, compute <code>char_col = pixel_x / 6</code> — sub-character pixel
-    addressing is not directly supported by the hardware cursor.
+    <strong>ALTERNATIVE &mdash; RESET AT PROGRAM START:</strong> Issue
+    <code>OUT($58, $B8)</code> once at startup to force scroll to line 0, then avoid
+    all BIOS text calls that could scroll the display. Safe for self-contained ML programs
+    that own the entire screen. The compensation approach via <code>$790D</code> is needed
+    when BASIC text output is interleaved with direct graphics.
   </div>
+</section>
+
+<!-- PIXEL BYTE -->
+<section class="ref-sec" id="pixel-byte">
+  <h2 class="sec-title">Pixel Byte Format <span class="sec-badge-warn">BIT 7 INVISIBLE</span></h2>
+
+  <div class="callout callout-red">
+    <strong>BIT 7 DOES NOT PRODUCE A VISIBLE PIXEL:</strong> Each byte controls 8 vertical
+    pixels, but bit 7 maps to a non-printable row in the E220 LCD panel. The effective
+    visible range per page band is bits 0&ndash;6 (7 pixels), giving a true visible height of
+    <strong>28 pixels</strong> across 4 pages, even though Y accepts values 0&ndash;30.
+    Y values 7, 15, 23, and 31 map to bit 7 and produce no visible pixel.
+  </div>
+
+  <pre class="code">
+  One byte = 8 vertical pixels at the current column:
+
+  Byte:   bit7     bit6  bit5  bit4  bit3  bit2  bit1  <span class="kw">bit0</span>
+  Row:  <span class="rd">[INVIS]</span>   Y+6   Y+5   Y+4   Y+3   Y+2   Y+1   <span class="kw">Y+0</span>  &lt;-- topmost
+
+  <span class="rd">Bit 7 is transmitted but produces no visible pixel on E220 hardware.</span>
+  Affected Y values (Y mod 8 == 7): Y = 7, 15, 23, 31.
+
+  bit_index = Y &amp; $07       ; 0-7 (7 is invisible)
+  mask      = 1 &lt;&lt; bit_index
+  page      = Y &gt;&gt; 3        ; 0-3
+
+  Effective coordinate range for visible pixels: X 0-119, Y 0-30
+  Visible pixel rows per page: 7 (bits 0-6 only)
+  Total visible pixels vertically: 28
+  </pre>
+</section>
+
+<!-- READ-MODIFY-WRITE -->
+<section class="ref-sec" id="rmw">
+  <h2 class="sec-title">Read-Modify-Write Protocol</h2>
+
+  <p style="font-size:12px;color:var(--green-dim);margin-bottom:.75rem;line-height:1.7">
+    Setting or clearing a single pixel requires reading the existing byte at that column,
+    modifying one bit, and writing it back. Three E220-specific complications apply:
+  </p>
+
+  <ol class="steps">
+    <li><span class="step-n">1</span>
+      <strong>Dummy read required.</strong>
+      The first <code>IN A,($5B)</code> after a page+column seek returns stale latched data.
+      Always read twice &mdash; discard the first result, use the second.
+    </li>
+    <li><span class="step-n">2</span>
+      <strong>Read auto-increments the column pointer.</strong>
+      After both reads the internal column counter has advanced by two.
+      You must re-issue the full page-select + column-select sequence before the write,
+      or the data will land on the wrong column.
+    </li>
+    <li><span class="step-n">3</span>
+      <strong>Busy-wait after every port access.</strong>
+      Call <code>$8530</code> after the dummy read, after the real read, after each
+      command of the re-issue sequence, and after the final write if further
+      LCD access follows immediately.
+    </li>
+  </ol>
+
+  <pre class="code">
+  <span class="cm">; Read-modify-write skeleton (page+col already selected via PB_ADDR)</span>
+  <span class="cm">; C = bit_index (0-7) saved from PB_ADDR return value</span>
+
+      <span class="cm">; step 1 -- dummy read (stale latch after seek)</span>
+      in   a, ($5B)
+      call $8530
+
+      <span class="cm">; step 2 -- real read: existing pixel byte</span>
+      in   a, ($5B)
+      ld   b, a           <span class="cm">; B = existing byte</span>
+      call $8530
+
+      <span class="cm">; step 3 -- re-select page+col (reads advanced column pointer by 2)</span>
+      push bc
+      call PB_ADDR        <span class="cm">; re-issues page and column commands with busy-waits</span>
+      pop  bc             <span class="cm">; restore C=bit_index, B=existing byte</span>
+
+      <span class="cm">; step 4 -- compute mask and merge</span>
+      ld   h, c \ ld a, 1 \ inc h
+  <span class="kw">shift:</span>
+      dec  h \ jr z, <span class="kw">done</span> \ sla a \ jr <span class="kw">shift</span>
+  <span class="kw">done:</span>
+      or   b              <span class="cm">; OR to set pixel  (use CPL/AND B to clear)</span>
+
+      <span class="cm">; step 5 -- write back</span>
+      out  ($5A), a
+  </pre>
+
+  <div class="callout callout-info">
+    <strong>CLEARING A PIXEL:</strong> Replace <code>OR B</code> with
+    <code>CPL</code> then <code>AND B</code>. <code>CPL</code> inverts the mask so only
+    the target bit is 0 while all others remain 1; the subsequent <code>AND</code> with
+    the existing byte clears only that bit.
+  </div>
+</section>
+
+<!-- BUSY WAIT -->
+<section class="ref-sec" id="busy-wait">
+  <h2 class="sec-title">LCD Busy-Wait <span class="sec-badge">ROM $8530</span></h2>
+
+  <div class="callout callout-purple">
+    <strong>LCD_BUSY_WAIT EQU $8530</strong> &mdash; ROM routine. Polls port <code>$59</code>
+    bit 7 in a tight loop until the LCD controller signals ready, then returns.
+    Must be called after every <code>OUT($58,...)</code>, <code>OUT($5A,...)</code>,
+    and <code>IN A,($5B)</code>. This is the key difference from the G850 which
+    tolerates back-to-back port writes without waiting.
+  </div>
+
+  <pre class="code">
+  <span class="am">LCD_BUSY_WAIT</span>  <span class="am">EQU</span>  <span class="am">$8530</span>   <span class="cm">; ROM busy-wait; call after every LCD port access</span>
+  <span class="am">LCD_CMD_PORT</span>   <span class="am">EQU</span>  <span class="am">$58</span>     <span class="cm">; command port (page-select and column-select)</span>
+  <span class="am">LCD_DATA_OUT</span>   <span class="am">EQU</span>  <span class="am">$5A</span>     <span class="cm">; pixel data write</span>
+  <span class="am">LCD_DATA_IN</span>    <span class="am">EQU</span>  <span class="am">$5B</span>     <span class="cm">; pixel data read (first read after seek is stale)</span>
+  <span class="am">PAGE_COMPENS</span>   <span class="am">EQU</span>  <span class="am">$790D</span>   <span class="cm">; RAM: live page-drift offset (add to N before $B8|N)</span>
+
+  <span class="cm">; Equivalent inline logic (the ROM routine does this):</span>
+  <span class="kw">busy_inline:</span>
+      in   a, ($59)
+      bit  7, a
+      jr   nz, <span class="kw">busy_inline</span>
+      ret
+  </pre>
+</section>
+
+<!-- FULL SEQUENCE -->
+<section class="ref-sec" id="sequence">
+  <h2 class="sec-title">Full Command Sequence &mdash; Setting One Pixel</h2>
+
+  <ol class="steps">
+    <li><span class="step-n">1</span>
+      <strong>Bounds check.</strong> X must be 0&ndash;119, Y must be 0&ndash;30.
+      Y mod 8 == 7 (values 7, 15, 23, 31) maps to invisible bit 7 &mdash; the write
+      succeeds but nothing appears on screen.
+    </li>
+    <li><span class="step-n">2</span>
+      <strong>Compute side and colpos.</strong>
+      X &lt; 60: side=0, colpos=X. X &ge; 60: side=1, colpos=119&minus;X.
+    </li>
+    <li><span class="step-n">3</span>
+      <strong>Compute row and bit_index.</strong>
+      row = Y &gt;&gt; 3. bit_index = Y &amp; $07. mask = 1 &lt;&lt; bit_index.
+    </li>
+    <li><span class="step-n">4</span>
+      <strong>Look up N.</strong>
+      index = side*4 + row. N = N_TABLE[index].
+    </li>
+    <li><span class="step-n">5</span>
+      <strong>Read PAGE_COMPENS and compute page command.</strong>
+      page_cmd = ($B8 | ((N + MEM[$790D]) &amp; $07)).
+    </li>
+    <li><span class="step-n">6</span>
+      <strong>Send page command.</strong>
+      <code>OUT($58, page_cmd)</code> &rarr; <code>CALL $8530</code>.
+    </li>
+    <li><span class="step-n">7</span>
+      <strong>Send column command.</strong>
+      <code>OUT($58, $40 | colpos)</code> &rarr; <code>CALL $8530</code>.
+    </li>
+    <li><span class="step-n">8</span>
+      <strong>Dummy read.</strong>
+      <code>IN A,($5B)</code> &rarr; <code>CALL $8530</code>. Discard result.
+    </li>
+    <li><span class="step-n">9</span>
+      <strong>Real read.</strong>
+      <code>IN A,($5B)</code> &rarr; <code>CALL $8530</code>. Save in register B.
+    </li>
+    <li><span class="step-n">10</span>
+      <strong>Re-issue page+column (steps 6&ndash;7).</strong>
+      The two reads advanced the column pointer by two. Reset it.
+    </li>
+    <li><span class="step-n">11</span>
+      <strong>Merge and write.</strong>
+      A = B | mask (set pixel) or A = B &amp; ~mask (clear pixel).
+      <code>OUT($5A, A)</code>.
+    </li>
+  </ol>
+</section>
+
+<!-- CODE -->
+<section class="ref-sec" id="code">
+  <h2 class="sec-title">PB_ADDR + PLOT_PIXEL + PLOT_PIXEL_CLR</h2>
+
+  <p style="font-size:12px;color:var(--green-dim);margin-bottom:.9rem;line-height:1.7">
+    From the hardware-verified <code>plot_e220.asm</code> pixel library.
+    <strong>D = X (0&ndash;119), E = Y (0&ndash;30)</strong>. Origin top-left.
+  </p>
+
+  <pre class="code">
+  <span class="cm">; ── ROM/RAM constants ────────────────────────────────────────</span>
+  <span class="am">LCD_BUSY_WAIT</span> <span class="am">EQU</span> <span class="am">$8530</span>   <span class="cm">; ROM: poll $59 bit7, loop until clear</span>
+  <span class="am">PAGE_COMPENS</span>  <span class="am">EQU</span> <span class="am">$790D</span>   <span class="cm">; RAM: live page-drift offset byte</span>
+
+  <span class="cm">; ── N_TABLE (8 bytes in program data) ───────────────────────</span>
+  <span class="kw">N_TABLE:</span>
+      db 0,1,2,3    <span class="cm">; side=0 (left  X 0-59)   rows 0-3</span>
+      db 4,5,6,7    <span class="cm">; side=1 (right X 60-119) rows 0-3</span>
+
+  <span class="cm">; ── PB_ADDR ──────────────────────────────────────────────────</span>
+  <span class="cm">; Select LCD page+column for pixel at D=X, E=Y.</span>
+  <span class="cm">; Returns: A = bit_index (Y mod 8). Page+col commands already sent.</span>
+  <span class="cm">; Destroys: B, C, H, L</span>
+  <span class="kw">PB_ADDR:</span>
+      <span class="cm">; --- side + colpos from X ---</span>
+      ld   a, d \ cp 60
+      jr   c, <span class="kw">PBA_LEFT</span>
+      ld   a, 119 \ sub d \ ld c, a   <span class="cm">; right: colpos=119-X</span>
+      ld   b, 4                        <span class="cm">; side*4=4</span>
+      jr   <span class="kw">PBA_SIDE</span>
+  <span class="kw">PBA_LEFT:</span>
+      ld   c, d \ ld b, 0             <span class="cm">; left: colpos=X, side*4=0</span>
+
+  <span class="kw">PBA_SIDE:</span>
+      <span class="cm">; save bit_index = Y mod 8</span>
+      ld   a, e \ and $07
+      push af
+
+      <span class="cm">; row = Y >> 3, look up N from N_TABLE</span>
+      ld   a, e
+      rrca \ rrca \ rrca \ and $07    <span class="cm">; A = row (0-3)</span>
+      add  a, b                        <span class="cm">; index = side*4 + row</span>
+      ld   hl, <span class="am">N_TABLE</span>
+      add  a, l \ ld l, a
+      jr   nc, <span class="kw">PBA_NC</span> \ inc h
+  <span class="kw">PBA_NC:</span>
+      ld   a, (hl)                     <span class="cm">; A = N (0-7)</span>
+
+      <span class="cm">; apply PAGE_COMPENS: compensate for BIOS scroll drift</span>
+      ld   hl, <span class="am">PAGE_COMPENS</span>
+      add  a, (hl)
+      and  $07                         <span class="cm">; wrap in 8-page ring</span>
+      or   $B8                         <span class="cm">; page-select command</span>
+      out  ($58), a
+      call <span class="am">LCD_BUSY_WAIT</span>
+
+      <span class="cm">; column-select command</span>
+      ld   a, $40 \ or c
+      out  ($58), a
+      call <span class="am">LCD_BUSY_WAIT</span>
+
+      pop  af                          <span class="cm">; A = bit_index</span>
+      ret
+
+  <span class="cm">; ── PLOT_PIXEL ───────────────────────────────────────────────</span>
+  <span class="cm">; Set pixel at D=X (0-119), E=Y (0-30).</span>
+  <span class="cm">; Note: Y mod 8 == 7 writes bit 7 which is invisible on E220.</span>
+  <span class="cm">; Destroys: A, B, C, H, L</span>
+  <span class="kw">PLOT_PIXEL:</span>
+      call <span class="kw">PB_ADDR</span>          <span class="cm">; A=bit_index, page+col selected</span>
+      ld   c, a
+
+      in   a, ($5B)          <span class="cm">; dummy read (stale after seek)</span>
+      call <span class="am">LCD_BUSY_WAIT</span>
+
+      in   a, ($5B)          <span class="cm">; real read: existing byte</span>
+      ld   b, a
+      call <span class="am">LCD_BUSY_WAIT</span>
+
+      push bc
+      call <span class="kw">PB_ADDR</span>          <span class="cm">; re-select: reads advanced column pointer</span>
+      pop  bc                <span class="cm">; C=bit_index, B=existing byte</span>
+
+      ld   h, c \ ld a, 1 \ inc h
+  <span class="kw">PP_SHIFT:</span>
+      dec  h \ jr z, <span class="kw">PP_DONE</span> \ sla a \ jr <span class="kw">PP_SHIFT</span>
+  <span class="kw">PP_DONE:</span>
+      or   b                 <span class="cm">; set pixel bit</span>
+      out  ($5A), a
+      ret
+
+  <span class="cm">; ── PLOT_PIXEL_CLR ───────────────────────────────────────────</span>
+  <span class="cm">; Clear pixel at D=X (0-119), E=Y (0-30).</span>
+  <span class="cm">; Destroys: A, B, C, H, L</span>
+  <span class="kw">PLOT_PIXEL_CLR:</span>
+      call <span class="kw">PB_ADDR</span>
+      ld   c, a
+
+      in   a, ($5B)          <span class="cm">; dummy read</span>
+      call <span class="am">LCD_BUSY_WAIT</span>
+
+      in   a, ($5B)          <span class="cm">; real read</span>
+      ld   b, a
+      call <span class="am">LCD_BUSY_WAIT</span>
+
+      push bc
+      call <span class="kw">PB_ADDR</span>          <span class="cm">; re-select column</span>
+      pop  bc
+
+      ld   h, c \ ld a, 1 \ inc h
+  <span class="kw">PPC_SHIFT:</span>
+      dec  h \ jr z, <span class="kw">PPC_DONE</span> \ sla a \ jr <span class="kw">PPC_SHIFT</span>
+  <span class="kw">PPC_DONE:</span>
+      cpl                    <span class="cm">; invert mask: target bit=0, others=1</span>
+      and  b                 <span class="cm">; clear only the pixel bit</span>
+      out  ($5A), a
+      ret
+
+  <span class="cm">; ── PLOT_BYTE ────────────────────────────────────────────────</span>
+  <span class="cm">; Write a full byte B at column D=X, page of E=Y. No RMW.</span>
+  <span class="cm">; Destroys: A, B, C, H, L</span>
+  <span class="kw">PLOT_BYTE:</span>
+      push bc
+      call <span class="kw">PB_ADDR</span>
+      pop  bc
+      ld   a, b
+      out  ($5A), a
+      ret
+  </pre>
+</section>
+
+<!-- PRIMITIVES -->
+<section class="ref-sec" id="primitives">
+  <h2 class="sec-title">Drawing Primitives</h2>
 
   <div class="tbl-wrap">
     <table>
-      <thead><tr><th>char_col</th><th>row</th><th>CMD BYTE</th><th>PIXEL AREA</th></tr></thead>
+      <thead><tr><th>ROUTINE</th><th>INPUT</th><th>OPERATION</th></tr></thead>
       <tbody>
-        <tr><td class="td-port" style="font-size:12px">0</td><td class="td-fn">0</td><td class="td-fn"><code>40h</code></td><td class="td-fn">X=0–5, Y=0–7</td></tr>
-        <tr><td class="td-port" style="font-size:12px">0</td><td class="td-fn">1</td><td class="td-fn"><code>41h</code></td><td class="td-fn">X=0–5, Y=8–15</td></tr>
-        <tr><td class="td-port" style="font-size:12px">0</td><td class="td-fn">2</td><td class="td-fn"><code>42h</code></td><td class="td-fn">X=0–5, Y=16–23</td></tr>
-        <tr><td class="td-port" style="font-size:12px">0</td><td class="td-fn">3</td><td class="td-fn"><code>43h</code></td><td class="td-fn">X=0–5, Y=24–31</td></tr>
-        <tr><td class="td-port" style="font-size:12px">1</td><td class="td-fn">0</td><td class="td-fn"><code>44h</code></td><td class="td-fn">X=6–11, Y=0–7</td></tr>
-        <tr><td class="td-port" style="font-size:12px">23</td><td class="td-fn">3</td><td class="td-fn"><code>FFh</code></td><td class="td-fn">X=138–143, Y=24–31</td></tr>
+        <tr><td class="td-port" style="font-size:12px">hline</td><td class="td-fn"><code>D=X1, E=Y, B=X2</code></td><td class="td-fn">Horizontal line X1 to X2 at Y (inclusive). Length = X2&minus;X1+1.</td></tr>
+        <tr><td class="td-port" style="font-size:12px">hline_clear</td><td class="td-fn"><code>D=X1, E=Y, B=X2</code></td><td class="td-fn">Clear horizontal line X1 to X2 at Y.</td></tr>
+        <tr><td class="td-port" style="font-size:12px">vline</td><td class="td-fn"><code>D=X, E=Y1, C=Y2</code></td><td class="td-fn">Vertical line Y1 to Y2 at X (inclusive). Length = Y2&minus;Y1+1.</td></tr>
+        <tr><td class="td-port" style="font-size:12px">vline_clear</td><td class="td-fn"><code>D=X, E=Y1, C=Y2</code></td><td class="td-fn">Clear vertical line Y1 to Y2 at X.</td></tr>
+        <tr><td class="td-port" style="font-size:12px">line</td><td class="td-fn"><code>D=X1, E=Y1, B=X2, C=Y2</code></td><td class="td-fn">Arbitrary line via Bresenham&rsquo;s algorithm. All state spilled to RAM variables.</td></tr>
+        <tr><td class="td-port" style="font-size:12px">box</td><td class="td-fn"><code>D=X1, E=Y1, B=X2, C=Y2</code></td><td class="td-fn">Hollow rectangle border (four line calls).</td></tr>
+        <tr><td class="td-port" style="font-size:12px">box_clear</td><td class="td-fn"><code>D=X1, E=Y1, B=X2, C=Y2</code></td><td class="td-fn">Clear hollow rectangle border.</td></tr>
+        <tr><td class="td-port" style="font-size:12px">box_filled</td><td class="td-fn"><code>D=X1, E=Y1, B=X2, C=Y2</code></td><td class="td-fn">Filled rectangle (hline for each Y from Y1 to Y2).</td></tr>
+        <tr><td class="td-port" style="font-size:12px">box_filled_clear</td><td class="td-fn"><code>D=X1, E=Y1, B=X2, C=Y2</code></td><td class="td-fn">Clear filled rectangle.</td></tr>
+        <tr><td class="td-port" style="font-size:12px">CLR_SCR</td><td class="td-fn">&mdash;</td><td class="td-fn">Clear screen via BIOS RPTCHR ($BFEEh): space char, 120 chars, row 0 col 0.</td></tr>
+        <tr><td class="td-port" style="font-size:12px">invert_box</td><td class="td-fn"><code>D=X1, E=Y1, B=X2, C=Y2</code></td><td class="td-fn"><span style="color:var(--amber)">STUB &mdash; not implemented.</span> Returns immediately. Needs byte-level XOR RMW loop.</td></tr>
       </tbody>
     </table>
   </div>
-</section>
 
-<!-- ── PIXEL BYTE ── -->
-<section class="ref-sec" id="pixel-byte">
-  <h2 class="sec-title">Pixel Byte Format</h2>
-  <pre class="code">
-  One byte = 8 vertical pixels in one character column:
-
-  Byte:  bit7  bit6  bit5  bit4  bit3  bit2  bit1  <span class="kw">bit0</span>
-  Row:   Y+7   Y+6   Y+5   Y+4   Y+3   Y+2   Y+1   <span class="kw">Y+0</span>  ← topmost (smallest Y)
-
-  The display has 4 pages (rows 0–3), each 8 pixels tall:
-    page 0 → Y  0–7
-    page 1 → Y  8–15
-    page 2 → Y 16–23
-    page 3 → Y 24–31
-
-  LCD controller auto-increments char_col after each write to port 5Ah.
-  To fill a full row (all 24 char columns, one page):
-    OUT(58h, 0x40 + page)   ; position to char_col=0, row=page
-    24× OUT(5Ah, data_byte)  ; auto-advance through columns
-  </pre>
-</section>
-
-<!-- ── SAMPLE CODE ── -->
-<section class="ref-sec" id="lcd-code">
-  <h2 class="sec-title">Sample LCD Routines</h2>
-  <pre class="code">
-  <span class="cm">; cls_e220 -- clear entire 144×32 display</span>
-  <span class="cm">; Sets all pixels to 0. Destroys: A, B, C</span>
-  <span class="kw">cls_e220:</span>
-      ld   c, <span class="am">0</span>             <span class="cm">; row (page) counter</span>
-  <span class="kw">cls_row:</span>
-      ld   a, c
-      or   <span class="am">040h</span>             <span class="cm">; char_col=0, row=c → cmd = 0x40 + c</span>
-      out  (<span class="am">058h</span>), a        <span class="cm">; position cursor at col 0, this row</span>
-      ld   b, <span class="am">24</span>            <span class="cm">; 24 character columns</span>
-  <span class="kw">cls_col:</span>
-      xor  a
-      out  (<span class="am">05Ah</span>), a        <span class="cm">; write zero byte (8 blank pixels)</span>
-      djnz cls_col
-      inc  c
-      ld   a, c \ cp <span class="am">4</span>
-      jr   nz, cls_row
-      ret
-
-  <span class="cm">; write_pattern -- output B bytes from HL at char_col=D, row=E</span>
-  <span class="cm">; Destroys: A, B, HL</span>
-  <span class="kw">write_pattern:</span>
-      ld   a, d             <span class="cm">; char_col</span>
-      add  a, a \ add a, a  <span class="cm">; * 4</span>
-      add  a, e             <span class="cm">; + row</span>
-      or   <span class="am">040h</span>
-      out  (<span class="am">058h</span>), a        <span class="cm">; set cursor</span>
-  <span class="kw">wp_loop:</span>
-      ld   a, (hl)
-      out  (<span class="am">05Ah</span>), a        <span class="cm">; write pixel byte</span>
-      inc  hl
-      djnz wp_loop
-      ret
-  </pre>
-
-  <div class="callout">
-    <strong>SHADOW BUFFER:</strong> Port 5Bh (pixel read) may return garbage in emulators —
-    the same caveat as the G815's port 57h. For read-modify-write operations
-    (setting individual pixels), maintain a 96-byte shadow buffer
-    (24 columns × 4 rows) and modify shadow data before writing to hardware.
+  <div class="callout callout-info">
+    <strong>RAM SPILL PATTERN:</strong> All line/box primitives use a RAM byte
+    <code>LINE_CNT</code> for the pixel counter (decrement-to-zero loop), because the
+    inner <code>PLOT_PIXEL</code> call clobbers all working registers.
+    The Bresenham <code>line</code> routine additionally spills <code>LINE_X0/Y0/X1/Y1</code>,
+    <code>LINE_DX/DY</code>, <code>LINE_SX/SY</code>, <code>LINE_ERR</code> (16-bit),
+    and <code>LINE_CX/CY</code> &mdash; all necessary because the 3.58 MHz CPU leaves
+    no scratch registers free across the inner pixel-plot call.
   </div>
-
-  <pre class="code">
-  <span class="cm">; Shadow buffer: 96 bytes (24 char-cols × 4 rows)</span>
-  <span class="pu">E220_VRAM</span>  <span class="am">EQU</span>  <span class="am">02000h</span>   <span class="cm">; layout: E220_VRAM + row*24 + char_col</span>
-
-  <span class="cm">; Flush entire shadow buffer to hardware</span>
-  <span class="kw">flush_vram:</span>
-      ld   hl, <span class="pu">E220_VRAM</span>
-      ld   c, <span class="am">0</span>             <span class="cm">; row counter</span>
-  <span class="kw">fv_row:</span>
-      ld   a, c \ or <span class="am">040h</span>
-      out  (<span class="am">058h</span>), a        <span class="cm">; set cursor to col 0, row c</span>
-      ld   b, <span class="am">24</span>
-  <span class="kw">fv_col:</span>
-      ld   a, (hl) \ inc hl
-      out  (<span class="am">05Ah</span>), a
-      djnz fv_col
-      inc  c \ ld a, c \ cp <span class="am">4</span>
-      jr   nz, fv_row
-      ret
-  </pre>
 </section>
 
-<!-- ── KEYBOARD ── -->
+<!-- KEYBOARD -->
 <section class="ref-sec" id="keyboard">
-  <h2 class="sec-title">Keyboard Ports <span class="sec-badge">10h – 13h</span></h2>
-
-  <p style="font-size:12px;color:var(--green-dim);margin-bottom:.9rem;line-height:1.7">
-    The E220 keyboard is an 8×8 matrix (regular keys) plus an 8×2 matrix
-    (function keys), scanned via two strobe ports. Port 13h provides the
-    SHIFT key status independently.
-  </p>
+  <h2 class="sec-title">Keyboard Ports <span class="sec-badge">$10 &ndash; $13</span></h2>
 
   <div class="tbl-wrap">
     <table>
       <thead><tr><th>PORT</th><th>DIR</th><th>NAME</th><th>DESCRIPTION</th></tr></thead>
       <tbody>
         <tr>
-          <td class="td-port">10h</td>
-          <td><span class="dir dir-in">IN</span></td>
-          <td class="td-fn">Key column read</td>
-          <td class="td-fn">
-            Returns column bitmask (bits 0–7) of the currently strobed row.
-            <span class="fn-note">Active-high: bit=1 means key pressed. Read after writing strobe to port 11h or 12h.</span>
-          </td>
+          <td class="td-port">$10</td><td><span class="dir dir-in">IN</span></td>
+          <td class="td-fn">Column read</td>
+          <td class="td-fn">Bitmask of currently strobed row. Bit=1 means key pressed (active-high).
+            <span class="fn-note">Read after writing strobe to $11 or $12.</span></td>
         </tr>
         <tr>
-          <td class="td-port">11h</td>
-          <td><span class="dir dir-out">OUT</span></td>
-          <td class="td-fn">8×8 matrix row strobe</td>
-          <td class="td-fn">
-            Write a 1-bit mask to select one of 8 rows of the main key matrix.
-            <span class="fn-note">Values: <code>01h</code> (row 0) … <code>80h</code> (row 7). Write 0 to deselect.</span>
-          </td>
+          <td class="td-port">$11</td><td><span class="dir dir-out">OUT</span></td>
+          <td class="td-fn">8x8 row strobe</td>
+          <td class="td-fn">1-bit mask selects one of 8 main matrix rows ($01&ndash;$80). Write 0 to deselect.</td>
         </tr>
         <tr>
-          <td class="td-port">12h</td>
-          <td><span class="dir dir-out">OUT</span></td>
-          <td class="td-fn">8×2 function key strobe</td>
-          <td class="td-fn">
-            Selects one of 2 function-key rows via bits 0–1.
-            <span class="fn-note">Bit 0 = function row 0, bit 1 = function row 1. Read result from port 10h.</span>
-          </td>
+          <td class="td-port">$12</td><td><span class="dir dir-out">OUT</span></td>
+          <td class="td-fn">Function key strobe</td>
+          <td class="td-fn">Bit 0 = fn row 0, bit 1 = fn row 1. Read result from $10.</td>
         </tr>
         <tr>
-          <td class="td-port">13h</td>
-          <td><span class="dir dir-in">IN</span></td>
-          <td class="td-fn">SHIFT key status</td>
-          <td class="td-fn">
-            Bit 0 = SHIFT key status (1 = pressed).
-            <span class="fn-note">Read independently of the matrix scan — no strobe needed.</span>
-          </td>
+          <td class="td-port">$13</td><td><span class="dir dir-in">IN</span></td>
+          <td class="td-fn">SHIFT key</td>
+          <td class="td-fn">Bit 0 = SHIFT pressed (1=pressed). Independent of matrix scan.</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <pre class="code">
-  <span class="cm">; Scan main key matrix — returns A=column bits, B=row bit if any key pressed</span>
-  <span class="cm">; Returns A=0, B=0 if no key pressed</span>
+  <span class="cm">; Scan main matrix. Returns A=col bits, B=row bit if key found; A=0 if none.</span>
   <span class="kw">scan_keys:</span>
-      ld   b, <span class="am">080h</span>          <span class="cm">; start with row 7 (bit 7)</span>
+      ld   b, $80
   <span class="kw">sk_row:</span>
-      ld   a, b
-      out  (<span class="am">011h</span>), a         <span class="cm">; strobe row</span>
-      in   a, (<span class="am">010h</span>)         <span class="cm">; read columns</span>
-      or   a
-      jr   nz, sk_found      <span class="cm">; NZ = key pressed</span>
-      rrc  b                  <span class="cm">; next row</span>
-      jr   nc, sk_row         <span class="cm">; loop until all 8 rows done</span>
-      xor  a                  <span class="cm">; no key</span>
-      ret
-  <span class="kw">sk_found:</span>                   <span class="cm">; A = column mask, B = row mask</span>
-      ret
-
-  <span class="cm">; Check SHIFT key</span>
-  <span class="kw">check_shift:</span>
-      in   a, (<span class="am">013h</span>)
-      and  <span class="am">001h</span>             <span class="cm">; bit 0 = SHIFT</span>
-      ret                     <span class="cm">; NZ = shift pressed</span>
+      ld   a, b \ out ($11), a
+      in   a, ($10) \ or a
+      ret  nz           <span class="cm">; key found: A=col mask, B=row mask</span>
+      rrc  b \ jr nc, <span class="kw">sk_row</span>
+      xor  a \ ret      <span class="cm">; no key pressed</span>
   </pre>
 </section>
 
-<!-- ── INTERRUPTS ── -->
+<!-- INTERRUPTS -->
 <section class="ref-sec" id="interrupt">
-  <h2 class="sec-title">Interrupt Ports <span class="sec-badge">16h – 17h</span></h2>
-
-  <div class="tbl-wrap">
-    <table>
-      <thead><tr><th>PORT</th><th>DIR</th><th>NAME</th><th>BITS</th><th>DESCRIPTION</th></tr></thead>
-      <tbody>
-        <tr>
-          <td class="td-port">16h</td>
-          <td><span class="dir dir-io">I/O</span></td>
-          <td class="td-fn">Interrupt flags</td>
-          <td class="td-fn"><code>bits 0–3</code></td>
-          <td class="td-fn">
-            Read to query pending interrupts; write to clear them.
-            <span class="fn-note">Bit 0 = keyboard · Bit 1 = ON key · Bit 2 = timer · Bit 3 = CPU INT pin</span>
-          </td>
-        </tr>
-        <tr>
-          <td class="td-port">17h</td>
-          <td><span class="dir dir-out">OUT</span></td>
-          <td class="td-fn">Interrupt enable</td>
-          <td class="td-fn"><code>bits 0–3</code></td>
-          <td class="td-fn">
-            Enable/disable individual interrupt sources.
-            <span class="fn-note">Bit 0 = keyboard · Bit 1 = ON key · Bit 2 = timer · Bit 3 = CPU INT pin<br>Set bit to 1 to enable that source.</span>
-          </td>
-        </tr>
-        <tr>
-          <td class="td-port">14h</td>
-          <td><span class="dir dir-io">I/O</span></td>
-          <td class="td-fn">Timer signal</td>
-          <td class="td-fn"><code>bit 0</code></td>
-          <td class="td-fn">
-            Bit 0 = timer signal from LCD driver clock. Period ≈ 0.95 s.
-            <span class="fn-note">This is the LCD driver oscillator divided down — not a general-purpose timer.</span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="tbl-wrap" style="margin-top:1rem">
-    <table class="bits-tbl">
-      <thead><tr><th>BIT</th><th>PORT 16h / 17h</th><th>INTERRUPT SOURCE</th></tr></thead>
-      <tbody>
-        <tr><td class="bit-n">bit 0</td><td class="bit-name">Keyboard</td><td class="bit-note">Any key pressed in the main matrix</td></tr>
-        <tr><td class="bit-n">bit 1</td><td class="bit-name">ON key</td><td class="bit-note">The ON/break key specifically</td></tr>
-        <tr><td class="bit-n">bit 2</td><td class="bit-name">Timer</td><td class="bit-note">LCD oscillator ÷ N, ≈ 0.95 s period</td></tr>
-        <tr><td class="bit-n">bit 3</td><td class="bit-name">CPU INT pin</td><td class="bit-note">External interrupt via expansion bus</td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-
-<!-- ── ROM BANKING ── -->
-<section class="ref-sec" id="banking">
-  <h2 class="sec-title">ROM Bank Mapping <span class="sec-badge">PORT 19h</span></h2>
-
-  <div class="callout callout-purple">
-    <strong>BANK ARCHITECTURE:</strong> The E220 has a 128 KB ROM organised as 8 × 16 KB banks
-    (bank 0–7). Two separate 16 KB windows are mapped into Z80 address space: one at
-    <code>C000h–FFFFh</code> and one at <code>8000h–BFFFh</code>. Both windows are
-    independently selectable via bits of port 19h.
-  </div>
-
-  <div class="tbl-wrap">
-    <table>
-      <thead><tr><th>PORT</th><th>DIR</th><th>BITS</th><th>WINDOW</th><th>DESCRIPTION</th></tr></thead>
-      <tbody>
-        <tr>
-          <td class="td-port">19h</td>
-          <td><span class="dir dir-io">I/O</span></td>
-          <td class="td-fn"><code>bits 0–2</code></td>
-          <td class="td-fn"><code>C000h–FFFFh</code></td>
-          <td class="td-fn">
-            Selects one of 8 internal ROM banks (0–7) for the upper window.
-            <span class="fn-note">Current value is also stored at RAM address <code>7900h</code>.</span>
-          </td>
-        </tr>
-        <tr>
-          <td class="td-port">19h</td>
-          <td><span class="dir dir-io">I/O</span></td>
-          <td class="td-fn"><code>bit 6</code></td>
-          <td class="td-fn"><code>8000h–BFFFh</code></td>
-          <td class="td-fn">
-            If bit 6 set, bits 4–5 address one of four 16 KB ROMs on the expansion port.
-            <span class="fn-note">Enables external ROM cartridge mapping into the lower 16 KB window.</span>
-          </td>
-        </tr>
-        <tr>
-          <td class="td-port">1Bh</td>
-          <td><span class="dir dir-out">OUT</span></td>
-          <td class="td-fn"><code>bit 2</code></td>
-          <td class="td-fn"><code>0000h–7FFFh</code></td>
-          <td class="td-fn">
-            If bit 2 set, maps an external 32 KB RAM (expansion port) to <code>0000h–7FFFh</code>.
-            <span class="fn-note">Cleared on BASIC module init. Do not set if no expansion RAM is attached.</span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="tbl-wrap" style="margin-top:1rem">
-    <table>
-      <thead><tr><th>BANK #</th><th>CONTENT (V.1)</th><th>USER KEY</th></tr></thead>
-      <tbody>
-        <tr><td class="td-port" style="font-size:12px">0</td><td class="td-fn">System / BIOS</td><td style="color:var(--green-dim);font-size:12px">always at 8000h–BFFFh</td></tr>
-        <tr><td class="td-port" style="font-size:12px">1</td><td class="td-fn">BASIC interpreter</td><td style="color:var(--green-dim);font-size:12px">BASIC (default C000h–FFFFh)</td></tr>
-        <tr><td class="td-port" style="font-size:12px">2</td><td class="td-fn">Peripheral CE-126P (printer/cassette)</td><td style="color:var(--green-dim);font-size:12px">—</td></tr>
-        <tr><td class="td-port" style="font-size:12px">3</td><td class="td-fn">Text Editor / Monitor</td><td style="color:var(--green-dim);font-size:12px">TEXT</td></tr>
-        <tr><td class="td-port" style="font-size:12px">4</td><td class="td-fn">Statistics &amp; Fonts</td><td style="color:var(--green-dim);font-size:12px">STAT</td></tr>
-        <tr><td class="td-port" style="font-size:12px">5</td><td class="td-fn">Assembler / Diagnostic module</td><td style="color:var(--green-dim);font-size:12px">ASMBL</td></tr>
-        <tr><td class="td-port" style="font-size:12px">6</td><td class="td-fn">Engineer software (integration, trig, constants)</td><td style="color:var(--green-dim);font-size:12px">ENG</td></tr>
-        <tr><td class="td-port" style="font-size:12px">7</td><td class="td-fn">Engineer software (factorisation, metric, complex)</td><td style="color:var(--green-dim);font-size:12px">ENG</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <pre class="code">
-  <span class="cm">; Switch to BASIC interpreter (bank 1) at C000h-FFFFh</span>
-  <span class="kw">bank_basic:</span>
-      ld   a, <span class="am">001h</span>
-      out  (<span class="am">019h</span>), a
-      ret
-
-  <span class="cm">; Switch to assembler/monitor (bank 5)</span>
-  <span class="kw">bank_asm:</span>
-      ld   a, <span class="am">005h</span>
-      out  (<span class="am">019h</span>), a
-      ret
-  </pre>
-</section>
-
-<!-- ── SERIAL ── -->
-<section class="ref-sec" id="serial">
-  <h2 class="sec-title">Serial Interface Ports <span class="sec-badge">15h / 18h / 1Fh</span></h2>
+  <h2 class="sec-title">Interrupt Ports <span class="sec-badge">$16 / $17</span></h2>
 
   <div class="tbl-wrap">
     <table>
       <thead><tr><th>PORT</th><th>DIR</th><th>BITS</th><th>DESCRIPTION</th></tr></thead>
       <tbody>
         <tr>
-          <td class="td-port">15h</td>
-          <td><span class="dir dir-io">I/O</span></td>
-          <td class="td-fn"><code>bit 0, bit 7</code></td>
-          <td class="td-fn">
-            Bit 0: cleared to enable XIN input. Bit 7: indicates XIN input enabled/inhibited.
-            <span class="fn-note">Controls the serial receive data path from pin XIN (11-pin interface pin 6).</span>
-          </td>
+          <td class="td-port">$16</td><td><span class="dir dir-io">I/O</span></td>
+          <td class="td-fn"><code>bits 0&ndash;3</code></td>
+          <td class="td-fn">Read: pending interrupt flags. Write: clear flags.
+            <span class="fn-note">Bit 0=keyboard &middot; Bit 1=ON key &middot; Bit 2=timer (~0.95 s LCD clock) &middot; Bit 3=CPU INT pin</span></td>
         </tr>
         <tr>
-          <td class="td-port">18h</td>
-          <td><span class="dir dir-io">I/O</span></td>
-          <td class="td-fn"><code>bits 0, 1, 7</code></td>
-          <td class="td-fn">
-            Bit 0 = BUSY/CTS output (pin 4) · Bit 1 = DOUT output (pin 5) · Bit 7 = XOUT/TXD (complement of transmit bit, pin 7).
-            <span class="fn-note">Bit 7 is the serial transmit data: write the complement of each data bit here.</span>
-          </td>
+          <td class="td-port">$17</td><td><span class="dir dir-out">OUT</span></td>
+          <td class="td-fn"><code>bits 0&ndash;3</code></td>
+          <td class="td-fn">Enable/disable interrupt sources (1=enabled). Same bit mapping as $16.</td>
         </tr>
         <tr>
-          <td class="td-port">1Fh</td>
-          <td><span class="dir dir-in">IN</span></td>
-          <td class="td-fn"><code>bits 0, 1, 2, 7</code></td>
-          <td class="td-fn">
-            Bit 0 = DIN (pin 8) · Bit 1 = ACK/RTS (pin 9) · Bit 2 = XIN/RXD complement (pin 6) · Bit 7 = ON/break key status.
-            <span class="fn-note">XIN data bit is inverted — complement bit 2 when reading received serial data.</span>
-          </td>
+          <td class="td-port">$14</td><td><span class="dir dir-io">I/O</span></td>
+          <td class="td-fn"><code>bit 0</code></td>
+          <td class="td-fn">LCD driver oscillator divided-down timer signal. Period ~0.95 s. Not a GP timer.</td>
         </tr>
       </tbody>
     </table>
   </div>
+</section>
 
-  <div class="callout callout-info">
-    <strong>PROTOCOL:</strong> The serial interface uses Intel Hex format at up to 9600 baud.
-    Signal levels are 0 V / 5 V (CMOS), <strong>not</strong> RS-232 ±12 V.
-    A level converter is required to interface with a PC's RS-232 port.
-    Allow at least 0.1 s after each Intel Hex line for the Sharp to decode the data.
+<!-- ROM BANKING -->
+<section class="ref-sec" id="banking">
+  <h2 class="sec-title">ROM Bank Mapping <span class="sec-badge">PORT $19</span></h2>
+
+  <div class="callout callout-purple">
+    <strong>8 x 16 KB BANKS:</strong> Port $19 bits 0&ndash;2 select one of 8 internal ROM
+    banks into the <code>$C000&ndash;$FFFF</code> window. Bank 0 (BIOS) is always mapped
+    at <code>$8000&ndash;$BFFF</code>. Current bank value is mirrored at RAM <code>$7900h</code>.
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>BANK</th><th>CONTENT</th><th>USER KEY</th></tr></thead>
+      <tbody>
+        <tr><td class="td-port" style="font-size:12px">0</td><td class="td-fn">System / BIOS &mdash; always at $8000&ndash;$BFFF</td><td style="color:var(--green-dim);font-size:12px">&mdash;</td></tr>
+        <tr><td class="td-port" style="font-size:12px">1</td><td class="td-fn">BASIC interpreter (default $C000&ndash;$FFFF)</td><td style="color:var(--green-dim);font-size:12px">BASIC</td></tr>
+        <tr><td class="td-port" style="font-size:12px">2</td><td class="td-fn">Peripheral CE-126P (printer/cassette)</td><td style="color:var(--green-dim);font-size:12px">&mdash;</td></tr>
+        <tr><td class="td-port" style="font-size:12px">3</td><td class="td-fn">Text Editor / Monitor</td><td style="color:var(--green-dim);font-size:12px">TEXT</td></tr>
+        <tr><td class="td-port" style="font-size:12px">4</td><td class="td-fn">Statistics &amp; Fonts</td><td style="color:var(--green-dim);font-size:12px">STAT</td></tr>
+        <tr><td class="td-port" style="font-size:12px">5</td><td class="td-fn">Assembler / Diagnostic module</td><td style="color:var(--green-dim);font-size:12px">ASMBL</td></tr>
+        <tr><td class="td-port" style="font-size:12px">6</td><td class="td-fn">Engineer SW (integration, trig, constants)</td><td style="color:var(--green-dim);font-size:12px">ENG</td></tr>
+        <tr><td class="td-port" style="font-size:12px">7</td><td class="td-fn">Engineer SW (factorisation, metric, complex)</td><td style="color:var(--green-dim);font-size:12px">ENG</td></tr>
+      </tbody>
+    </table>
   </div>
 </section>
 
-<!-- ── MISC PORTS ── -->
+<!-- SERIAL -->
+<section class="ref-sec" id="serial">
+  <h2 class="sec-title">Serial Interface Ports <span class="sec-badge">$15 / $18 / $1F</span></h2>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>PORT</th><th>DIR</th><th>BITS</th><th>DESCRIPTION</th></tr></thead>
+      <tbody>
+        <tr><td class="td-port">$15</td><td><span class="dir dir-io">I/O</span></td><td class="td-fn"><code>bit 0, 7</code></td>
+          <td class="td-fn">Bit 0: clear to enable XIN input. Bit 7: XIN enabled/inhibited.</td></tr>
+        <tr><td class="td-port">$18</td><td><span class="dir dir-io">I/O</span></td><td class="td-fn"><code>bits 0,1,7</code></td>
+          <td class="td-fn">Bit 0=BUSY/CTS (pin 4) &middot; Bit 1=DOUT (pin 5) &middot; Bit 7=XOUT/TXD complement (pin 7).
+            <span class="fn-note">Bit 7 is serial TX data &mdash; write the complement of each bit.</span></td></tr>
+        <tr><td class="td-port">$1F</td><td><span class="dir dir-in">IN</span></td><td class="td-fn"><code>bits 0,1,2,7</code></td>
+          <td class="td-fn">Bit 0=DIN (pin 8) &middot; Bit 1=ACK/RTS (pin 9) &middot; Bit 2=XIN/RXD complement (pin 6) &middot; Bit 7=ON/break key.
+            <span class="fn-note">XIN data is inverted &mdash; complement bit 2 to get the received data bit.</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout callout-info">
+    <strong>PROTOCOL:</strong> Intel Hex format, up to 9600 baud, 0 V/5 V CMOS logic.
+    RS-232 level converter required for PC interfacing. Allow &ge; 0.1 s pause after
+    each Intel Hex line for the Sharp to decode and verify.
+  </div>
+</section>
+
+<!-- MISC -->
 <section class="ref-sec" id="misc">
   <h2 class="sec-title">Miscellaneous Ports</h2>
-
   <div class="tbl-wrap">
     <table>
       <thead><tr><th>PORT</th><th>DIR</th><th>NAME</th><th>DESCRIPTION</th></tr></thead>
       <tbody>
-        <tr>
-          <td class="td-port">1Ch</td>
-          <td><span class="dir dir-out">OUT</span></td>
-          <td class="td-fn">Peripheral reset</td>
-          <td class="td-fn">
-            Bit 0 = trigger status · Bit 1 = signal level (low or high).
-            <span class="fn-note">Used to reset peripheral devices on the expansion bus.</span>
-          </td>
-        </tr>
-        <tr>
-          <td class="td-port">1Dh</td>
-          <td><span class="dir dir-in">IN</span></td>
-          <td class="td-fn">Battery status</td>
-          <td class="td-fn">
-            Bit 0 = battery OK (1 = OK, 0 = low battery warning).
-          </td>
-        </tr>
-        <tr>
-          <td class="td-port">1Ah</td>
-          <td><span class="dir dir-out">OUT</span></td>
-          <td class="td-fn">(unknown)</td>
-          <td class="td-fn">
-            Cleared during BASIC module initialisation. Do not write arbitrary values.
-          </td>
-        </tr>
-        <tr>
-          <td class="td-port">1Eh</td>
-          <td><span class="dir dir-out">OUT</span></td>
-          <td class="td-fn">(unknown)</td>
-          <td class="td-fn">
-            Bits 0–1 documented as used. Function not fully mapped.
-          </td>
-        </tr>
+        <tr><td class="td-port">$1B</td><td><span class="dir dir-out">OUT</span></td><td class="td-fn">External RAM</td><td class="td-fn">Bit 2: map external 32 KB expansion RAM to $0000&ndash;$7FFF. Cleared on BASIC init.</td></tr>
+        <tr><td class="td-port">$1C</td><td><span class="dir dir-out">OUT</span></td><td class="td-fn">Peripheral reset</td><td class="td-fn">Bit 0=trigger status &middot; Bit 1=signal level. Resets expansion-bus peripherals.</td></tr>
+        <tr><td class="td-port">$1D</td><td><span class="dir dir-in">IN</span></td><td class="td-fn">Battery status</td><td class="td-fn">Bit 0 = 1 means battery OK, 0 means low.</td></tr>
+        <tr><td class="td-port">$1A</td><td><span class="dir dir-out">OUT</span></td><td class="td-fn">(unknown)</td><td class="td-fn">Cleared during BASIC module init. Avoid writing arbitrary values.</td></tr>
+        <tr><td class="td-port">$1E</td><td><span class="dir dir-out">OUT</span></td><td class="td-fn">(unknown)</td><td class="td-fn">Bits 0&ndash;1 documented as used. Function not fully mapped.</td></tr>
       </tbody>
     </table>
   </div>
 </section>
 
-<!-- ── 11-PIN INTERFACE ── -->
+<!-- 11-PIN INTERFACE -->
 <section class="ref-sec" id="iface">
   <h2 class="sec-title">11-Pin Interface <span class="sec-badge">2.54mm HEADER</span></h2>
-
   <div class="callout callout-info">
-    <strong>SIGNAL LEVELS:</strong> The E220 uses 0 V / 5 V CMOS logic, <em>not</em> RS-232.
-    A level converter is required for PC interfacing. Input voltages significantly above 6 V
-    may destroy the unit. The buzzer output (pin 1) is a direct TTL signal — suitable for
-    driving a piezo buzzer without buffering.
+    <strong>SIGNAL LEVELS:</strong> 0 V / 5 V CMOS &mdash; not RS-232 (&plusmn;12 V).
+    A level converter is required for PC interfacing. Voltage significantly above 6 V on
+    input pins may damage the unit. External 4&ndash;6 V power supply can be connected
+    to pin 2 (+) / pin 3 (GND).
   </div>
-
   <div class="tbl-wrap">
     <table class="iface-tbl">
-      <thead><tr><th>PIN</th><th>DIR</th><th>RS-232 NAME</th><th>SHARP NAME</th><th>FUNCTION</th></tr></thead>
+      <thead><tr><th>PIN</th><th>DIR</th><th>RS-232</th><th>SHARP NAME</th><th>FUNCTION</th></tr></thead>
       <tbody>
-        <tr><td class="pin-n">1</td><td class="pin-dir">OUT</td><td>—</td><td class="pin-name">BUZ</td><td class="pin-note">Buzzer signal (frequency, duration, count controlled by BASIC BEEP)</td></tr>
-        <tr><td class="pin-n">2</td><td>—</td><td>Vcc</td><td class="pin-name">GND</td><td class="pin-note">+5 V supply (also accepts 4–6 V external power supply on this pin)</td></tr>
-        <tr><td class="pin-n">3</td><td>—</td><td>SG</td><td class="pin-name">Vcc</td><td class="pin-note">Signal ground (0 V reference)</td></tr>
-        <tr><td class="pin-n">4</td><td class="pin-dir">OUT</td><td>CTS</td><td class="pin-name">BUSY</td><td class="pin-note">Sharp signals it is busy / not ready to receive</td></tr>
+        <tr><td class="pin-n">1</td><td class="pin-dir">OUT</td><td>&mdash;</td><td class="pin-name">BUZ</td><td class="pin-note">Buzzer signal (BEEP: frequency, duration, count)</td></tr>
+        <tr><td class="pin-n">2</td><td>&mdash;</td><td>Vcc</td><td class="pin-name">GND</td><td class="pin-note">+5 V rail / external power input (4&ndash;6 V DC)</td></tr>
+        <tr><td class="pin-n">3</td><td>&mdash;</td><td>SG</td><td class="pin-name">Vcc</td><td class="pin-note">Signal ground (0 V reference)</td></tr>
+        <tr><td class="pin-n">4</td><td class="pin-dir">OUT</td><td>CTS</td><td class="pin-name">BUSY</td><td class="pin-note">High when Sharp is busy / not ready to receive</td></tr>
         <tr><td class="pin-n">5</td><td class="pin-dir">OUT</td><td>DTR</td><td class="pin-name">DOUT</td><td class="pin-note">High when Sharp has activated the serial interface</td></tr>
-        <tr><td class="pin-n">6</td><td class="pin-dir">IN</td><td>RXD</td><td class="pin-name">XIN</td><td class="pin-note">Serial data input to Sharp (INVERTED — active low)</td></tr>
-        <tr><td class="pin-n">7</td><td class="pin-dir">OUT</td><td>TXD</td><td class="pin-name">XOUT</td><td class="pin-note">Serial data output from Sharp (INVERTED — active low)</td></tr>
-        <tr><td class="pin-n">8</td><td class="pin-dir">IN</td><td>DSR</td><td class="pin-name">DIN</td><td class="pin-note">Data input flag from peripheral</td></tr>
-        <tr><td class="pin-n">9</td><td class="pin-dir">IN</td><td>RTS</td><td class="pin-name">ACK</td><td class="pin-note">Must be high to signal Sharp that it may send data</td></tr>
-        <tr><td class="pin-n">10</td><td>—</td><td>—</td><td>—</td><td class="pin-note">Not connected</td></tr>
-        <tr><td class="pin-n">11</td><td>—</td><td>—</td><td>—</td><td class="pin-note">Not connected</td></tr>
+        <tr><td class="pin-n">6</td><td class="pin-dir">IN</td><td>RXD</td><td class="pin-name">XIN</td><td class="pin-note">Serial data input &mdash; INVERTED (active low)</td></tr>
+        <tr><td class="pin-n">7</td><td class="pin-dir">OUT</td><td>TXD</td><td class="pin-name">XOUT</td><td class="pin-note">Serial data output &mdash; INVERTED (active low)</td></tr>
+        <tr><td class="pin-n">8</td><td class="pin-dir">IN</td><td>DSR</td><td class="pin-name">DIN</td><td class="pin-note">Data-in flag from peripheral</td></tr>
+        <tr><td class="pin-n">9</td><td class="pin-dir">IN</td><td>RTS</td><td class="pin-name">ACK</td><td class="pin-note">Must be high for Sharp to transmit</td></tr>
+        <tr><td class="pin-n">10</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td class="pin-note">Not connected</td></tr>
+        <tr><td class="pin-n">11</td><td>&mdash;</td><td>&mdash;</td><td>&mdash;</td><td class="pin-note">Not connected</td></tr>
       </tbody>
     </table>
   </div>
-
-  <div class="callout">
-    <strong>RS-232 WIRING (9-pin D-Sub male):</strong>
-    Connect RXD (pin 2) ↔ Sharp pin 7 INVERTED ·
-    TXD (pin 3) ↔ Sharp pin 6 INVERTED ·
-    SG (pin 5) ↔ Sharp pin 3 ·
-    RTS (pin 7) ↔ Sharp pin 4 INVERTED ·
-    CTS (pin 8) ↔ Sharp pin 9 INVERTED.
-    Note: RS-232 uses ±12 V — an inverting level converter is mandatory.
-    Pins 6 and 7 (XIN/XOUT) are active-low; the inversion is built into the level converter.
-  </div>
 </section>
 
-<!-- ── HARDWARE SPECS ── -->
+<!-- SPECS -->
 <section class="ref-sec" id="specs">
   <h2 class="sec-title">Hardware Specifications</h2>
-
   <div class="tbl-wrap">
     <table>
-      <thead><tr><th>FEATURE</th><th>PC-E220</th></tr></thead>
+      <thead><tr><th style="width:22%">FEATURE</th><th>PC-E220</th></tr></thead>
       <tbody>
-        <tr><td style="color:var(--green-dim);font-size:11px">CPU</td><td class="td-fn">CMOS-SC7852 (Z80A code-compatible, not cycle-compatible) at 3.58 MHz (3,579,545 Hz)</td></tr>
-        <tr><td style="color:var(--green-dim);font-size:11px">Display</td><td class="td-fn">144 × 32 pixels (4 rows × 24 chars) — manual contrast wheel</td></tr>
-        <tr><td style="color:var(--green-dim);font-size:11px">LCD controllers</td><td class="td-fn">HD62202 (left 72 cols) + HD61203 (right 72 cols)</td></tr>
-        <tr><td style="color:var(--green-dim);font-size:11px">RAM</td><td class="td-fn">32 KB total — 30,090 bytes user-accessible (addresses <code>0100h–77E0h</code>)</td></tr>
-        <tr><td style="color:var(--green-dim);font-size:11px">ROM</td><td class="td-fn">128 KB (1 Mbit) — 8 × 16 KB banks mapped via port 19h</td></tr>
-        <tr><td style="color:var(--green-dim);font-size:11px">ROM address space</td><td class="td-fn"><code>8000h–BFFFh</code> (bank 0 fixed: BIOS) · <code>C000h–FFFFh</code> (switchable: banks 1–7)</td></tr>
-        <tr><td style="color:var(--green-dim);font-size:11px">Keys</td><td class="td-fn">82 keys</td></tr>
-        <tr><td style="color:var(--green-dim);font-size:11px">Sound</td><td class="td-fn">Buzzer on pin 1 of 11-pin interface; BASIC BEEP with frequency, duration, count</td></tr>
-        <tr><td style="color:var(--green-dim);font-size:11px">Serial</td><td class="td-fn">SIO up to 9600 baud via 11-pin interface; Intel Hex format</td></tr>
-        <tr><td style="color:var(--green-dim);font-size:11px">Power</td><td class="td-fn">4 × 1.5 V AA + 1 × CR-2032 backup; or 4–6 V DC via pin 2/3 of interface (≈ 0.37 W)</td></tr>
-        <tr><td style="color:var(--green-dim);font-size:11px">Size / Weight</td><td class="td-fn">215 × 100 × 18 mm / 300 g (with batteries and hard case)</td></tr>
-        <tr><td style="color:var(--green-dim);font-size:11px">Built</td><td class="td-fn">1991 · Three ROM versions: V.0, V.1, V.2</td></tr>
-        <tr><td style="color:var(--green-dim);font-size:11px">Versions</td><td class="td-fn">V.0 / V.1 / V.2 — differ in ROM contents and possibly CPU clock. Detectable by SHIFT+, during RESET.</td></tr>
+        <tr><td style="color:var(--green-dim);font-size:11px">CPU</td><td class="td-fn">SC7852 (Z80A code-compatible, NOT cycle-compatible) &mdash; 3.58 MHz (3,579,545 Hz)</td></tr>
+        <tr><td style="color:var(--green-dim);font-size:11px">Display</td><td class="td-fn"><strong style="color:var(--purple)">120 x 32 pixels</strong> (4 pages x 8 px). Effective visible height: 28 px (bit 7 non-visible per page). Manual contrast wheel.</td></tr>
+        <tr><td style="color:var(--green-dim);font-size:11px">LCD controllers</td><td class="td-fn">HD62202 (left half, X 0&ndash;59) + HD61203 (right half, X 60&ndash;119, addressed right-to-left)</td></tr>
+        <tr><td style="color:var(--green-dim);font-size:11px">RAM</td><td class="td-fn">32 KB total &mdash; 30,090 bytes user-accessible (<code>$0100&ndash;$77E0</code>)</td></tr>
+        <tr><td style="color:var(--green-dim);font-size:11px">ROM</td><td class="td-fn">128 KB (1 Mbit) &mdash; 8 x 16 KB banks; bank 0 fixed at $8000&ndash;$BFFF, banks 1&ndash;7 switchable at $C000&ndash;$FFFF via port $19</td></tr>
+        <tr><td style="color:var(--green-dim);font-size:11px">Keys</td><td class="td-fn">82 keys (8x8 main matrix + 8x2 function keys)</td></tr>
+        <tr><td style="color:var(--green-dim);font-size:11px">Sound</td><td class="td-fn">Buzzer on pin 1 (TTL level, drives piezo directly); BASIC BEEP with frequency, duration, count parameters</td></tr>
+        <tr><td style="color:var(--green-dim);font-size:11px">Serial</td><td class="td-fn">SIO up to 9600 baud; Intel Hex format; 0 V/5 V CMOS on 11-pin interface</td></tr>
+        <tr><td style="color:var(--green-dim);font-size:11px">Power</td><td class="td-fn">4 x 1.5 V AA + CR-2032 backup; or 4&ndash;6 V DC on pins 2/3 (approx 0.37 W)</td></tr>
+        <tr><td style="color:var(--green-dim);font-size:11px">Versions</td><td class="td-fn">V.0 / V.1 / V.2 &mdash; V.1 vs V.2 differ in only 3 ROM bytes. Hold SHIFT+, during RESET to display version and access diagnostics (caution: RAM-Check mode clears all memory).</td></tr>
+        <tr><td style="color:var(--green-dim);font-size:11px">Size / Weight</td><td class="td-fn">215 x 100 x 18 mm / 300 g (with batteries and hard case). Built 1991.</td></tr>
       </tbody>
     </table>
   </div>
 
   <div class="sources">
     <strong style="color:var(--green-dim);letter-spacing:.1em">// SOURCES</strong><br>
-    Achim Flammenkamp — <a href="https://wwwhomes.uni-bielefeld.de/achim/pc-e220.html" target="_blank">The Sharp PC-E220 Homepage</a> (uni-bielefeld.de) — primary reference for all port data<br>
-    Flammenkamp — <a href="https://wwwhomes.uni-bielefeld.de/achim/pc-e220/ram.txt" target="_blank">RAM usage map</a> · <a href="https://wwwhomes.uni-bielefeld.de/achim/pc-e220/rom.txt" target="_blank">ROM entry points</a> · <a href="https://wwwhomes.uni-bielefeld.de/achim/pc-e220/e220-keycodes.txt" target="_blank">key codes</a><br>
-    z88dk — <a href="https://github.com/z88dk/z88dk/blob/master/libsrc/target/g800/graphics/locate.asm" target="_blank">libsrc/target/g800/graphics/locate.asm</a> (related G815 port geometry)
+    Achim Flammenkamp &mdash; <a href="https://wwwhomes.uni-bielefeld.de/achim/pc-e220.html" target="_blank">The Sharp PC-E220 Homepage</a> (uni-bielefeld.de): port table, ROM bank map, 11-pin interface, RAM map<br>
+    <code>plot_e220.asm</code> (hardware-verified pixel library, direct analysis): LCD_BUSY_WAIT=$8530, PAGE_COMPENS=$790D usage and rationale, N_TABLE layout, dummy-read + column-reselect requirement, bit-7 invisibility, 120-column geometry, CLR_SCR via RPTCHR<br>
+    z88dk &mdash; <a href="https://github.com/z88dk/z88dk/blob/master/libsrc/target/g800/graphics/locate.asm" target="_blank">libsrc/target/g800/graphics/locate.asm</a> (related G815 port geometry for comparison)
   </div>
 </section>
 
@@ -754,10 +947,10 @@
 </div>
 
 <footer>
-  <div>Sharp PC-E220 · I/O Port Reference · uni-bielefeld.de/achim · hardware analysis</div>
+  <div>Sharp PC-E220 &middot; I/O Port Reference &middot; uni-bielefeld.de/achim &middot; plot_e220.asm analysis</div>
   <div>
-    <a href="ports_g850.html">← G850 Ports</a> &nbsp;
-    <a href="rom_e220.html">E220 ROM →</a>
+    <a href="ports_g850.html">&larr; G850 Ports</a> &nbsp;
+    <a href="rom_e220.html">E220 ROM &rarr;</a>
   </div>
 </footer>
 
@@ -774,7 +967,7 @@
     e.forEach(en=>{
       if(en.isIntersecting){
         lnks.forEach(l=>l.classList.remove('active'));
-        const a=document.querySelector(`.sidebar a[href="#${en.target.id}"]`);
+        const a=document.querySelector('.sidebar a[href="#'+en.target.id+'"]');
         if(a)a.classList.add('active');
       }
     });
