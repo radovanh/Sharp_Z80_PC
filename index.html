@@ -11,7 +11,7 @@
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
   :root{
     --green:#39ff14;--green-dim:#1a7a09;--green-glow:#39ff1480;
-    --amber:#ffb300;--cyan:#00e5ff;
+    --amber:#ffb300;--cyan:#00e5ff;--purple:#c084fc;
     --bg:#050a04;--bg2:#0a100a;
     --scanline:rgba(0,0,0,0.18);
     --font-mono:'Share Tech Mono',monospace;
@@ -60,13 +60,16 @@
   .device-model{font-family:var(--font-vt);font-size:2.8rem;line-height:1;text-shadow:0 0 14px var(--green-glow)}
   .g815 .device-model{color:var(--green)}
   .g850 .device-model{color:var(--cyan);text-shadow:0 0 14px rgba(0,229,255,.35)}
+  .e220 .device-model{color:var(--purple);text-shadow:0 0 14px rgba(192,132,252,.35)}
   .device-tagline{font-size:12px;letter-spacing:.1em}
   .g815 .device-tagline{color:var(--green-dim)}
   .g850 .device-tagline{color:rgba(0,229,255,.5)}
+  .e220 .device-tagline{color:rgba(192,132,252,.5)}
   .device-specs{font-size:11px;color:var(--green-dim);margin-left:auto;text-align:right;line-height:1.7}
   .device-specs strong{font-weight:normal}
   .g815 .device-specs strong{color:var(--green)}
   .g850 .device-specs strong{color:var(--cyan)}
+  .e220 .device-specs strong{color:var(--purple)}
 
   .tiles{display:grid;grid-template-columns:1fr 1fr;gap:2px}
   @media(max-width:600px){.tiles{grid-template-columns:1fr}}
@@ -75,25 +78,31 @@
   .tile::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;opacity:0;transition:opacity .2s}
   .g815 .tile::before{background:linear-gradient(90deg,transparent,var(--green),transparent)}
   .g850 .tile::before{background:linear-gradient(90deg,transparent,var(--cyan),transparent)}
+  .e220 .tile::before{background:linear-gradient(90deg,transparent,var(--purple),transparent)}
   .tile:hover{background:#0c140c}
   .g815 .tile:hover{border-color:var(--green)}
   .g850 .tile:hover{border-color:var(--cyan)}
+  .e220 .tile:hover{border-color:var(--purple)}
   .tile:hover::before{opacity:.8}
 
   .tile-icon{font-family:var(--font-vt);font-size:2.2rem;line-height:1;margin-bottom:.6rem;opacity:.7}
   .g815 .tile-icon{color:var(--green)}
   .g850 .tile-icon{color:var(--cyan)}
+  .e220 .tile-icon{color:var(--purple)}
   .tile-type{font-size:10px;letter-spacing:.22em;margin-bottom:.3rem}
   .g815 .tile-type{color:var(--green-dim)}
   .g850 .tile-type{color:rgba(0,229,255,.45)}
+  .e220 .tile-type{color:rgba(192,132,252,.45)}
   .tile-title{font-family:var(--font-title);font-size:13px;font-weight:700;letter-spacing:.1em;margin-bottom:.6rem}
   .g815 .tile-title{color:var(--green)}
   .g850 .tile-title{color:var(--cyan)}
+  .e220 .tile-title{color:var(--purple)}
   .tile-desc{font-size:11px;line-height:1.7;color:var(--green-dim)}
   .tile-desc code{font-size:10px;background:rgba(255,179,0,.08);padding:1px 4px;border-radius:2px;color:var(--amber)}
   .tile-arrow{position:absolute;bottom:1rem;right:1.25rem;font-size:18px;opacity:.3;transition:opacity .2s,transform .2s}
   .g815 .tile-arrow{color:var(--green)}
   .g850 .tile-arrow{color:var(--cyan)}
+  .e220 .tile-arrow{color:var(--purple)}
   .tile:hover .tile-arrow{opacity:.9;transform:translateX(4px)}
 
   /* ── COMPARISON ── */
@@ -126,7 +135,11 @@
     <li><a href="ports_g815.html">G815 PORTS</a></li>
     <li><a href="rom_g815.html">G815 ROM</a></li>
     <li><a href="ports_g850.html">G850 PORTS</a></li>
+    <li><a href="ports_e220.html">E220 PORTS</a></li>
+    <li><a href="rom_e220.html">E220 ROM</a></li>
     <li><a href="rom_g850.html">G850 ROM</a></li>
+    <li><a href="ports_e220.html">E220 PORTS</a></li>
+    <li><a href="rom_e220.html">E220 ROM</a></li>
   </ul>
 </nav>
 
@@ -149,12 +162,16 @@
     <span>G815 split <strong>X=72</strong> · page <strong>0xB8</strong> left / <strong>0xBC</strong> right &nbsp;·&nbsp; </span>
     <span>G850 <strong>144×48px</strong> · single controller · port <strong>40h</strong> &nbsp;·&nbsp; </span>
     <span>G850 X = two nibbles: <strong>lo</strong> then <strong>hi|10h</strong> · Y page <strong>0xB0+p</strong> &nbsp;·&nbsp; </span>
+    <span>E220 <strong>144×32px</strong> · HD62202+HD61203 · cmd port <strong>58h</strong> · data <strong>5Ah</strong> &nbsp;·&nbsp; </span>
+    <span>E220 cmd = <strong>(col×4)+row|40h</strong> · SC7852 <strong>3.58 MHz</strong> · 8 ROM banks port <strong>19h</strong> &nbsp;·&nbsp; </span>
     <span>BIOS <strong>BFD0h</strong> GPRINT · <strong>BFF1h</strong> string · <strong>BFEEh</strong> repeat · <strong>BE53h</strong> inkey &nbsp;·&nbsp; </span>
     <span>RST <strong>30h</strong> register dump · <strong>C110h</strong> power off &nbsp;·&nbsp; </span>
     <span>G815 <strong>144×32px</strong> · 2×HD61203 · ports <strong>54h 56h 58h 5Ah</strong> &nbsp;·&nbsp; </span>
     <span>G815 split <strong>X=72</strong> · page <strong>0xB8</strong> left / <strong>0xBC</strong> right &nbsp;·&nbsp; </span>
     <span>G850 <strong>144×48px</strong> · single controller · port <strong>40h</strong> &nbsp;·&nbsp; </span>
     <span>G850 X = two nibbles: <strong>lo</strong> then <strong>hi|10h</strong> · Y page <strong>0xB0+p</strong> &nbsp;·&nbsp; </span>
+    <span>E220 <strong>144×32px</strong> · HD62202+HD61203 · cmd port <strong>58h</strong> · data <strong>5Ah</strong> &nbsp;·&nbsp; </span>
+    <span>E220 cmd = <strong>(col×4)+row|40h</strong> · SC7852 <strong>3.58 MHz</strong> · 8 ROM banks port <strong>19h</strong> &nbsp;·&nbsp; </span>
     <span>BIOS <strong>BFD0h</strong> GPRINT · <strong>BFF1h</strong> string · <strong>BFEEh</strong> repeat · <strong>BE53h</strong> inkey &nbsp;·&nbsp; </span>
     <span>RST <strong>30h</strong> register dump · <strong>C110h</strong> power off &nbsp;·&nbsp; </span>
   </div>
@@ -245,6 +262,47 @@
     </div>
   </div>
 
+  <!-- PC-E220 -->
+  <div class="device-block e220">
+    <div class="device-header">
+      <div class="device-model">PC-E220</div>
+      <div class="device-tagline">SC7852 · 3.58 MHz · HD62202 + HD61203</div>
+      <div class="device-specs">
+        <strong>144 × 32</strong> pixels &nbsp;·&nbsp; 4 pages<br>
+        All LCD via port <strong>58h</strong> · data <strong>5Ah</strong><br>
+        Cmd = <strong>(col×4)+row | 40h</strong> · 8 ROM banks
+      </div>
+    </div>
+
+    <div class="tiles">
+      <a class="tile" href="ports_e220.html">
+        <div class="tile-icon">I/O</div>
+        <div class="tile-type">// HARDWARE</div>
+        <div class="tile-title">I/O PORT REFERENCE</div>
+        <div class="tile-desc">
+          Single-command-port LCD map (port <code>58h</code>), packed
+          command encoding <code>(col×4)+row|40h</code>, keyboard matrix
+          (ports 10h–13h), interrupt control (16h/17h), 8-bank ROM mapping
+          (port 19h), serial interface (15h/18h/1Fh), 11-pin connector.
+        </div>
+        <span class="tile-arrow">→</span>
+      </a>
+
+      <a class="tile" href="rom_e220.html">
+        <div class="tile-icon">ROM</div>
+        <div class="tile-type">// BIOS / IOCS</div>
+        <div class="tile-title">ROM ROUTINE REFERENCE</div>
+        <div class="tile-desc">
+          Shared IOCS calls (<code>BFD0h</code> GPRINT, <code>BFF1h</code>
+          string, <code>BE53h</code> inkey), E220 memory map
+          (<code>0100h–77E0h</code> user RAM), ROM bank table,
+          work area, software limits, and G815→E220 porting checklist.
+        </div>
+        <span class="tile-arrow">→</span>
+      </a>
+    </div>
+  </div>
+
 </div>
 
 <!-- ── COMPARISON ── -->
@@ -254,25 +312,28 @@
     <table>
       <thead>
         <tr>
-          <th style="width:22%">FEATURE</th>
-          <th style="width:39%">PC-G815</th>
-          <th style="width:39%">PC-G850 / G850S / G850V / G850VS</th>
+          <th style="width:18%">FEATURE</th>
+          <th style="width:27%">PC-G815</th>
+          <th style="width:27%">PC-G850 / G850S / G850V / G850VS</th>
+          <th style="width:28%">PC-E220</th>
         </tr>
       </thead>
       <tbody>
-        <tr><td class="td-label">Resolution</td><td class="td-g815">144 × 32 pixels (4 pages)</td><td class="td-g850">144 × 48 pixels (6 pages)</td></tr>
-        <tr><td class="td-label">CPU</td><td class="td-g815">Z80 CMOS 8 MHz</td><td class="td-g850">LZ8514 (Z80 compatible) 8 MHz</td></tr>
-        <tr><td class="td-label">LCD controllers</td><td class="td-g815">2 × HD61203 (left + right)</td><td class="td-g850">1 × integrated controller</td></tr>
-        <tr><td class="td-label">Command port</td><td class="td-g815"><code>54h</code> (left half), <code>58h</code> (centre)</td><td class="td-g850"><code>40h</code> (all commands)</td></tr>
-        <tr><td class="td-label">Data write</td><td class="td-g815"><code>56h</code> / <code>5Ah</code></td><td class="td-g850"><code>42h</code></td></tr>
-        <tr><td class="td-label">X addressing</td><td class="td-g815">Column addr <code>0x40–0x7B</code>, split at X=72, right half mirrored</td><td class="td-g850">Two nibbles: lo then <code>hi|0x10</code></td></tr>
-        <tr><td class="td-label">Y / page command</td><td class="td-g815"><code>0xB8+page</code> left · <code>0xBC+page</code> right</td><td class="td-g850"><code>0xB0 + (Y&gt;&gt;3)</code></td></tr>
-        <tr><td class="td-label">Scroll reset</td><td class="td-g815"><code>OUT(54h,C0h)</code> + <code>OUT(58h,C0h)</code></td><td class="td-g850"><code>OUT(40h,40h)</code></td></tr>
-        <tr><td class="td-label">Text rows</td><td class="td-g815">4 rows (D = 0–3)</td><td class="td-g850">6 rows (D = 0–5)</td></tr>
-        <tr><td class="td-label">Pixel byte format</td><td class="td-g815">8 vertical pixels, bit 0 = topmost</td><td class="td-g850">8 vertical pixels, bit 0 = topmost</td></tr>
-        <tr><td class="td-label">BIOS GPRINT</td><td class="td-g815"><code>BFD0h</code> — destroys DE, HL, B</td><td class="td-g850"><code>BFD0h</code> — same address and interface</td></tr>
-        <tr><td class="td-label">BIOS inkey</td><td class="td-g815"><code>BE53h</code> — needs EI enabled</td><td class="td-g850"><code>BE53h</code> — same, also has <code>BCC4h</code> mode key</td></tr>
-        <tr><td class="td-label">Direct key scan</td><td class="td-g815"><code>OUT(11h,row)</code> / <code>IN(10h)</code></td><td class="td-g850"><code>OUT(11h,row)</code> / <code>IN(10h)</code> + <code>OUT(12h,row)</code></td></tr>
+        <tr><td class="td-label">Resolution</td><td class="td-g815">144 × 32 pixels (4 pages)</td><td class="td-g850">144 × 48 pixels (6 pages)</td><td style="color:#c084fc">144 × 32 pixels (4 pages)</td></tr>
+        <tr><td class="td-label">CPU</td><td class="td-g815">Z80 CMOS 8 MHz</td><td class="td-g850">LZ8514 (Z80 compatible) 8 MHz</td><td style="color:#c084fc">SC7852 (Z80A compat) 3.58 MHz</td></tr>
+        <tr><td class="td-label">LCD controllers</td><td class="td-g815">2 × HD61203 (left + right)</td><td class="td-g850">1 × integrated controller</td><td style="color:#c084fc">HD62202 + HD61203</td></tr>
+        <tr><td class="td-label">Command port</td><td class="td-g815"><code>54h</code> (left half), <code>58h</code> (centre)</td><td class="td-g850"><code>40h</code> (all commands)</td><td style="color:#c084fc"><code>58h</code> (single command port)</td></tr>
+        <tr><td class="td-label">Data write</td><td class="td-g815"><code>56h</code> / <code>5Ah</code></td><td class="td-g850"><code>42h</code></td><td style="color:#c084fc"><code>5Ah</code></td></tr>
+        <tr><td class="td-label">X addressing</td><td class="td-g815">Column addr <code>0x40–0x7B</code>, split at X=72, right half mirrored</td><td class="td-g850">Two nibbles: lo then <code>hi|0x10</code></td><td style="color:#c084fc">Packed: <code>(char_col×4)+row|0x40</code></td></tr>
+        <tr><td class="td-label">Y / page command</td><td class="td-g815"><code>0xB8+page</code> left · <code>0xBC+page</code> right</td><td class="td-g850"><code>0xB0 + (Y&gt;&gt;3)</code></td><td style="color:#c084fc">Encoded in same byte as X</td></tr>
+        <tr><td class="td-label">Scroll reset</td><td class="td-g815"><code>OUT(54h,C0h)</code> + <code>OUT(58h,C0h)</code></td><td class="td-g850"><code>OUT(40h,40h)</code></td><td style="color:#c084fc">No scroll — fixed display</td></tr>
+        <tr><td class="td-label">Text rows</td><td class="td-g815">4 rows (D = 0–3)</td><td class="td-g850">6 rows (D = 0–5)</td><td style="color:#c084fc">4 rows (D = 0–3)</td></tr>
+        <tr><td class="td-label">Pixel byte format</td><td class="td-g815">8 vertical pixels, bit 0 = topmost</td><td class="td-g850">8 vertical pixels, bit 0 = topmost</td><td style="color:#c084fc">8 vertical pixels, bit 0 = topmost</td></tr>
+        <tr><td class="td-label">BIOS GPRINT</td><td class="td-g815"><code>BFD0h</code> — D = pixel col (0–143)</td><td class="td-g850"><code>BFD0h</code> — same address</td><td style="color:#c084fc"><code>BFD0h</code> — D = char col (0–23)</td></tr>
+        <tr><td class="td-label">BIOS inkey</td><td class="td-g815"><code>BE53h</code> — needs EI enabled</td><td class="td-g850"><code>BE53h</code> — same, also has <code>BCC4h</code></td><td style="color:#c084fc"><code>BE53h</code> — identical</td></tr>
+        <tr><td class="td-label">Direct key scan</td><td class="td-g815"><code>OUT(11h,row)</code> / <code>IN(10h)</code></td><td class="td-g850"><code>OUT(11h,row)</code> / <code>IN(10h)</code> + <code>OUT(12h,row)</code></td><td style="color:#c084fc"><code>OUT(11h,row)</code> / <code>IN(10h)</code> + <code>OUT(12h,bit)</code> fn keys</td></tr>
+        <tr><td class="td-label">ROM banking</td><td class="td-g815">None</td><td class="td-g850">None</td><td style="color:#c084fc">8 × 16 KB banks via port <code>19h</code></td></tr>
+        <tr><td class="td-label">User RAM</td><td class="td-g815">Model dependent</td><td class="td-g850">Model dependent</td><td style="color:#c084fc">~30 KB (<code>0100h–77E0h</code>)</td></tr>
       </tbody>
     </table>
   </div>
@@ -284,7 +345,9 @@
     <a href="ports_g815.html">G815 Ports</a> ·
     <a href="rom_g815.html">G815 ROM</a> ·
     <a href="ports_g850.html">G850 Ports</a> ·
-    <a href="rom_g850.html">G850 ROM</a>
+    <a href="rom_g850.html">G850 ROM</a> ·
+    <a href="ports_e220.html">E220 Ports</a> ·
+    <a href="rom_e220.html">E220 ROM</a>
   </div>
 </footer>
 

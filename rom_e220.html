@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PC-E220 ROM / BIOS Reference · System Routines</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=VT323&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --green:#39ff14;--green-dim:#1a7a09;--green-glow:#39ff1480;
+    --amber:#ffb300;--cyan:#00e5ff;--red:#ff4455;--purple:#c084fc;
+    --bg:#050a04;--bg2:#0a100a;--bg3:#0d150c;
+    --scanline:rgba(0,0,0,0.18);
+    --font-mono:'Share Tech Mono',monospace;
+    --font-vt:'VT323',monospace;
+    --font-title:'Orbitron',sans-serif;
+  }
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--green);font-family:var(--font-mono);min-height:100vh;overflow-x:hidden;cursor:crosshair}
+  body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,var(--scanline) 0px,var(--scanline) 1px,transparent 1px,transparent 3px);pointer-events:none;z-index:9999}
+  body::after{content:'';position:fixed;inset:0;background-image:radial-gradient(circle,rgba(57,255,20,.05) 1px,transparent 1px);background-size:28px 28px;pointer-events:none;z-index:0}
+
+  nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:52px;border-bottom:1px solid var(--green-dim);background:rgba(5,10,4,.96);backdrop-filter:blur(4px)}
+  .nav-logo{font-family:var(--font-title);font-size:13px;font-weight:700;letter-spacing:.12em;color:var(--green);text-shadow:0 0 8px var(--green-glow)}
+  nav ul{list-style:none;display:flex;gap:1.5rem;flex-wrap:wrap}
+  nav a{font-family:var(--font-mono);font-size:12px;color:var(--green-dim);text-decoration:none;letter-spacing:.08em;transition:color .2s}
+  nav a:hover,nav a.active{color:var(--green);text-shadow:0 0 8px var(--green-glow)}
+
+  .page-hdr{position:relative;z-index:1;padding:3rem 2rem 2rem;border-bottom:1px solid var(--green-dim);max-width:1160px;margin:0 auto}
+  .breadcrumb{font-size:11px;letter-spacing:.18em;color:var(--green-dim);margin-bottom:.75rem}
+  .breadcrumb a{color:var(--green-dim);text-decoration:none}
+  .breadcrumb a:hover{color:var(--green)}
+  .page-title{font-family:var(--font-vt);font-size:clamp(2rem,5vw,3.5rem);color:var(--purple);text-shadow:0 0 16px rgba(192,132,252,.4);margin-bottom:.5rem}
+  .page-desc{font-size:13px;color:var(--green-dim);line-height:1.7;max-width:740px}
+  .page-desc code{color:var(--amber);background:rgba(255,179,0,.08);padding:1px 4px;border-radius:2px;font-size:12px}
+
+  .layout{position:relative;z-index:1;display:grid;grid-template-columns:210px 1fr;max-width:1160px;margin:0 auto}
+  @media(max-width:780px){.layout{grid-template-columns:1fr}.sidebar{display:none}}
+
+  .sidebar{border-right:1px solid var(--green-dim);padding:1.5rem 1.25rem;position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--green-dim) transparent}
+  .sb-label{font-size:10px;letter-spacing:.2em;color:var(--green-dim);margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:1px solid rgba(57,255,20,.15)}
+  .sidebar ul{list-style:none}
+  .sidebar li{margin-bottom:.15rem}
+  .sidebar a{font-size:11px;color:var(--green-dim);text-decoration:none;display:block;padding:.25rem .4rem;border-left:2px solid transparent;transition:all .15s}
+  .sidebar a:hover,.sidebar a.active{color:var(--green);border-left-color:var(--green);background:rgba(57,255,20,.04)}
+  .sb-grp{font-size:10px;letter-spacing:.15em;color:var(--green-dim);opacity:.45;padding:.7rem .4rem .12rem}
+
+  .content{padding:2rem 2.5rem 5rem}
+  .ref-sec{margin-bottom:3.5rem;scroll-margin-top:64px}
+  .sec-title{font-family:var(--font-title);font-size:12px;font-weight:700;letter-spacing:.14em;color:var(--purple);margin-bottom:1rem;padding-bottom:.4rem;border-bottom:1px solid rgba(192,132,252,.3);display:flex;align-items:center;gap:.6rem}
+  .sec-badge{font-family:var(--font-mono);font-size:9px;font-weight:400;letter-spacing:.08em;color:var(--bg);background:var(--green-dim);padding:1px 6px;border-radius:2px}
+
+  .routine{border:1px solid var(--green-dim);background:var(--bg2);margin-bottom:1.25rem;transition:border-color .2s}
+  .routine:hover{border-color:rgba(192,132,252,.4)}
+  .rout-hdr{display:flex;align-items:baseline;justify-content:space-between;padding:.75rem 1rem;border-bottom:1px solid rgba(57,255,20,.12);flex-wrap:wrap;gap:.5rem}
+  .rout-addr{font-family:var(--font-vt);font-size:2rem;color:var(--amber);text-shadow:0 0 8px rgba(255,179,0,.35);line-height:1}
+  .rout-name{font-family:var(--font-title);font-size:11px;font-weight:700;letter-spacing:.1em;color:var(--purple)}
+  .rout-tags{display:flex;gap:.4rem;flex-wrap:wrap}
+  .tag{font-size:9px;letter-spacing:.08em;padding:2px 7px;border-radius:2px;border:1px solid;white-space:nowrap}
+  .tag-display{color:var(--cyan);border-color:rgba(0,229,255,.3);background:rgba(0,229,255,.06)}
+  .tag-input{color:var(--purple);border-color:rgba(192,132,252,.3);background:rgba(192,132,252,.06)}
+  .tag-system{color:var(--amber);border-color:rgba(255,179,0,.3);background:rgba(255,179,0,.06)}
+  .tag-e220{color:#f0a0ff;border-color:rgba(240,160,255,.3);background:rgba(240,160,255,.05)}
+  .rout-body{padding:.75rem 1rem;display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem}
+  @media(max-width:600px){.rout-body{grid-template-columns:1fr}}
+  .rout-col-title{font-size:10px;letter-spacing:.18em;color:var(--green-dim);margin-bottom:.35rem}
+  .rout-col-body{font-size:12px;color:var(--green);line-height:1.65}
+  .rout-col-body code{color:var(--amber);font-size:11px;background:rgba(255,179,0,.08);padding:1px 4px;border-radius:2px}
+  .rout-col-body .reg{color:var(--cyan);font-family:var(--font-mono)}
+  .rout-desc{padding:.5rem 1rem .75rem;font-size:12px;color:var(--green-dim);line-height:1.7;border-top:1px solid rgba(57,255,20,.07)}
+  .rout-desc code{color:var(--amber);font-size:11px;background:rgba(255,179,0,.08);padding:1px 4px;border-radius:2px}
+  .rout-note{padding:.5rem 1rem .75rem;font-size:11px;color:var(--green-dim);line-height:1.6;border-top:1px dashed rgba(57,255,20,.12);font-style:italic}
+
+  .callout{border-left:2px solid var(--amber);padding:.9rem 1.1rem;background:rgba(255,179,0,.05);margin:1rem 0;font-size:12px;color:var(--green);line-height:1.7}
+  .callout strong{color:var(--amber)}
+  .callout-info{border-left-color:var(--cyan);background:rgba(0,229,255,.04)}
+  .callout-info strong{color:var(--cyan)}
+  .callout-purple{border-left-color:var(--purple);background:rgba(192,132,252,.04)}
+  .callout-purple strong{color:var(--purple)}
+
+  pre.code{font-family:var(--font-mono);font-size:11px;color:var(--green-dim);line-height:1.7;border:1px solid var(--green-dim);padding:1rem 1.25rem;background:var(--bg2);overflow-x:auto;white-space:pre;margin:1rem 0}
+  pre.code .kw{color:var(--green)}
+  pre.code .cm{color:#1a7a09;font-style:italic}
+  pre.code .am{color:var(--amber)}
+  pre.code .cy{color:var(--cyan)}
+  pre.code .pu{color:var(--purple)}
+
+  .tbl-wrap{overflow-x:auto;border:1px solid var(--green-dim);margin-bottom:1rem}
+  table.plain{width:100%;border-collapse:collapse;font-size:12px}
+  table.plain thead th{font-size:10px;letter-spacing:.12em;color:var(--green-dim);padding:7px 12px;text-align:left;background:var(--bg2);border-bottom:1px solid var(--green-dim)}
+  table.plain tbody tr{border-bottom:1px solid rgba(57,255,20,.07)}
+  table.plain tbody tr:hover{background:rgba(57,255,20,.03)}
+  table.plain td{padding:8px 12px;vertical-align:top;line-height:1.6;color:var(--green-dim)}
+  table.plain td:first-child{color:var(--amber);font-family:var(--font-mono);white-space:nowrap}
+  table.plain td strong{color:var(--green);font-weight:normal}
+  table.plain td code{color:var(--amber);font-size:11px;background:rgba(255,179,0,.08);padding:1px 4px;border-radius:2px}
+
+  .addr-cmp{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--green-dim);border:1px solid var(--green-dim);margin:1rem 0;font-size:12px}
+  .addr-cmp-hdr{background:var(--bg2);padding:6px 12px;font-size:10px;letter-spacing:.15em;color:var(--green-dim)}
+  .addr-cmp-cell{background:var(--bg);padding:8px 12px;color:var(--green);line-height:1.6}
+  .addr-cmp-cell code{color:var(--amber);font-size:11px}
+  .addr-cmp-cell .na{color:var(--green-dim);font-style:italic}
+
+  .sources{margin-top:2rem;padding:.9rem 1.25rem;border:1px solid rgba(57,255,20,.15);background:var(--bg2);font-size:11px;color:var(--green-dim);line-height:1.8}
+  .sources a{color:var(--green-dim);text-decoration:underline;text-underline-offset:3px}
+  .sources a:hover{color:var(--green)}
+
+  footer{position:relative;z-index:1;border-top:1px solid var(--green-dim);padding:1.25rem 2rem;font-size:12px;color:var(--green-dim);display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;letter-spacing:.06em}
+  footer a{color:var(--green-dim);text-decoration:none}
+  footer a:hover{color:var(--green)}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">SHARP POKECOM · GFX · REF</div>
+  <ul>
+    <li><a href="index.html">HOME</a></li>
+    <li><a href="ports_g815.html">G815 PORTS</a></li>
+    <li><a href="rom_g815.html">G815 ROM</a></li>
+    <li><a href="ports_g850.html">G850 PORTS</a></li>
+    <li><a href="rom_g850.html">G850 ROM</a></li>
+    <li><a href="ports_e220.html">E220 PORTS</a></li>
+    <li><a href="rom_e220.html" class="active">E220 ROM</a></li>
+  </ul>
+</nav>
+
+<div class="page-hdr">
+  <div class="breadcrumb"><a href="index.html">HOME</a> / <a href="ports_e220.html">PC-E220</a> / ROM ROUTINES</div>
+  <h1 class="page-title">PC-E220 ROM / BIOS Reference</h1>
+  <p class="page-desc">
+    System ROM entry points, work area map, key code table, software limits, and
+    RAM layout for the Sharp PC-E220 (1991). Many BIOS addresses are shared with the
+    G815/G850 series — entries marked <span style="color:var(--purple);font-size:11px;border:1px solid rgba(192,132,252,.4);padding:1px 5px;border-radius:2px">E220</span>
+    are E220-specific or have a different address/behaviour.
+    Sources: Achim Flammenkamp's technical analysis (uni-bielefeld.de), including
+    ROM entry point list and RAM usage map.
+  </p>
+</div>
+
+<div class="layout">
+<nav class="sidebar">
+  <div class="sb-label">// ON THIS PAGE</div>
+  <ul>
+    <li><div class="sb-grp">DISPLAY</div></li>
+    <li><a href="#char-out">Char Output</a></li>
+    <li><a href="#gfx-out">Pattern Output</a></li>
+    <li><a href="#cls">Clear Screen</a></li>
+    <li><div class="sb-grp">INPUT</div></li>
+    <li><a href="#inkey">Inkey / Waitkey</a></li>
+    <li><a href="#keycodes">Key Code Table</a></li>
+    <li><div class="sb-grp">SYSTEM</div></li>
+    <li><a href="#poweroff">Power Off</a></li>
+    <li><a href="#memmap">Memory Map</a></li>
+    <li><div class="sb-grp">REFERENCE</div></li>
+    <li><a href="#workarea">Work Area (RAM)</a></li>
+    <li><a href="#swlimits">Software Limits</a></li>
+    <li><a href="#compare">G815 vs E220</a></li>
+  </ul>
+</nav>
+
+<main class="content">
+
+<div class="callout callout-purple">
+  <strong>REGISTER CONVENTIONS:</strong> Character position: <code>D</code> = row (0–3),
+  <code>E</code> = column (0–23). For graphics (<code>BFD0h</code>): <code>D</code> = character
+  column (0–23), <code>E</code> = row (0–3). The E220's BIOS call interface is largely
+  identical to the G815/G850 — code written for the G815 will often run unmodified.
+</div>
+
+<!-- ── DISPLAY ── -->
+<section class="ref-sec" id="char-out">
+  <h2 class="sec-title">Display Routines</h2>
+
+  <div class="routine">
+    <div class="rout-hdr">
+      <div>
+        <div class="rout-addr">BE62h</div>
+        <div class="rout-name">Single Character Output</div>
+      </div>
+      <div class="rout-tags">
+        <span class="tag tag-display">DISPLAY</span>
+      </div>
+    </div>
+    <div class="rout-body">
+      <div>
+        <div class="rout-col-title">// INPUT</div>
+        <div class="rout-col-body">
+          <span class="reg">A</span> = ASCII character<br>
+          <span class="reg">D</span> = row (0–3)<br>
+          <span class="reg">E</span> = column (0–23)
+        </div>
+      </div>
+      <div>
+        <div class="rout-col-title">// OUTPUT</div>
+        <div class="rout-col-body">None</div>
+      </div>
+      <div>
+        <div class="rout-col-title">// DESTROYS</div>
+        <div class="rout-col-body"><span class="reg">AF BC HL</span></div>
+      </div>
+    </div>
+    <div class="rout-desc">Outputs one ASCII character at position (D, E). Address is identical to G815/G850.</div>
+  </div>
+
+  <div class="routine">
+    <div class="rout-hdr">
+      <div>
+        <div class="rout-addr">BFEEh</div>
+        <div class="rout-name">Repeated Character Output</div>
+      </div>
+      <div class="rout-tags">
+        <span class="tag tag-display">DISPLAY</span>
+      </div>
+    </div>
+    <div class="rout-body">
+      <div>
+        <div class="rout-col-title">// INPUT</div>
+        <div class="rout-col-body">
+          <span class="reg">A</span> = ASCII character<br>
+          <span class="reg">B</span> = repeat count<br>
+          <span class="reg">D</span> = row (0–3)<br>
+          <span class="reg">E</span> = column (0–23)
+        </div>
+      </div>
+      <div>
+        <div class="rout-col-title">// OUTPUT</div>
+        <div class="rout-col-body">
+          <span class="reg">C</span> = scroll count<br>
+          <span class="reg">DE</span> = position after last char
+        </div>
+      </div>
+      <div>
+        <div class="rout-col-title">// DESTROYS</div>
+        <div class="rout-col-body"><span class="reg">AF B HL</span></div>
+      </div>
+    </div>
+    <div class="rout-desc">
+      Outputs the same character B times starting at (D, E). To clear the screen:
+      <code>LD A,0x20 / LD B,96 / LD DE,0 / CALL BFEEh</code> (96 = 4 rows × 24 columns).
+    </div>
+  </div>
+
+  <div class="routine">
+    <div class="rout-hdr">
+      <div>
+        <div class="rout-addr">BFF1h</div>
+        <div class="rout-name">String Output</div>
+      </div>
+      <div class="rout-tags">
+        <span class="tag tag-display">DISPLAY</span>
+      </div>
+    </div>
+    <div class="rout-body">
+      <div>
+        <div class="rout-col-title">// INPUT</div>
+        <div class="rout-col-body">
+          <span class="reg">B</span> = byte count<br>
+          <span class="reg">D</span> = row (0–3)<br>
+          <span class="reg">E</span> = column (0–23)<br>
+          <span class="reg">HL</span> = string address
+        </div>
+      </div>
+      <div>
+        <div class="rout-col-title">// OUTPUT</div>
+        <div class="rout-col-body">
+          <span class="reg">C</span> = scroll count<br>
+          <span class="reg">DE</span> = position after last<br>
+          <span class="reg">HL</span> = address after last byte
+        </div>
+      </div>
+      <div>
+        <div class="rout-col-title">// DESTROYS</div>
+        <div class="rout-col-body"><span class="reg">AF B</span></div>
+      </div>
+    </div>
+    <div class="rout-desc">
+      Outputs B bytes from HL starting at (D, E). String is raw ASCII, not null-terminated.
+      Wraps to next row and scrolls if the string exceeds column 23.
+    </div>
+  </div>
+</section>
+
+<!-- ── GPRINT ── -->
+<section class="ref-sec" id="gfx-out">
+  <h2 class="sec-title">Graphics / Pattern Output</h2>
+
+  <div class="routine">
+    <div class="rout-hdr">
+      <div>
+        <div class="rout-addr">BFD0h</div>
+        <div class="rout-name">Graphics Pattern Output (GPRINT)</div>
+      </div>
+      <div class="rout-tags">
+        <span class="tag tag-display">DISPLAY</span>
+      </div>
+    </div>
+    <div class="rout-body">
+      <div>
+        <div class="rout-col-title">// INPUT</div>
+        <div class="rout-col-body">
+          <span class="reg">B</span> = byte count<br>
+          <span class="reg">D</span> = char column (0–23)<br>
+          <span class="reg">E</span> = row (0–3)<br>
+          <span class="reg">HL</span> = pattern data address
+        </div>
+      </div>
+      <div>
+        <div class="rout-col-title">// OUTPUT</div>
+        <div class="rout-col-body">
+          <span class="reg">HL</span> = address after last byte read
+        </div>
+      </div>
+      <div>
+        <div class="rout-col-title">// DESTROYS</div>
+        <div class="rout-col-body"><span class="reg">AF B DE HL</span></div>
+      </div>
+    </div>
+    <div class="rout-desc">
+      Outputs B pixel bytes from HL at character column D, row E. Each byte = 8 vertical pixels
+      (bit 0 = topmost). The BIOS handles LCD port writes internally using port 58h/5Ah.
+      Granularity is one character column (6 pixels) — sub-character pixel addressing
+      requires direct port access.
+    </div>
+    <div class="rout-note">
+      BFD0h destroys DE and HL. Always save them: <code>PUSH DE / PUSH HL / CALL BFD0h / POP HL / POP DE</code>.
+      Address is identical to G815/G850.
+    </div>
+  </div>
+
+  <div class="callout callout-info">
+    <strong>E220 vs G815 GPRINT DIFFERENCE:</strong> On the G815, <code>BFD0h</code> uses
+    <code>D</code> as a <em>pixel</em> column (0–143). On the E220, <code>D</code> is a
+    <em>character</em> column (0–23). This is because the E220 LCD controller only
+    accepts character-column granularity natively. If porting G815 code that uses
+    pixel-exact X coordinates, convert: <code>char_col = pixel_x / 6</code>.
+  </div>
+</section>
+
+<!-- ── CLEAR ── -->
+<section class="ref-sec" id="cls">
+  <h2 class="sec-title">Clear Screen Routines</h2>
+
+  <div class="routine">
+    <div class="rout-hdr">
+      <div>
+        <div class="rout-addr">BFEBh</div>
+        <div class="rout-name">Clear Graphics Screen</div>
+      </div>
+      <div class="rout-tags">
+        <span class="tag tag-display">DISPLAY</span>
+      </div>
+    </div>
+    <div class="rout-body">
+      <div><div class="rout-col-title">// INPUT</div><div class="rout-col-body">None</div></div>
+      <div><div class="rout-col-title">// OUTPUT</div><div class="rout-col-body">None</div></div>
+      <div>
+        <div class="rout-col-title">// DESTROYS</div>
+        <div class="rout-col-body"><span class="reg">AF B HL</span><br>IX undefined after call</div>
+      </div>
+    </div>
+    <div class="rout-desc">Clears the entire 144×32 pixel display (equivalent to BASIC CLG). Zeros all pixel data via port 5Ah.</div>
+  </div>
+
+  <div class="routine">
+    <div class="rout-hdr">
+      <div>
+        <div class="rout-addr">BE65h</div>
+        <div class="rout-name">Clear to End of Line</div>
+      </div>
+      <div class="rout-tags">
+        <span class="tag tag-display">DISPLAY</span>
+      </div>
+    </div>
+    <div class="rout-body">
+      <div>
+        <div class="rout-col-title">// INPUT</div>
+        <div class="rout-col-body">
+          <span class="reg">D</span> = row (0–3)<br>
+          <span class="reg">E</span> = column (0–23)
+        </div>
+      </div>
+      <div><div class="rout-col-title">// OUTPUT</div><div class="rout-col-body">None</div></div>
+      <div><div class="rout-col-title">// DESTROYS</div><div class="rout-col-body"><span class="reg">AF BC DE HL</span></div></div>
+    </div>
+    <div class="rout-desc">Clears from (D, E) to the end of that row.</div>
+  </div>
+
+  <pre class="code">
+  <span class="cm">; Full clear sequence for ML programs:</span>
+  <span class="kw">cls_full:</span>
+      ld   a, <span class="am">020h</span>     <span class="cm">; space character</span>
+      ld   b, <span class="am">096h</span>     <span class="cm">; 4 rows × 24 cols = 96</span>
+      ld   de, <span class="am">0000h</span>  <span class="cm">; row 0, col 0</span>
+      call <span class="am">0BFEEh</span>      <span class="cm">; fill with spaces (text layer)</span>
+      call <span class="am">0BFEBh</span>      <span class="cm">; clear graphics layer</span>
+      ret
+  </pre>
+</section>
+
+<!-- ── INPUT ── -->
+<section class="ref-sec" id="inkey">
+  <h2 class="sec-title">Input Routines</h2>
+
+  <div class="routine">
+    <div class="rout-hdr">
+      <div>
+        <div class="rout-addr">BE53h</div>
+        <div class="rout-name">Get Key Code (No Wait)</div>
+      </div>
+      <div class="rout-tags">
+        <span class="tag tag-input">INPUT</span>
+      </div>
+    </div>
+    <div class="rout-body">
+      <div>
+        <div class="rout-col-title">// INPUT</div>
+        <div class="rout-col-body">None (interrupts must be enabled)</div>
+      </div>
+      <div>
+        <div class="rout-col-title">// OUTPUT</div>
+        <div class="rout-col-body">
+          <span class="reg">A</span> = key code (0 = no key)<br>
+          <span class="reg">Cy</span> = 1 if key pressed
+        </div>
+      </div>
+      <div>
+        <div class="rout-col-title">// DESTROYS</div>
+        <div class="rout-col-body"><span class="reg">F</span></div>
+      </div>
+    </div>
+    <div class="rout-desc">
+      Returns immediately. If no key pressed, A = 0 and carry is clear.
+      Returns key code from the IOCS table below. Requires <code>EI</code> to be active.
+    </div>
+    <div class="rout-note">
+      Polling loop: <code>CALL BE53h / OR A / JR Z, loop</code>. Address shared with G815/G850.
+    </div>
+  </div>
+
+  <div class="routine">
+    <div class="rout-hdr">
+      <div>
+        <div class="rout-addr">BCFDh</div>
+        <div class="rout-name">Wait for Key Press</div>
+      </div>
+      <div class="rout-tags">
+        <span class="tag tag-input">INPUT</span>
+      </div>
+    </div>
+    <div class="rout-body">
+      <div><div class="rout-col-title">// INPUT</div><div class="rout-col-body">None</div></div>
+      <div>
+        <div class="rout-col-title">// OUTPUT</div>
+        <div class="rout-col-body"><span class="reg">A</span> = key code</div>
+      </div>
+      <div><div class="rout-col-title">// DESTROYS</div><div class="rout-col-body"><span class="reg">F</span></div></div>
+    </div>
+    <div class="rout-desc">Blocks until a key is pressed, then returns its key code in A. Equivalent to BASIC's INKEY$ with a built-in wait loop.</div>
+  </div>
+
+  <div class="routine">
+    <div class="rout-hdr">
+      <div>
+        <div class="rout-addr">BE56h</div>
+        <div class="rout-name">Key Code → ASCII Character</div>
+      </div>
+      <div class="rout-tags">
+        <span class="tag tag-input">INPUT</span>
+      </div>
+    </div>
+    <div class="rout-body">
+      <div>
+        <div class="rout-col-title">// INPUT</div>
+        <div class="rout-col-body"><span class="reg">A</span> = key code (from BE53h)</div>
+      </div>
+      <div>
+        <div class="rout-col-title">// OUTPUT</div>
+        <div class="rout-col-body"><span class="reg">A</span> = ASCII character</div>
+      </div>
+      <div><div class="rout-col-title">// DESTROYS</div><div class="rout-col-body"><span class="reg">F B</span></div></div>
+    </div>
+    <div class="rout-desc">Converts a raw IOCS key code to the corresponding ASCII character, respecting CAPS lock state.</div>
+  </div>
+
+  <div class="routine">
+    <div class="rout-hdr">
+      <div>
+        <div class="rout-addr">BD09h</div>
+        <div class="rout-name">Input 2-Digit Hex Value</div>
+      </div>
+      <div class="rout-tags">
+        <span class="tag tag-input">INPUT</span>
+      </div>
+    </div>
+    <div class="rout-body">
+      <div><div class="rout-col-title">// INPUT</div><div class="rout-col-body">None</div></div>
+      <div><div class="rout-col-title">// OUTPUT</div><div class="rout-col-body"><span class="reg">A</span> = 8-bit hex value</div></div>
+      <div><div class="rout-col-title">// DESTROYS</div><div class="rout-col-body"><span class="reg">F BC DE HL IX IY</span></div></div>
+    </div>
+    <div class="rout-desc">Waits for the user to type two hex digits (e.g. "4F") and returns the byte value in A.</div>
+  </div>
+
+  <div class="routine">
+    <div class="rout-hdr">
+      <div>
+        <div class="rout-addr">BD0Fh</div>
+        <div class="rout-name">Input 4-Digit Hex Value</div>
+      </div>
+      <div class="rout-tags">
+        <span class="tag tag-input">INPUT</span>
+      </div>
+    </div>
+    <div class="rout-body">
+      <div><div class="rout-col-title">// INPUT</div><div class="rout-col-body">None</div></div>
+      <div><div class="rout-col-title">// OUTPUT</div><div class="rout-col-body"><span class="reg">HL</span> = 16-bit value</div></div>
+      <div><div class="rout-col-title">// DESTROYS</div><div class="rout-col-body"><span class="reg">A BC DE IX IY</span></div></div>
+    </div>
+    <div class="rout-desc">Waits for the user to type four hex digits and returns the 16-bit word in HL.</div>
+  </div>
+</section>
+
+<!-- ── SYSTEM ── -->
+<section class="ref-sec" id="poweroff">
+  <h2 class="sec-title">System Routines</h2>
+
+  <div class="routine">
+    <div class="rout-hdr">
+      <div>
+        <div class="rout-addr">C110h</div>
+        <div class="rout-name">Power Off</div>
+      </div>
+      <div class="rout-tags">
+        <span class="tag tag-system">SYSTEM</span>
+      </div>
+    </div>
+    <div class="rout-body">
+      <div><div class="rout-col-title">// INPUT</div><div class="rout-col-body">None</div></div>
+      <div><div class="rout-col-title">// OUTPUT</div><div class="rout-col-body">Does not return</div></div>
+      <div><div class="rout-col-title">// DESTROYS</div><div class="rout-col-body">N/A</div></div>
+    </div>
+    <div class="rout-desc">Shuts the unit off. Resumes from BASIC prompt when the ON key is pressed. Address shared with G815/G850.</div>
+  </div>
+
+  <div class="routine">
+    <div class="rout-hdr">
+      <div>
+        <div class="rout-addr">0030h</div>
+        <div class="rout-name">Register Dump (RST 30h)</div>
+      </div>
+      <div class="rout-tags">
+        <span class="tag tag-system">SYSTEM</span>
+      </div>
+    </div>
+    <div class="rout-body">
+      <div><div class="rout-col-title">// INPUT</div><div class="rout-col-body">None</div></div>
+      <div><div class="rout-col-title">// OUTPUT</div><div class="rout-col-body">Displays on screen</div></div>
+      <div><div class="rout-col-title">// DESTROYS</div><div class="rout-col-body">None</div></div>
+    </div>
+    <div class="rout-desc">Invoked via <code>RST 30h</code> (opcode <code>0xF7</code>). Displays all CPU register values on screen for debugging. Returns to MON rather than caller.</div>
+  </div>
+</section>
+
+<!-- ── KEY CODES ── -->
+<section class="ref-sec" id="keycodes">
+  <h2 class="sec-title">Key Code Table <span class="sec-badge">BE53h RETURN VALUES</span></h2>
+  <p style="font-size:12px;color:var(--green-dim);margin-bottom:.9rem;line-height:1.7">
+    Values returned in A by <code>BE53h</code> and <code>BCFDh</code>.
+    SHIFT + key adds <code>0x80</code>. Two keys simultaneously = <code>0x52</code>.
+    Codes are identical to the G815/G850 for all shared keys.
+  </p>
+  <div class="tbl-wrap">
+    <table class="plain">
+      <thead><tr><th>CODE</th><th>KEY</th><th>CODE</th><th>KEY</th><th>CODE</th><th>KEY</th><th>CODE</th><th>KEY</th></tr></thead>
+      <tbody>
+        <tr><td>01h</td><td>OFF</td><td>02h</td><td>Q</td><td>03h</td><td>W</td><td>04h</td><td>E</td></tr>
+        <tr><td>05h</td><td>R</td><td>06h</td><td>T</td><td>07h</td><td>Y</td><td>08h</td><td>U</td></tr>
+        <tr><td>09h</td><td>A</td><td>0Ah</td><td>S</td><td>0Bh</td><td>D</td><td>0Ch</td><td>F</td></tr>
+        <tr><td>0Dh</td><td>G</td><td>0Eh</td><td>H</td><td>0Fh</td><td>J</td><td>10h</td><td>K</td></tr>
+        <tr><td>11h</td><td>Z</td><td>12h</td><td>X</td><td>13h</td><td>C</td><td>14h</td><td>V</td></tr>
+        <tr><td>15h</td><td>B</td><td>16h</td><td>N</td><td>17h</td><td>M</td><td>18h</td><td>,</td></tr>
+        <tr><td>19h</td><td>BASIC</td><td>1Ah</td><td>TEXT</td><td>1Bh</td><td>CAPS</td><td>1Ch</td><td>カナ</td></tr>
+        <tr><td>1Dh</td><td>TAB</td><td>1Eh</td><td>SPACE</td><td>1Fh</td><td>↓</td><td>20h</td><td>↑</td></tr>
+        <tr><td>21h</td><td>←</td><td>22h</td><td>→</td><td>23h</td><td>ANS</td><td>24h</td><td>0</td></tr>
+        <tr><td>25h</td><td>.</td><td>26h</td><td>=</td><td>27h</td><td>+</td><td>28h</td><td>RETURN</td></tr>
+        <tr><td>29h</td><td>L</td><td>2Ah</td><td>;</td><td>2Bh</td><td>CONST</td><td>2Ch</td><td>1</td></tr>
+        <tr><td>2Dh</td><td>2</td><td>2Eh</td><td>3</td><td>2Fh</td><td>-</td><td>30h</td><td>M+</td></tr>
+        <tr><td>31h</td><td>I</td><td>32h</td><td>O</td><td>33h</td><td>INS</td><td>34h</td><td>4</td></tr>
+        <tr><td>35h</td><td>5</td><td>36h</td><td>6</td><td>37h</td><td>*</td><td>38h</td><td>RCM</td></tr>
+        <tr><td>39h</td><td>P</td><td>3Ah</td><td>BS</td><td>3Bh</td><td>π</td><td>3Ch</td><td>7</td></tr>
+        <tr><td>3Dh</td><td>8</td><td>3Eh</td><td>9</td><td>3Fh</td><td>/</td><td>40h</td><td>)</td></tr>
+        <tr><td>41h</td><td>nPr</td><td>42h</td><td>→DEG</td><td>44h</td><td>x²</td><td>45h</td><td>yˣ</td></tr>
+        <tr><td>46h</td><td>(</td><td>47h</td><td>1/x</td><td>48h</td><td>MDF</td><td>49h</td><td>2ndF</td></tr>
+        <tr><td>4Ah</td><td>sin</td><td>4Bh</td><td>cos</td><td>4Ch</td><td>ln</td><td>4Dh</td><td>log</td></tr>
+        <tr><td>4Eh</td><td>tan</td><td>4Fh</td><td>F⇔E</td><td>50h</td><td>CLS</td><td>51h</td><td>ON</td></tr>
+        <tr><td>52h</td><td colspan="7">Two or more keys pressed simultaneously</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ── MEMORY MAP ── -->
+<section class="ref-sec" id="memmap">
+  <h2 class="sec-title">Memory Map <span class="sec-badge">Z80 ADDRESS SPACE</span></h2>
+
+  <div class="tbl-wrap">
+    <table class="plain">
+      <thead><tr><th>ADDRESS RANGE</th><th>SIZE</th><th>CONTENT</th></tr></thead>
+      <tbody>
+        <tr><td>0000h–00FFh</td><td>256 B</td><td><strong>Z80 vectors / system</strong> — interrupt table, RST vectors. Not user RAM.</td></tr>
+        <tr><td>0100h–77E0h</td><td>~30 KB</td><td><strong>User RAM</strong> — 30,090 bytes free for BASIC programs and ML code</td></tr>
+        <tr><td>77E1h–7FFFh</td><td>~2 KB</td><td><strong>System work area</strong> — BIOS variables, key buffer, scroll offset, bank register mirror (see below)</td></tr>
+        <tr><td>8000h–BFFFh</td><td>16 KB</td><td><strong>ROM bank 0 (BIOS)</strong> — always mapped, contains system routines and IOCS table</td></tr>
+        <tr><td>C000h–FFFFh</td><td>16 KB</td><td><strong>ROM switchable window</strong> — bank 1 (BASIC) by default; selectable via port 19h</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-purple">
+    <strong>USER CODE ORG:</strong> ML programs loaded via the assembler module should
+    use <code>ORG 0100h</code> as the start address, matching the base of user RAM.
+    The ROM entry points (<code>BE53h</code>, <code>BFD0h</code>, etc.) are always
+    accessible in the <code>8000h–BFFFh</code> window regardless of which bank is
+    selected at <code>C000h–FFFFh</code>.
+  </div>
+
+  <pre class="code">
+  <span class="cm">; Typical ML program header for PC-E220</span>
+      <span class="am">org</span>  <span class="am">0100h</span>      <span class="cm">; base of user RAM</span>
+
+  <span class="kw">start:</span>
+      ld   (saved_sp), sp   <span class="cm">; save SP so we can return cleanly</span>
+      <span class="cm">; ... your code here ...</span>
+
+  <span class="kw">exit:</span>
+      ld   sp, (saved_sp)
+      ret                    <span class="cm">; return to MON / BASIC</span>
+
+  <span class="kw">saved_sp:</span>
+      dw   0
+  </pre>
+</section>
+
+<!-- ── WORK AREA ── -->
+<section class="ref-sec" id="workarea">
+  <h2 class="sec-title">System Work Area <span class="sec-badge">RAM 7800h–7FFFh</span></h2>
+
+  <div class="tbl-wrap">
+    <table class="plain">
+      <thead><tr><th>ADDRESS</th><th>NAME</th><th>DESCRIPTION</th></tr></thead>
+      <tbody>
+        <tr><td>779Ch</td><td><strong>Contrast</strong></td><td>LCD contrast value. Write to hardware is via direct port write; this mirrors the current setting.</td></tr>
+        <tr><td>7900h</td><td><strong>ROM bank (C000–FFFF)</strong></td><td>Mirror of current value written to port 19h bits 0–2. Read to determine active bank.</td></tr>
+        <tr><td>7901h</td><td><strong>CAPS/Kana lock</strong></td><td>Bit 0 = always 1. Bit 1 = CAPS lock. Bit 2 = Kana lock. Writable.</td></tr>
+        <tr><td>790Dh</td><td><strong>VRAM scroll start</strong></td><td>Lower 4 bits × 8 = pixel scroll offset used by BIOS text scroll. Read to compensate Y in ML graphics.</td></tr>
+        <tr><td>7966h</td><td><strong>INKEY1</strong></td><td>Non-zero after INKEY$ if a key was pressed. Not ASCII — use INKEY2 for the character value.</td></tr>
+        <tr><td>7E00h</td><td><strong>INKEY2</strong></td><td>ASCII value of last INKEY$ key. Not cleared on no-key — always check INKEY1 first.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout">
+    <strong>FULL RAM MAP:</strong> Achim Flammenkamp's detailed RAM usage table (addresses
+    <code>7800h–7FFFh</code>) is available at
+    <a href="https://wwwhomes.uni-bielefeld.de/achim/pc-e220/ram.txt" target="_blank" style="color:var(--amber)">uni-bielefeld.de/achim/pc-e220/ram.txt</a>
+    and covers all BIOS variables, the key repeat timer, the serial interface state,
+    BASIC interpreter variables, and the stack areas.
+  </div>
+</section>
+
+<!-- ── SOFTWARE LIMITS ── -->
+<section class="ref-sec" id="swlimits">
+  <h2 class="sec-title">Software Limits <span class="sec-badge">BASIC INTERPRETER</span></h2>
+
+  <div class="tbl-wrap">
+    <table class="plain">
+      <thead><tr><th>FEATURE</th><th>LIMIT</th></tr></thead>
+      <tbody>
+        <tr><td>Calculation precision</td><td><strong>10 significant digits</strong> + 2-digit exponent (range: &lt; ±1.0×10¹⁰⁰)</td></tr>
+        <tr><td>Nested parentheses</td><td>Maximum depth: <strong>15</strong></td></tr>
+        <tr><td>GOSUB / subroutine stack</td><td>Maximum <strong>10</strong> nestings</td></tr>
+        <tr><td>Function (DEF FN) stack</td><td>Maximum <strong>16</strong> nestings</td></tr>
+        <tr><td>FOR-NEXT loop stack</td><td>Maximum <strong>5</strong> nestings</td></tr>
+        <tr><td>DATA read buffer</td><td>Maximum <strong>8</strong> buffers</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout callout-info">
+    <strong>DIAGNOSTIC MODE:</strong> Hold <strong>SHIFT + , (colon)</strong> while pressing
+    RESET to enter the diagnostic menu. Five diagnostic modes are selectable — caution: the
+    RAM Check mode clears all memory. The ROM version (V.0, V.1, or V.2) is displayed in
+    this mode.
+  </div>
+</section>
+
+<!-- ── COMPARE ── -->
+<section class="ref-sec" id="compare">
+  <h2 class="sec-title">G815 vs E220 — Key Differences</h2>
+
+  <p style="font-size:12px;color:var(--green-dim);margin-bottom:1rem;line-height:1.7">
+    The G815 and E220 share the same BIOS call addresses and most register conventions,
+    but differ importantly in LCD port assignment, command encoding, and CPU speed.
+  </p>
+
+  <div class="tbl-wrap">
+    <table class="plain">
+      <thead>
+        <tr>
+          <th style="width:25%">FEATURE</th>
+          <th style="width:37.5%">PC-G815</th>
+          <th style="width:37.5%">PC-E220</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>CPU</td>
+          <td><strong>Z80 CMOS 8 MHz</strong></td>
+          <td><strong>SC7852 (Z80A compat) 3.58 MHz</strong><br><code style="font-size:11px">Not cycle-compatible — timing loops need adjustment</code></td>
+        </tr>
+        <tr>
+          <td>LCD resolution</td>
+          <td>144 × 32 px (4 pages)</td>
+          <td>144 × 32 px (4 pages) — identical</td>
+        </tr>
+        <tr>
+          <td>LCD controllers</td>
+          <td>2 × HD61203</td>
+          <td>HD62202 + HD61203</td>
+        </tr>
+        <tr>
+          <td>LCD command port</td>
+          <td><code>54h</code> (left) / <code>58h</code> (right)</td>
+          <td><code>58h</code> only — single command port</td>
+        </tr>
+        <tr>
+          <td>LCD data port</td>
+          <td><code>56h</code> / <code>5Ah</code></td>
+          <td><code>5Ah</code> only</td>
+        </tr>
+        <tr>
+          <td>Command encoding</td>
+          <td>Page (<code>0xB8+p</code>) then column (<code>0x40+col</code>) as separate bytes</td>
+          <td>Single byte: <code>(char_col × 4) + row | 0x40</code></td>
+        </tr>
+        <tr>
+          <td>X granularity in BIOS</td>
+          <td>BFD0h uses <em>pixel</em> column D (0–143)</td>
+          <td>BFD0h uses <em>character</em> column D (0–23)</td>
+        </tr>
+        <tr>
+          <td>Busy port</td>
+          <td><code>55h</code> (left) / <code>59h</code> (right)</td>
+          <td><code>59h</code> — bit 7 = busy</td>
+        </tr>
+        <tr>
+          <td>Keyboard matrix</td>
+          <td><code>OUT(11h,row) / IN(10h)</code></td>
+          <td><code>OUT(11h,row) / IN(10h)</code> + <code>OUT(12h,row)</code> for fn keys</td>
+        </tr>
+        <tr>
+          <td>ROM banking</td>
+          <td>None (single 128 KB ROM, bank 0 always visible)</td>
+          <td>8 × 16 KB banks via port <code>19h</code></td>
+        </tr>
+        <tr>
+          <td>User RAM</td>
+          <td>32 KB (model dependent)</td>
+          <td>~30 KB (<code>0100h–77E0h</code>)</td>
+        </tr>
+        <tr>
+          <td>BIOS call addresses</td>
+          <td>BE53h / BCFDh / BFD0h / BFEEh / BFF1h / C110h …</td>
+          <td><strong>Identical</strong> for all shared routines</td>
+        </tr>
+        <tr>
+          <td>Serial interface</td>
+          <td>CE-140F disk / serial via 11-pin</td>
+          <td>SIO 9600 baud Intel Hex via 11-pin (ports 15h/18h/1Fh)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout">
+    <strong>PORTING CHECKLIST (G815 → E220):</strong>
+    Change LCD command port from <code>54h/58h</code> to <code>58h</code> only ·
+    Change LCD data port from <code>56h/5Ah</code> to <code>5Ah</code> only ·
+    Change command encoding from separate page + column to packed single byte ·
+    Adjust timing loops for 3.58 MHz (roughly halve loop counts vs 8 MHz G815) ·
+    BIOS call addresses (<code>BFD0h</code> etc.) remain unchanged ·
+    If using <code>BFD0h</code>, note that D is now a character column (0–23), not a pixel column.
+  </div>
+
+  <div class="sources">
+    <strong style="color:var(--green-dim);letter-spacing:.1em">// SOURCES</strong><br>
+    Achim Flammenkamp — <a href="https://wwwhomes.uni-bielefeld.de/achim/pc-e220.html" target="_blank">The Sharp PC-E220 Homepage</a> (uni-bielefeld.de) — port table, RAM map, ROM bank table<br>
+    Flammenkamp — <a href="https://wwwhomes.uni-bielefeld.de/achim/pc-e220/rom.txt" target="_blank">ROM addresses and entry points</a><br>
+    Flammenkamp — <a href="https://wwwhomes.uni-bielefeld.de/achim/pc-e220/ram.txt" target="_blank">RAM usage (7800h–7FFFh)</a><br>
+    Flammenkamp — <a href="https://wwwhomes.uni-bielefeld.de/achim/pc-e220/e220-keycodes.txt" target="_blank">Key code table</a><br>
+    ver0.sakura.ne.jp — <a href="http://ver0.sakura.ne.jp/doc/pcg800iocs.html" target="_blank">PC-G800 IOCS table</a> (shared BIOS addresses)<br>
+    z88dk — <a href="https://github.com/z88dk/z88dk" target="_blank">libsrc/target/g800</a> (shared BIOS interface patterns)
+  </div>
+</section>
+
+</main>
+</div>
+
+<footer>
+  <div>Sharp PC-E220 · ROM / BIOS Reference · uni-bielefeld.de/achim · ver0.sakura.ne.jp</div>
+  <div>
+    <a href="ports_e220.html">← E220 Ports</a> &nbsp;
+    <a href="index.html">Home →</a>
+  </div>
+</footer>
+
+<script>
+  document.body.style.opacity='0';
+  document.body.style.transition='opacity .12s';
+  requestAnimationFrame(()=>{
+    document.body.style.opacity='1';
+    setTimeout(()=>{document.body.style.opacity='.9';setTimeout(()=>{document.body.style.opacity='1'},70)},110);
+  });
+  const secs=document.querySelectorAll('.ref-sec');
+  const lnks=document.querySelectorAll('.sidebar a');
+  const obs=new IntersectionObserver(e=>{
+    e.forEach(en=>{
+      if(en.isIntersecting){
+        lnks.forEach(l=>l.classList.remove('active'));
+        const a=document.querySelector(`.sidebar a[href="#${en.target.id}"]`);
+        if(a)a.classList.add('active');
+      }
+    });
+  },{rootMargin:'-20% 0px -60% 0px'});
+  secs.forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>
